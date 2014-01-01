@@ -5,6 +5,7 @@
 * C int ranf(int x) -> lua math.random(0, x)
 * C double franf(void) -> lua math.random()
 * C void srand(unsigned s) or void srandom(unsigned s) -> lua math.randomseed(s)
+* Do we need to use MT19937 in Luarocks lrandom package? Probably not.
 
 ## Things not in Lua
 
