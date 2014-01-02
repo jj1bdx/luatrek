@@ -14,4 +14,11 @@
         umask 022
         make install
 
+## pathname of lua?
+
+* On OS X it's at `/usr/local/bin/lua`
+* On FreeBSD it's at `/usr/local/bin` but the name is `lua52`
+    * doing this will solve this issue: `ln -s /usr/local/bin/lua52 ~/bin/lua`
+* `/usr/bin/env lua` will find the right path anyway (I hope)
+
 ## end of memorandum
