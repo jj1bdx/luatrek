@@ -15,6 +15,23 @@ function M.getstring (prompt)
     return io.read("*l")
 end
 
+--- get string parameter
+-- See <http://lua-users.org/wiki/SplitJoin>
+-- @param first prompt string (if not string, converted to string)
+-- @return first number of words in integer
+-- @return second table of words
+function M.getwords (prompt)
+    local s = ""
+    local n = 0
+    local t = {}
+    s = M.getstring(prompt)
+    for i in string.gmatch(s, "%S+") do
+        table.insert(t, i)
+        n = n + 1
+    end
+    return n, t
+end
+
 -- End of module
 return M
 
