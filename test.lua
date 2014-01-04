@@ -1,5 +1,7 @@
 #!/usr/bin/env lua
 
+getpar = require "getpar"
+
 function string.ends(String,End)
     return End=='' or string.sub(String,-string.len(End))==End
 end
@@ -9,9 +11,11 @@ test2="comp 10 20"
 print(test1, string.ends(test1, ";"))
 print(test2, string.ends(test2, ";"))
 
-io.write("Hello? ")
-io.flush()
--- x, y = io.read("*n", "*n")
--- io.write("x= ", x, " y= ", y, "\n")
-s = io.read("*l")
-io.write("s= ", s)
+n, t = getpar.getwords("test_prompt")
+print("number of words=", n)
+local j = 0
+for i in t do 
+    j = j + 1
+    print("j=", j)
+    print("i=", i)
+end
