@@ -19,6 +19,25 @@
 * On OS X it's at `/usr/local/bin/lua`
 * On FreeBSD it's at `/usr/local/bin` but the name is `lua52`
     * doing this will solve this issue: `ln -s /usr/local/bin/lua52 ~/bin/lua`
-* `/usr/bin/env lua` will find the right path anyway (I hope)
+* by using the program name `lua`, `/usr/bin/env lua` will find the right path anyway (I hope)
+
+## Other Luarocks modules for development
+
+* Luatrek source code documentation will be with Ldoc
+* Whether Luatrek code should depend on these rocks or not is still undecided
+* Use `--local` option for installing rocks for development
+
+* Penlight <http://stevedonovan.github.io/Penlight/api/index.html> Source: <https://github.com/stevedonovan/Penlight>
+
+        luarocks --local install penlight
+
+* LuaFileSystem <http://keplerproject.github.io/luafilesystem/> Source: <https://github.com/keplerproject/luafilesystem>
+
+        # installed as a penlight dependency
+        luarocks --local install luafilesystem
+
+* Ldoc <http://stevedonovan.github.io/ldoc/> Source: <https://github.com/stevedonovan/LDoc>
+
+        luarocks --local install ldoc
 
 ## end of memorandum
