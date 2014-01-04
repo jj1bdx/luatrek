@@ -14,6 +14,11 @@
         umask 022
         make install
 
+* Use `--local` option for installing rocks for development
+* Enable local rocks installation: add this to `~/.zshenv`
+
+        eval `luarocks path`
+
 ## pathname of lua?
 
 * On OS X it's at `/usr/local/bin/lua`
