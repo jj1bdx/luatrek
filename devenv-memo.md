@@ -40,4 +40,11 @@
 
         luarocks --local install ldoc
 
+## pathname of gcc on FreeBSD
+
+* `gcc` no longer exists on FreeBSD 10 or later: make symlinks in a local bin directory
+
+        ln -s /usr/local/bin/gcc46 ~/bin/gcc
+        ln -s /usr/local/bin/g++46 ~/bin/g++
+
 ## end of memorandum
