@@ -15,7 +15,7 @@ function M.getstring (prompt)
     return io.read("*l")
 end
 
---- get string parameter
+--- get parameter splitted as space-separated words into a table 
 -- See <http://lua-users.org/wiki/SplitJoin>
 -- @param first prompt string (if not string, converted to string)
 -- @return first number of words in integer
