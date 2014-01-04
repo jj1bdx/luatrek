@@ -6,11 +6,12 @@
 local M = {}
 
 --- get string parameter
--- @param first prompt string
+-- @param first prompt string (if not string, converted to string)
 -- @return first entered string
 function M.getstring (prompt)
-    io.write(prompt)
+    io.write(tostring(prompt))
     io.write(": ")
+    io.flush()
     return io.read("*l")
 end
 
