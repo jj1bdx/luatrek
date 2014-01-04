@@ -14,8 +14,6 @@ print(test2, string.ends(test2, ";"))
 n, t = getpar.getwords("test_prompt")
 print("number of words=", n)
 local j = 0
-for i in t do 
-    j = j + 1
-    print("j=", j)
-    print("i=", i)
+for i, v in ipairs(t) do
+    print("t[", i, "]=", v)
 end
