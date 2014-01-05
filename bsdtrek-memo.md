@@ -9,7 +9,9 @@
 
 ## Things not in Lua
 
-* C cgetc()/ungetc() function is not in Lua; we should reinvent an alternative, or discard them and acquire entire line at one by Lua `string = io.read("*l")` and parse the string by string:match(). C testnl(), readdelim(), and skiptonl() are simply too criptic and should be rewritten.
+
+* Argument parsing of UI is ad-hoc; getpar.c defines word-by-word parsing functions, which are not suitable for Lua
+    * C cgetc()/ungetc() function is not in Lua; we should reinvent an alternative, or discard them and acquire entire line at one by Lua `string = io.read("*l")` and parse the string by string:match(). C testnl(), readdelim(), and skiptonl() are simply too criptic and should be rewritten.
     * See getpar.getwords()
 
 * Do we need setjmp()/longjmp() just for restarting a game? I don't think so. The longjmp() calls are only used to notify end of the game and jump back to the main.c loop from lose() in lose.c, myreset() in play.c, and win() in win.c. Terminating the game altogether in the three cases will eliminate the need for the setjmp()/longjmp() pairs.
