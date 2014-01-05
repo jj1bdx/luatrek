@@ -19,13 +19,6 @@
 
         eval `luarocks path`
 
-## pathname of lua?
-
-* On OS X it's at `/usr/local/bin/lua`
-* On FreeBSD it's at `/usr/local/bin` but the name is `lua52`
-    * doing this will solve this issue: `ln -s /usr/local/bin/lua52 ~/bin/lua`
-* by using the program name `lua`, `/usr/bin/env lua` will find the right path anyway (I hope)
-
 ## Other Luarocks modules for development
 
 * Luatrek source code documentation will be with Ldoc
@@ -44,6 +37,13 @@
 * Ldoc <http://stevedonovan.github.io/ldoc/> Source: <https://github.com/stevedonovan/LDoc>
 
         luarocks --local install ldoc
+
+## pathname of lua
+
+* On OS X it's at `/usr/local/bin/lua`
+* On FreeBSD it's at `/usr/local/bin` but the name is `lua52`
+    * doing this will solve this issue: `ln -s /usr/local/bin/lua52 ~/bin/lua`
+* by using the program name `lua`, `/usr/bin/env lua` will find the right path anyway (I hope)
 
 ## pathname of gcc on FreeBSD
 
