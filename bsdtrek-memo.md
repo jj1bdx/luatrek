@@ -9,7 +9,6 @@
 
 ## Things not in Lua
 
-
 * Argument parsing of UI is ad-hoc; getpar.c defines word-by-word parsing functions, which are not suitable for Lua
     * C cgetc()/ungetc() function is not in Lua; we should reinvent an alternative, or discard them and acquire entire line at one by Lua `string = io.read("*l")` and parse the string by string:match(). C testnl(), readdelim(), and skiptonl() are simply too criptic and should be rewritten.
     * See getpar.getwords()
@@ -22,7 +21,6 @@
 
 * C utility.c syserr("string") -> Lua error(string.format("LUATREK SYSERR: %s\n", "error string"))
 
-* Array initialization in Lua needed
-    * especially for two-dimensional arrays
+* Array initialization in Lua needed -> Lua utils.create[12]darray()
 
 ## end of memorandum
