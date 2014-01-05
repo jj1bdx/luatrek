@@ -7,12 +7,17 @@ local M = {}
 
 --- get string parameter
 -- @param first prompt string (if not string, converted to string)
--- @return first entered string
+-- @return first entered string (if no string entered, "")
 function M.getstring (prompt)
     io.write(tostring(prompt))
     io.write(": ")
     io.flush()
-    return io.read("*l")
+    local s = io.read("*l")
+    if (type(s) == "string") then
+        return s
+    else
+        return ""
+    end
 end
 
 --- get parameter splitted as space-separated words into a table 
