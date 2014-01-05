@@ -18,4 +18,9 @@
 
 * Do we really need sleep() system calls? I don't think so. The sleep() calls are only used for game effects; they can be totally eliminated.
 
+* C utility.c syserr("string") -> Lua error(string.format("LUATREK SYSERR: %s\n", "error string"))
+
+* Array initialization in Lua needed
+    * especially for two-dimensional arrays
+
 ## end of memorandum
