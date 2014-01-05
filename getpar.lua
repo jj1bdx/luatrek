@@ -21,15 +21,12 @@ end
 -- @return first number of words in integer
 -- @return second table of words
 function M.getwords (prompt)
-    local s = ""
-    local n = 0
     local t = {}
-    s = M.getstring(prompt)
+    local s = M.getstring(prompt)
     for i in string.gmatch(s, "%S+") do
         table.insert(t, i)
-        n = n + 1
     end
-    return n, t
+    return #t, t
 end
 
 -- End of module
