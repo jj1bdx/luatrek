@@ -17,3 +17,5 @@ local j = 0
 for i, v in ipairs(t) do
     print("t[", i, "]=", v)
 end
+
+print(getpar.getynpar("Yes or no please"))
