@@ -34,6 +34,26 @@ function M.getwords (prompt)
     return #t, t
 end
 
+--- get Yes/No boolean parameter
+-- Repeat until 
+--     Yes (== "Yes" or "yes") (returns true) or
+--     No (== "No" or "no") (returns false)
+-- is entered
+-- @param first prompt string (if not string, converted to string)
+-- @return boolean true if yes, false if no
+function M.getynpar (prompt)
+    while true do
+        local s = M.getstring(prompt)
+        if ((s == "yes") or (s == "Yes")) then
+            return true
+        elseif ((s == "no") or (s == "No")) then
+            return false
+        end
+        io.write("invalid input; please enter yes or no\n")
+    end
+    -- NOTREACHED
+end
+
 -- End of module
 return M
 
