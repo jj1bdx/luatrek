@@ -1,6 +1,11 @@
 # bsdtrek code reading memorandum
 
-## random number functions
+## Global definitions
+
+* See trek.lua
+* Global constant: C NSECTS -> Lua trek.Const.NSECTS (note: Const's C is capitalized)
+
+## Random number functions
 
 * C int ranf(int x) -> Lua math.random(0, x)
 * C double franf(void) -> Lua math.random()
