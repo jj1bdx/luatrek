@@ -1,7 +1,6 @@
 #!/usr/bin/env lua
 
-getpar = require "getpar"
-utils = require "utils"
+trek = require "trek"
 
 function string.ends(String,End)
     return End=='' or string.sub(String,-string.len(End))==End
@@ -12,6 +11,7 @@ test2="comp 10 20"
 print(test1, string.ends(test1, ";"))
 print(test2, string.ends(test2, ";"))
 
+--[[
 n, t = getpar.getwords("test_prompt")
 print("number of words=", n)
 for i, v in ipairs(t) do
@@ -30,3 +30,6 @@ for i, t1 in ipairs(a) do
         print("a[", i, "][", j, "]=", v)
     end
 end
+]]--
+
+print(trek.Const.NSECTS)
