@@ -1,5 +1,11 @@
 # bsdtrek code reading memorandum
 
+## Module naming (a proposal)
+
+* Hierarchical naming: trek.getpar.getynpar()? 
+* You can always assign shorthands in Lua, e.g., GP = trek.getpar; GP.getynpar()
+* Module directory (`trek/`) assignment has to be defined
+
 ## random number functions
 
 * C int ranf(int x) -> Lua math.random(0, x)
