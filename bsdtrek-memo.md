@@ -6,6 +6,12 @@
 * See lua/trek/init.lua
 * Global constant: C NSECTS -> Lua trek.Const.NSECTS (note: Const's C is capitalized)
 
+## Module naming (a proposal)
+
+* Hierarchical naming: trek.getpar.getynpar()? 
+* You can always assign shorthands in Lua, e.g., GP = trek.getpar; GP.getynpar()
+* Module directory (`trek/`) assignment has to be defined
+
 ## Random number functions
 
 * C int ranf(int x) -> Lua math.random(0, x)
