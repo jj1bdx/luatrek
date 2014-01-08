@@ -1,5 +1,12 @@
 # development environment memo
 
+## Luatrek modules
+
+* under `lua/trek/`
+* Adding `lua/` into the search path is required as follows:
+
+        export "LUA_PATH=$LUA_PATH;./lua/?.lua;./lua/?/init.lua"
+
 ## Luarocks
 
 * http://www.luarocks.org/
