@@ -7,8 +7,8 @@ local M = {}
 
 --- globally-required modules
 
-getpar = require "getpar"
-utils = require "utils"
+M.getpar = require "trek.getpar"
+M.utils = require "trek.utils"
 
 --- Read-only table function for immutable constants
 -- @params table table to be set as read-only
