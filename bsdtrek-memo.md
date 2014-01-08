@@ -2,7 +2,8 @@
 
 ## Global definitions
 
-* See trek.lua
+* All modules are now under lua/trek/
+* See lua/trek/init.lua
 * Global constant: C NSECTS -> Lua trek.Const.NSECTS (note: Const's C is capitalized)
 
 ## Random number functions
