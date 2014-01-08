@@ -2,15 +2,15 @@
 
 ## Global definitions
 
-* All modules are now under lua/trek/
 * See lua/trek/init.lua
 * Global constant: C NSECTS -> Lua trek.Const.NSECTS (note: Const's C is capitalized)
 
-## Module naming (a proposal)
+## Module names
 
-* Hierarchical naming: trek.getpar.getynpar()? 
+* All modules are now under lua/trek/
+* Hierarchical naming: trek.getpar.getynpar()
 * You can always assign shorthands in Lua, e.g., GP = trek.getpar; GP.getynpar()
-* Module directory (`trek/`) assignment has to be defined
+* Module directory (`lua/trek/`) assignment is defined
 
 ## Random number functions
 
