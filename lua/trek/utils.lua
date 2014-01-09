@@ -1,6 +1,6 @@
 #!/usr/bin/env lua
 --- Luatrek miscellaneous utility functions
--- @module utils
+-- @module trek.utils
 -- @alias M
 
 local M = {}
