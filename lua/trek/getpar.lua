@@ -1,6 +1,6 @@
 #!/usr/bin/env lua
 --- Get parameters
--- @module getpar
+-- @module trek.getpar
 -- @alias M
 
 local M = {}
@@ -44,9 +44,11 @@ end
 function M.getynpar (prompt)
     while true do
         local s = M.getstring(prompt)
-        if ((s == "yes") or (s == "Yes")) then
+        if ((s == "yes") or (s == "Yes") or
+            (s == "y") or (s == "Y")) then
             return true
-        elseif ((s == "no") or (s == "No")) then
+        elseif ((s == "no") or (s == "No") or
+                (s == "n") or (s == "N")) then
             return false
         end
         io.write("invalid input; please enter yes or no\n")
