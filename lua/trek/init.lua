@@ -6,6 +6,7 @@
 local M = {}
 
 --- globally-required modules
+-- load all submodules
 
 M.getpar = require "trek.getpar"
 M.utils = require "trek.utils"
@@ -37,6 +38,11 @@ M.Const = M.readonlytable {
     NSECTS = 10,    -- dimensions of quadrant in sectors
     NQUADS = 8,     -- dimension of galaxy in quadrants
     NINHAB = 32,    -- number of quadrants which are inhabited
+    MAXEVENTS = 25, -- max number of concurrently pending events
+    MAXKLQUAD = 9,  -- maximum klingons per quadrant
+    MAXBASES = 9,   -- maximum number of starbases in galaxy
+    MAXDISTR = 5,   -- maximum concurrent distress calls
+    NBANKS = 6,     -- number of phaser banks
     otherstuff = {} -- endmark
 }
 
