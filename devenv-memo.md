@@ -3,8 +3,10 @@
 ## Luatrek modules
 
 * under `lua/trek/`
+
 * Adding `lua/` into the search path is required as follows:
 
+        # you can also do ". source-initenv.sh"
         export "LUA_PATH=$LUA_PATH;./lua/?.lua;./lua/?/init.lua"
 
 ## Luarocks
