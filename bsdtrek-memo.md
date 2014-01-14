@@ -2,12 +2,13 @@
 
 ## Global definitions
 
-* See lua/trek/init.lua
-* Global constant: C NSECTS -> Lua trek.Const.NSECTS (note: Const's C is capitalized)
+* See lua/trek/const.lua
+* Global constant: C NSECTS -> Lua trek.const.Const.NSECTS (note: second Const's C is capitalized)
 
 ## Module names
 
 * All modules are now under lua/trek/
+* lua/trek/init.lua will load all the necessary modules
 * Hierarchical naming: trek.getpar.getynpar()
 * You can always assign shorthands in Lua, e.g., GP = trek.getpar; GP.getynpar()
 * Module directory (`lua/trek/`) assignment is defined
