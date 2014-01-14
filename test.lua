@@ -30,4 +30,4 @@ for i, t1 in ipairs(a) do
     end
 end
 
-print(trek.Const.NSECTS)
+print(trek.const.Const.NSECTS)
