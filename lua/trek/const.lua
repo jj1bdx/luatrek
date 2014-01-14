@@ -1,15 +1,9 @@
 #!/usr/bin/env lua
 --- Luatrek setup and global constants/variables
--- @module trek
+-- @module trek.const
 -- @alias M
 
 local M = {}
-
---- globally-required modules
--- load all submodules
-
-M.getpar = require "trek.getpar"
-M.utils = require "trek.utils"
 
 --- Read-only table function for immutable constants
 -- @params table table to be set as read-only
