@@ -31,7 +31,7 @@
 ## Other Luarocks modules for development
 
 * Luatrek source code documentation will be with Ldoc
-* Whether Luatrek code should depend on these rocks or not is still undecided
+* Luatrek *will depend on* these modules
 * Use `--local` option for installing rocks for development
 
 * Penlight <http://stevedonovan.github.io/Penlight/api/index.html> Source: <https://github.com/stevedonovan/Penlight>
