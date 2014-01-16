@@ -5,40 +5,25 @@
 
 local M = {}
 
---- Read-only table function for immutable constants
--- @params table table to be set as read-only
--- @return first metatable set as read-only
--- @see <http://lua-users.org/wiki/ReadOnlyTables>
-
-function M.readonlytable(table)
-    return setmetatable({}, {
-        __index = table,
-        __newindex = function(table, key, value)
-                         error("Attempt to modify read-only table")
-                     end,
-        __metatable = false
-        });
-end
-
 --- Luatrek constants
--- Notes:
--- * these are immutable but cannot be iterated
---   (by pairs, ipairs, next, the # operator, etc.)
--- * it is still possible to modify members of members of read-only tables
--- * rawset() and table.insert can still be used to directly modify a read-only table
--- @see <http://lua-users.org/wiki/ReadOnlyTables>
+-- Note: these are global variables
 
-M.Const = M.readonlytable {
-    NSECTS = 10,    -- dimensions of quadrant in sectors
-    NQUADS = 8,     -- dimension of galaxy in quadrants
-    NINHAB = 32,    -- number of quadrants which are inhabited
-    MAXEVENTS = 25, -- max number of concurrently pending events
-    MAXKLQUAD = 9,  -- maximum klingons per quadrant
-    MAXBASES = 9,   -- maximum number of starbases in galaxy
-    MAXDISTR = 5,   -- maximum concurrent distress calls
-    NBANKS = 6,     -- number of phaser banks
-    otherstuff = {} -- endmark
-}
+-- dimensions of quadrant in sectors
+NSECTS = 10
+-- dimension of galaxy in quadrants
+NQUADS = 8
+-- number of quadrants which are inhabited
+NINHAB = 32
+-- max number of concurrently pending events
+MAXEVENTS = 25
+-- maximum klingons per quadrant
+MAXKLQUAD = 9
+-- maximum number of starbases in galaxy
+MAXBASES = 9
+-- maximum concurrent distress calls
+MAXDISTR = 5
+-- number of phaser banks
+NBANKS = 6
 
 -- End of module
 return M
