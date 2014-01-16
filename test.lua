@@ -19,7 +19,7 @@ end
 
 print(trek.getpar.getynpar("Yes or no please"))
 
-local a = trek.utils.create2darray(4, 5, "elem")
+local a = pl.array2d.new(4, 5, "elem")
 a[1][1] = 1
 a[2][2] = 2
 a[3][3] = 3
@@ -30,4 +30,4 @@ for i, t1 in ipairs(a) do
     end
 end
 
-print(trek.const.Const.NSECTS)
+print(NSECTS)
