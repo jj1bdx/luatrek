@@ -1,9 +1,12 @@
 # bsdtrek code reading memorandum
 
-## Global definitions
+(Including how to implement bsdtrek functions with lua)
+
+## Global variables and tables
 
 * See lua/trek/const.lua
-* Global constant: C NSECTS -> Lua trek.const.Const.NSECTS (note: second Const's C is capitalized)
+* Perform initialization check by Lua pl.strict module
+* Global constant: C NSECTS -> Lua NSECTS
 
 ## Module names
 
@@ -34,6 +37,6 @@
 
 * C utility.c syserr("string") -> Lua error(string.format("LUATREK SYSERR: %s\n", "error string"))
 
-* Array initialization in Lua needed -> Lua utils.create[12]darray()
+* Array initialization in Lua needed -> Lua pl.array2d.new()
 
 ## end of memorandum
