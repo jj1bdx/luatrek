@@ -1,16 +1,18 @@
 #!/usr/bin/env lua
---- Luatrek setup and global constants/variables
+--- Luatrek initialization
 -- @module trek
 -- @alias M
 
 local M = {}
 
 --- globally-required modules
+-- strict checking on global variables
+strict = require "pl.strict"
+-- Penlight module table (in global namespace)
+pl = require "pl.import_into"()
 -- load all submodules
-
 M.const = require "trek.const"
 M.getpar = require "trek.getpar"
-M.utils = require "trek.utils"
 
 -- End of module
 return M
