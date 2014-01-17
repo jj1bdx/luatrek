@@ -24,6 +24,40 @@ MAXBASES = 9
 MAXDISTR = 5
 -- number of phaser banks
 NBANKS = 6
+-- Names of the star systems (31 entries)
+Systemname = {
+    "Talos IV",
+    "Rigel III",
+    "Deneb VII",
+    "Canopus V",
+    "Icarus I",
+    "Prometheus II",
+    "Omega VII",
+    "Elysium I",
+    "Scalos IV",
+    "Procyon IV",
+    "Arachnid I",
+    "Argo VIII",
+    "Triad III",
+    "Echo IV",
+    "Nimrod III",
+    "Nemisis IV",
+    "Centarurus I",
+    "Kronos III",
+    "Spectros V",
+    "Beta III",
+    "Gamma Tranguli VI",
+    "Pyris III",
+    "Triachus",
+    "Marcus XII",
+    "Kaland",
+    "Ardana",
+    "Stratos",
+    "Eden",
+    "Arrikis",
+    "Epsilon Eridani IV",
+    "Exo III",
+}
 
 -- End of module
 return M
