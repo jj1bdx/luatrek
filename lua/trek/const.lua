@@ -5,14 +5,17 @@
 
 local M = {}
 
---- Luatrek constants
+--- Luatrek constants and tables
 -- Note: these are global variables
+-- Some of original numbered arrays are converted into
+-- arrays with string keys
 
 -- dimensions of quadrant in sectors
 NSECTS = 10
 -- dimension of galaxy in quadrants
 NQUADS = 8
 -- number of quadrants which are inhabited
+-- (#Systemname + 1)
 NINHAB = 32
 -- max number of concurrently pending events
 MAXEVENTS = 25
@@ -88,6 +91,35 @@ Device = {
     ["XPORTER"] = { name = "transporter", person = "Scotty" },
     -- shuttlecraft
     ["SHUTTLE"] = { name = "shuttlecraft", person = "Scotty" },
+}
+-- You lose codes and messages
+Losemsg = {
+    -- ran out of time
+    ["L_NOTIME"] = "You ran out of time",
+    -- ran out of energy
+    ["L_NOENGY"] = "You ran out of energy",
+    -- destroyed by a Klingon
+    ["L_DSTRYD"] = "You have been destroyed",
+    -- ran into the negative energy barrier
+    ["L_NEGENB"] = "You ran into the negative energy barrier",
+    -- destroyed in a nova
+    ["L_SUICID"] = "You destroyed yourself by nova'ing that star",
+    -- destroyed in a supernova
+    ["L_SNOVA"] = "You have been caught in a supernova",
+    -- life support died (so did you)
+    ["L_NOLIFE"] = "You just suffocated in outer space",
+    -- you could not be rematerialized
+    ["L_NOHELP"] = "You could not be rematerialized",
+    -- pretty stupid going at warp 10
+    ["L_TOOFAST"] = "*** Ship's hull has imploded ***",
+    -- ran into a star
+    ["L_STAR"] = "You have burned up in a star",
+    -- self destructed
+    ["L_DSTRCT"] = "Well, you destroyed yourself, but it didn't do any good",
+    -- captured by Klingons
+    ["L_CAPTURED"] = "You have been captured by Klingons and mercilessly tortured",
+    -- you ran out of crew
+    ["L_NOCREW"] = "Your last crew member died",
 }
 
 -- End of module
