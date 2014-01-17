@@ -58,6 +58,37 @@ Systemname = {
     "Epsilon Eridani IV",
     "Exo III",
 }
+-- Device token, name, assigned person
+Device = {
+    -- warp engines
+    ["WARP"] = { name = "warp drive", person = "Scotty" },
+    -- short range scanners
+    ["SRSCAN"] = { name = "S.R. scanners", person ="Scotty" },
+    -- long range scanners
+    ["LRSCAN"] = { name = "L.R. scanners", person = "Scotty" },
+    -- phaser control
+    ["PHASER"] = { name = "phasers", person = "Sulu" },
+    -- photon torpedo control
+    ["TORPED"] = { name = "photon tubes", person = "Sulu" },
+    -- impulse engines
+    ["IMPULSE"] = { name = "impulse engines", person = "Scotty" },
+    -- shield control
+    ["SHIELD"] = { name = "shield control", person = "Sulu" },
+    -- on board computer
+    ["COMPUTER"] = { name = "computer", person = "Spock" },
+    -- subspace radio
+    ["SSRADIO"] = { name = "subspace radio", person = "Uhura" },
+    -- life support systems
+    ["LIFESUP"] = { name = "life support", person = "Scotty" },
+    -- Space Inertial Navigation System
+    ["SINS"] = { name = "navigation system", person = "Chekov" },
+    -- cloaking device
+    ["CLOAK"] = { name = "cloaking device", person = "Scotty" },
+    -- transporter
+    ["XPORTER"] = { name = "transporter", person = "Scotty" },
+    -- shuttlecraft
+    ["SHUTTLE"] = { name = "shuttlecraft", person = "Scotty" },
+}
 
 -- End of module
 return M
