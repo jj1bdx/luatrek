@@ -13,6 +13,7 @@ pl = require "pl.import_into"()
 -- load all submodules
 M.const = require "trek.const"
 M.getpar = require "trek.getpar"
+M.gstate = require "trek.gstate"
 
 -- End of module
 return M
