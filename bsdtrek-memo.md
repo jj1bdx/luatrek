@@ -2,11 +2,12 @@
 
 (Including how to implement bsdtrek functions with lua)
 
-## Global variables and tables
+## Game variables and tables
 
-* See lua/trek/const.lua
-* Perform initialization check by Lua pl.strict module
-* Global constant: C NSECTS -> Lua NSECTS
+* All defined in module trek.gstate
+* Perform initialization check by Lua Penlight pl.strict.module()
+* Convention: C NSECTS -> Lua V.NSECTS (where `local V = trek.gstate`)
+* Even shorter names can be locally defined per each module
 
 ## Module names
 
