@@ -1,6 +1,7 @@
 #!/usr/bin/env lua
 
-trek = require "trek"
+local trek = require "trek"
+local V = trek.gstate
 
 function string.ends(String,End)
     return End=='' or string.sub(String,-string.len(End))==End
@@ -19,7 +20,7 @@ end
 
 print(trek.getpar.getynpar("Yes or no please"))
 
-print(NSECTS)
-print(Quad[1][1].bases)
-Quad[1][1].bases = 1
-print(Quad[1][1].bases)
+print(V.NSECTS)
+print(V.Quad[1][1].bases)
+V.Quad[1][1].bases = 1
+print(V.Quad[1][1].bases)
