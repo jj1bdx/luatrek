@@ -3,15 +3,13 @@
 -- @module trek
 -- @alias M
 
-local M = {}
-
 --- globally-required modules
--- strict checking on global variables
-strict = require "pl.strict"
+-- Make module strict by Penlight pl.strict.module()
+local strict = require "pl.strict"
+local M = strict.module()
 -- Penlight module table (in global namespace)
 pl = require "pl.import_into"()
 -- load all submodules
-M.const = require "trek.const"
 M.getpar = require "trek.getpar"
 M.gstate = require "trek.gstate"
 
