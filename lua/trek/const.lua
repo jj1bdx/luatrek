@@ -1,16 +1,16 @@
 #!/usr/bin/env lua
---- Luatrek setup and global constants/variables
+--- Luatrek global constants
 -- @module trek.const
 -- @alias M
 
 local M = {}
 
---- Luatrek constants and tables
+--- Luatrek constant values and tables
 -- Note: these are global variables
 -- Some of original numbered arrays are converted into
 -- arrays with string keys
--- TODO: Should tables representing bsdtrek C structures
--- with dummy variable values available?
+-- Note: tables representing bsdtrek C structures
+-- are defined in trek.gstate as *global* variables
 
 -- dimensions of quadrant in sectors
 NSECTS = 10
@@ -130,6 +130,15 @@ KM_EB = 2 -- Enter quadrant, Before attack
 KM_EA = 3 -- Enter quadrant, After attack
 KM_LB = 4 -- Leave quadrant, Before attack
 KM_LA = 5 -- Leave quadrant, After attack
+-- Sector map codes
+EMPTY      = '.'
+STAR       = '*'
+BASE       = '#'
+ENTERPRISE = 'E'
+QUEENE     = 'Q'
+KLINGON    = 'K'
+INHABIT    = '@'
+HOLE       = ' '
 
 -- End of module
 return M
