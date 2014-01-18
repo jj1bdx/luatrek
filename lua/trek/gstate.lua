@@ -124,6 +124,7 @@ M.Losemsg = {
     ["L_NOCREW"] = "Your last crew member died",
 }
 -- Klingon move indices
+-- TODO: this should be symbolic
 M.KM_OB = 0 -- Old quadrant, Before attack
 M.KM_OA = 1 -- Old quadrant, After attack
 M.KM_EB = 2 -- Enter quadrant, Before attack
@@ -144,18 +145,55 @@ M.KM_LA = 5 -- Leave quadrant, After attack
 --   >= 1: the index into the Event table which will have the system name
 --   0:    not distressed
 M.Quad = pl.array2d.new(M.NQUADS, M.NQUADS,
-    { bases = 0, -- number of bases in this quadrant
-      klings = 0, -- number of Klingons in this quadrant
-      holes = 0, -- number of black holes in this quadrant
-      scanned = -1, -- star chart entry code
-      starts = 0, -- number of stars in this quadrant
-      systemname = 0, -- starsystem name code
-      distressed = 0, -- distressed starsystem
-    })
+    { 
+        bases = 0, -- number of bases in this quadrant
+        klings = 0, -- number of Klingons in this quadrant
+        holes = 0, -- number of black holes in this quadrant
+        scanned = -1, -- star chart entry code
+        starts = 0, -- number of stars in this quadrant
+        systemname = 0, -- starsystem name code
+        distressed = 0, -- distressed starsystem
+    }
+)
 
+-- Sector Map Code table for the short range sensor display
+-- Note: all codes are represented by strings
+M.Sectdisp = {
+    ["EMPTY"] = ".",
+    ["STAR"] = "*",
+    ["BASE"] = "#",
+    ["ENTERPRISE"] = "E",
+    ["QUEENE"] = "Q",
+    ["KLINGON"] = "K",
+    ["INHABIT"] = "@",
+    ["HOLE"] = " ", -- Isn't this hard to recognize? 
+}
 -- Two dimensional table of the Sectors
--- See the sector map codes in trek.const
 M.Sect = pl.array2d.new(M.NSECTS, M.NSECTS, nil)
+-- Event codes (represented in string)
+--   E_LRTB   /* long range tractor beam */
+--   E_KATSB  /* Klingon attacks starbase */
+--   E_KDESB  /* Klingon destroys starbase */
+--   E_ISSUE  /* distress call is issued */
+--   E_ENSLV  /* Klingons enslave a quadrant */
+--   E_REPRO  /* a Klingon is reproduced */
+--   E_FIXDV  /* fix a device */
+--   E_ATTACK /* Klingon attack during rest period */
+--   E_SNAP   /* take a snapshot for time warp */
+--   E_SNOVA  /* supernova occurs */
+-- Event table
+M.Event = pl.tablex.new(M.MAXEVENTS,
+    {
+        x = 0, -- coordinate X
+        y = 0, -- coordinate Y
+        date = 0, -- trap date
+        evcode = "", -- event code ("": unallocated)
+        -- index into Systemname table for reported distress calls
+        systemname = 0, 
+        hidden = false, -- true if unreported (SSradio out)
+        ghost = false, -- true if actually already expired
+    }
+)
 
 -- End of module
 return M
