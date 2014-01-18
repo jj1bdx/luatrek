@@ -3,7 +3,9 @@
 -- @module trek.getpar
 -- @alias M
 
-local M = {}
+-- Make module strict by Penlight pl.strict.module()
+local strict = require "pl.strict"
+local M = strict.module()
 
 --- get string parameter
 -- @param first prompt string (if not string, converted to string)
