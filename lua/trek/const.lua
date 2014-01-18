@@ -9,6 +9,8 @@ local M = {}
 -- Note: these are global variables
 -- Some of original numbered arrays are converted into
 -- arrays with string keys
+-- TODO: Should tables representing bsdtrek C structures
+-- with dummy variable values available?
 
 -- dimensions of quadrant in sectors
 NSECTS = 10
@@ -121,6 +123,13 @@ Losemsg = {
     -- you ran out of crew
     ["L_NOCREW"] = "Your last crew member died",
 }
+-- Klingon move indices
+KM_OB = 0 -- Old quadrant, Before attack
+KM_OA = 1 -- Old quadrant, After attack
+KM_EB = 2 -- Enter quadrant, Before attack
+KM_EA = 3 -- Enter quadrant, After attack
+KM_LB = 4 -- Leave quadrant, Before attack
+KM_LA = 5 -- Leave quadrant, After attack
 
 -- End of module
 return M
