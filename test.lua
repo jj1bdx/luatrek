@@ -19,15 +19,5 @@ end
 
 print(trek.getpar.getynpar("Yes or no please"))
 
-local a = pl.array2d.new(4, 5, "elem")
-a[1][1] = 1
-a[2][2] = 2
-a[3][3] = 3
-a[4][4] = 4
-for i, t1 in ipairs(a) do
-    for j, v in ipairs(t1) do
-        print("a[", i, "][", j, "]=", v)
-    end
-end
-
 print(NSECTS)
+print(Quad[1][1].bases)
