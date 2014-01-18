@@ -21,3 +21,5 @@ print(trek.getpar.getynpar("Yes or no please"))
 
 print(NSECTS)
 print(Quad[1][1].bases)
+Quad[1][1].bases = 1
+print(Quad[1][1].bases)
