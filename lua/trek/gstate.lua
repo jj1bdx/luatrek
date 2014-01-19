@@ -8,7 +8,7 @@ local strict = require "pl.strict"
 local M = strict.module()
 
 --- Luatrek global mutable values and tables
--- Note: all values and tables belongs to the module
+-- Note: all values and tables belongs to the module namespace
 -- Some of original numbered arrays are converted into
 -- arrays with string keys
 
@@ -194,7 +194,25 @@ M.Event = pl.tablex.new(M.MAXEVENTS,
         ghost = false, -- true if actually already expired
     }
 )
-
+-- Game length table (to be migrated to setup module)
+-- match to lowercase
+M.Lentab = {
+    ["s"] = 1, ["short"] = 1,
+    ["m"] = 2, ["medium"] = 2,
+    ["l"] = 4, ["long"] = 4,
+    -- In bsdtrek it's NULL but the code compares NULL to 0 and that is BAD
+    ["restart"] = -1,
+}
+-- Game skill table (to be migrated to setup module)
+-- match to lowercase
+M.Skitab = {
+    ["n"] = 1, ["novice"] = 1,
+    ["f"] = 2, ["fair"] = 2,
+    ["g"] = 3, ["good"] = 3,
+    ["e"] = 4, ["expert"] = 4,
+    ["c"] = 5, ["commodore"] = 5,
+    ["i"] = 6, ["impossible"] = 6,
+}
 -- End of module
 return M
 
