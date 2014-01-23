@@ -32,6 +32,7 @@
 * Help for C getcodpar(): each acceptable command word should be displayed in the sorted manner
     * Abbreviation and full words are individually treated
     * Sort collation: per return value
+    * Command cancellation patterns should be defined
 
 * Do we need setjmp()/longjmp() just for restarting a game? I don't think so. The longjmp() calls are only used to notify end of the game and jump back to the main.c loop from lose() in lose.c, myreset() in play.c, and win() in win.c. Terminating the game altogether in the three cases will eliminate the need for the setjmp()/longjmp() pairs.
     * Removing the "Another Game" loop will be the simplest solution. 
