@@ -23,7 +23,9 @@
         umask 022
         make install
 
-* Use `--local` option for installing rocks for development
+* Always use `--local` option for installing rocks for development
+    * On OS X homebrew, the default installation is at /usr/local (site wide)
+
 * Enable local rocks installation: add this to `~/.zshenv`
 
         eval `luarocks path`
@@ -46,6 +48,10 @@
 * Ldoc <http://stevedonovan.github.io/ldoc/> Source: <https://github.com/stevedonovan/LDoc>
 
         luarocks --local install ldoc
+
+* Markdown <http://www.frykholm.se/files/markdown.lua>
+
+        luarocks --local install markdown
 
 ## pathname of lua
 
