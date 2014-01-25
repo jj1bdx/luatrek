@@ -67,4 +67,8 @@
         ln -s /usr/local/bin/gcc46 ~/bin/gcc
         ln -s /usr/local/bin/g++46 ~/bin/g++
 
+## Lua Documentation
+
+* Use Ldoc to document the Lua modules
+
 ## end of memorandum
