@@ -23,7 +23,7 @@ function M.getstring (prompt)
 end
 
 --- Get parameter splitted as space-separated words into a table 
--- See <http://lua-users.org/wiki/SplitJoin>
+-- (see http://lua-users.org/wiki/SplitJoin)
 -- @param prompt string (if not string, converted to string)
 -- @return first number of words in integer
 -- @return second table of words
@@ -37,10 +37,7 @@ function M.getwords (prompt)
 end
 
 --- Get Yes/No boolean parameter
--- Repeat until 
---     Yes (== "Yes" or "yes") (returns true) or
---     No (== "No" or "no") (returns false)
--- is entered
+-- repeating until Yes (returns true) or No (returns false) is entered
 -- @param prompt string (if not string, converted to string)
 -- @return boolean true if yes, false if no
 function M.getynpar (prompt)
@@ -59,8 +56,9 @@ function M.getynpar (prompt)
 end
 
 --- Check command word
--- Find the command word in the given table
--- If the command word is "?" then the list of
+-- by finding the command word in the given table 
+-- and return the word when found;
+-- if the command word is "?", then the list of
 -- available input is printed, sorted by the key
 -- @param command string
 -- @param wordtab table of valid command words
@@ -68,22 +66,29 @@ end
 
 function M.checkcmd (command, wordtab)
     if command == "?" then -- write help and return nil
+        -- four words per line, separated by comma
         local c = 4
+        local punct = false
         for k, v in pl.tablex.sort(wordtab) do
-            pl.utils.printf("%14.14s", k)
+            if punct then
+                io.write(", ")
+                punct = false
+            end
+            io.write(k)
             c = c - 1
             if c == 0 then
-                io.write("\n")
+                io.write(",\n")
                 c = 4
+                punct = false
             else
-            io.write(" ")
+                punct = true
             end
         end
         if c > 0 then
             io.write("\n")
         end
         return nil
-    else -- check command
+    else -- check command and return the matched result
         local v = wordtab[command]
         if v == nil then
             io.write("Invalid input: ? for valid inputs\n")
@@ -92,9 +97,9 @@ function M.checkcmd (command, wordtab)
     end
 end
 
---- Get command and parameter
--- get parameter splitted as space-separated words into a table 
--- and find the first word as the command defined in the given table
+--- Get command and parameters
+-- which are splitted as space-separated words into a table 
+-- and set the first word as the command defined in the given table
 -- @param prompt string (if not string, converted to string)
 -- @param wordtab table of valid command words
 -- @return first matched table value if existed, nil if failed
@@ -108,8 +113,6 @@ function M.getcodpar (prompt, wordtab)
     until val -- not nil
     return val, num, t
 end
-
-
 
 -- End of module
 return M
