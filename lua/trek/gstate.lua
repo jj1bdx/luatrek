@@ -73,7 +73,7 @@ M.Systemname = {
 }
 
 --- Device token, name, assigned person
--- (Note: field names are strings)
+-- (Note: listed field names are actually table keys in strings)
 -- @table Device
 -- @field WARP Warp engines
 -- @field SRSCAN Short range scanners
@@ -107,7 +107,7 @@ M.Device = {
 }
 
 --- You lose codes and messages 
--- (Note: field names are strings)
+-- (Note: listed field names are actually table keys in strings)
 -- @table Losemsg
 -- @field L_NOTIME Ran out of time
 -- @field L_NOENGY Ran out of energy
@@ -175,7 +175,7 @@ M.Quad = pl.array2d.new(M.NQUADS, M.NQUADS,
 )
 
 --- Sector Map Code table for the short range sensor display
--- (Note: all codes (field names) are strings)
+-- (Note: all codes (table keys) are strings)
 -- @table Sectdisp
 -- @field EMPTY Empty space
 -- @field STAR Star
