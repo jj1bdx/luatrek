@@ -1,5 +1,5 @@
 #!/usr/bin/env lua
---- Get parameters
+--- Functions of obtaining user input parameters
 -- @module trek.getpar
 -- @alias M
 
@@ -8,8 +8,8 @@ local strict = require "pl.strict"
 local M = strict.module()
 
 --- Get string parameter
--- @param prompt string (if not string, converted to string)
--- @return first entered string (if no string entered, "")
+-- @string prompt (if not string, converted to string)
+-- @treturn string entered string (if no string entered, "")
 function M.getstring (prompt)
     io.write(tostring(prompt))
     io.write(": ")
@@ -24,9 +24,9 @@ end
 
 --- Get parameter splitted as space-separated words into a table 
 -- (see http://lua-users.org/wiki/SplitJoin)
--- @param prompt string (if not string, converted to string)
--- @return first number of words in integer
--- @return second table of words
+-- @string prompt (if not string, converted to string)
+-- @treturn int number of words in integer
+-- @treturn tab table of words
 function M.getwords (prompt)
     local t = {}
     local s = M.getstring(prompt)
@@ -38,8 +38,8 @@ end
 
 --- Get Yes/No boolean parameter
 -- repeating until Yes (returns true) or No (returns false) is entered
--- @param prompt string (if not string, converted to string)
--- @return boolean true if yes, false if no
+-- @string prompt (if not string, converted to string)
+-- @treturn bool true if yes, false if no
 function M.getynpar (prompt)
     while true do
         local s = M.getstring(prompt)
@@ -60,8 +60,8 @@ end
 -- and return the word when found;
 -- if the command word is "?", then the list of
 -- available input is printed, sorted by the key
--- @param command string
--- @param wordtab table of valid command words
+-- @string command command string
+-- @tab wordtab table of valid command words
 -- @return first matched table value if existed, nil if failed
 
 function M.checkcmd (command, wordtab)
@@ -100,11 +100,11 @@ end
 --- Get command and parameters
 -- which are splitted as space-separated words into a table 
 -- and set the first word as the command defined in the given table
--- @param prompt string (if not string, converted to string)
--- @param wordtab table of valid command words
+-- @string prompt string (if not string, converted to string)
+-- @string wordtab table of valid command words
 -- @return first matched table value if existed, nil if failed
--- @return second number of words in integer
--- @return third table of words
+-- @treturn int number of words in integer
+-- @treturn tab table of words
 function M.getcodpar (prompt, wordtab)
     local num, t, val
     repeat
