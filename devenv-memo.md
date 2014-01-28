@@ -33,6 +33,8 @@
 ## Other Luarocks modules for development
 
 * Luatrek source code documentation will be with Ldoc
+    * Tags should be fully utilized
+    * See <http://stevedonovan.github.io/ldoc/manual/doc.md.html> for the details
 * Luatrek *will depend on* these modules
 * Use `--local` option for installing rocks for development
 
