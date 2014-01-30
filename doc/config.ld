@@ -1,0 +1,8 @@
+project = 'Luatrek'
+description = 'Lua Star Trek game'
+title = 'Luatrek Documentation'
+dir = 'modules'
+topics = 'manual'
+package = 'trek'
+file = '../lua/trek'
+format = 'markdown'
