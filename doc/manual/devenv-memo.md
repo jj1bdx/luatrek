@@ -55,6 +55,10 @@
 
         luarocks --local install markdown
 
+* lua-discount <http://asbradbury.org/projects/lua-discount/> Source: <https://github.com/asb/lua-discount/>
+
+        luarocks --local install lua-discount
+
 ## pathname of lua
 
 * On OS X it's at `/usr/local/bin/lua`
@@ -72,5 +76,3 @@
 ## Lua Documentation
 
 * Use Ldoc to document the Lua modules
-
-## end of memorandum
