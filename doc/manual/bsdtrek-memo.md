@@ -43,5 +43,3 @@
 * C utility.c syserr("string") -> Lua error(string.format("LUATREK SYSERR: %s\n", "error string"))
 
 * Array initialization in Lua needed -> Lua pl.array2d.new()
-
-## end of memorandum
