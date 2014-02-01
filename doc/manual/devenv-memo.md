@@ -3,7 +3,6 @@
 ## Luatrek modules
 
 * under `lua/trek/`
-
 * Adding `lua/` into the search path is required as follows:
 
         # you can also do ". source-initenv.sh"
@@ -24,8 +23,7 @@
         make install
 
 * Always use `--local` option for installing rocks for development
-    * On OS X homebrew, the default installation is at /usr/local (site wide)
-
+* On OS X homebrew, the default installation is at /usr/local (site wide), so `--local` is crucial
 * Enable local rocks installation: add this to `~/.zshenv`
 
         eval `luarocks path`
@@ -34,7 +32,6 @@
 
 * Luatrek *will depend on* these modules
 * Use `--local` option for installing rocks for development
-
 * Penlight <http://stevedonovan.github.io/Penlight/api/index.html> Source: <https://github.com/stevedonovan/Penlight>
 
         luarocks --local install penlight
