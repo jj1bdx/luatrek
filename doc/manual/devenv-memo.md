@@ -32,9 +32,6 @@
 
 ## Other Luarocks modules for development
 
-* Luatrek source code documentation will be with Ldoc
-    * Tags should be fully utilized
-    * See <http://stevedonovan.github.io/ldoc/manual/doc.md.html> for the details
 * Luatrek *will depend on* these modules
 * Use `--local` option for installing rocks for development
 
@@ -62,8 +59,7 @@
 ## pathname of lua
 
 * On OS X it's at `/usr/local/bin/lua`
-* On FreeBSD it's at `/usr/local/bin` but the name is `lua52`
-    * doing this will solve this issue: `ln -s /usr/local/bin/lua52 ~/bin/lua`
+* On FreeBSD it's at `/usr/local/bin` but the name is `lua52`; doing this will solve this issue: `ln -s /usr/local/bin/lua52 ~/bin/lua`
 * by using the program name `lua`, `/usr/bin/env lua` will find the right path anyway (I hope)
 
 ## pathname of gcc on FreeBSD
@@ -73,6 +69,8 @@
         ln -s /usr/local/bin/gcc46 ~/bin/gcc
         ln -s /usr/local/bin/g++46 ~/bin/g++
 
-## Lua Documentation
+## Lua source code documentation
 
-* Use Ldoc to document the Lua modules
+* Documentation will be on LDoc
+* The tags should be fully utilized
+* See <http://stevedonovan.github.io/ldoc/manual/doc.md.html> for the details
