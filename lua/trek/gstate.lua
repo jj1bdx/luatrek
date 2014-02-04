@@ -304,6 +304,86 @@ M.Event = pl.tablex.new(M.MAXEVENTS,
     }
 )
 
+--- Starship status
+-- @table Ship
+-- @field warp Warp factor
+-- @field warp2 Warp factor squared
+-- @field warp3 Warp factor cubed
+-- @field shldup boolean - true if shield is up, false if down
+-- @field cloaked boolean - true if cloaking device is on
+-- @field energy Starship's energy
+-- @field shield Energy in shields
+-- @field reserves Life support reserves
+-- @field crew Number of crew
+-- @field brigfree space left in brig
+-- @field torped Number of photon torpedoes
+-- @field cloakgood boolean - true if we have moved
+-- @field quadx Quadrant X coordinate
+-- @field quady Quadrant Y coordinate
+-- @field sectx Sector X coordinate
+-- @field secty Sector y coordinate
+-- @field cond Condition code (in string)
+-- @field sinsbad boolean - true if Space Inertial Navigation System is working but not calibrated
+-- @field shipname Name of current starship (in string)
+-- @field ship Current starship (in Sector Map Code string)
+-- @field distressed Number of distress calls
+M.Ship = {
+    warp = 0,
+    warp2 = 0,
+    warp3 = 0,
+    shldup = false,
+    cloaked = false,
+    energy = 0,
+    shield = 0,
+    reserves = 0,
+    crew = 0,
+    brigfree = 0,
+    torped = 0,
+    cloakgood = false,
+    quadx = 0,
+    quady = 0,
+    sectx = 0,
+    secty = 0,
+    cond = "",
+    sinsbad = false,
+    shipname = "",
+    ship = "",
+    distressed = 0,
+}
+
+--- Game related information, mostly scoring
+-- @table Game
+-- @field killk Number of Klingons killed
+-- @field deaths Number of deaths onboard Enterprise
+-- @field negenbar Number of hits on negative energy barrier
+-- @field killb Number of starbases killed
+-- @field kills Number of stars killed
+-- @field skill Skill rating of the player
+-- @field length Length of game
+-- @field killed boolean - true if you were killed
+-- @field killinhab Number of inhabitated starsystems killed
+-- @field tourn boolean - true if a tournament game
+-- @field passwd Game password string
+-- @field snap boolean - true if snapshot taken
+-- @field helps Number of help calls
+-- @field captives Total number of captives taken
+M.Game = {
+    killk = 0,
+    deaths = 0,
+    negenbar = 0,
+    killb = 0,
+    kills = 0,
+    skill = 0,
+    length = 0,
+    killed = false,
+    killinhab = 0,
+    tourn = false,
+    passwd = "",
+    snap = false,
+    helps = 0,
+    captives = 0,
+}
+
 --- Game length table (to be migrated to setup module)
 -- @table Lentab
 -- @field s -> short
