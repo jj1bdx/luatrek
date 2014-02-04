@@ -211,6 +211,7 @@ M.Losemsg = {
 
 --- Klingon move indices
 -- @todo this should be symbolic
+M.KM_NUMBER = 6
 M.KM_OB = 0 -- Old quadrant, Before attack
 M.KM_OA = 1 -- Old quadrant, After attack
 M.KM_EB = 2 -- Enter quadrant, Before attack
@@ -271,17 +272,18 @@ M.Sectdisp = {
 -- @table Sect
 M.Sect = pl.array2d.new(M.NSECTS, M.NSECTS, nil)
 
--- Event codes (represented in string)
---   E_LRTB   /* long range tractor beam */
---   E_KATSB  /* Klingon attacks starbase */
---   E_KDESB  /* Klingon destroys starbase */
---   E_ISSUE  /* distress call is issued */
---   E_ENSLV  /* Klingons enslave a quadrant */
---   E_REPRO  /* a Klingon is reproduced */
---   E_FIXDV  /* fix a device */
---   E_ATTACK /* Klingon attack during rest period */
---   E_SNAP   /* take a snapshot for time warp */
---   E_SNOVA  /* supernova occurs */
+--- Event codes (represented in string)
+-- @table Event_codes
+-- @field E_LRTB  long range tractor beam
+-- @field E_KATSB Klingon attacks starbase
+-- @field E_KDESB Klingon destroys starbase
+-- @field E_ISSUE distress call is issued
+-- @field E_ENSLV Klingons enslave a quadrant
+-- @field E_REPRO a Klingon is reproduced
+-- @field E_FIXDV fix a device
+-- @field E_ATTACK Klingon attack during rest period
+-- @field E_SNAP take a snapshot for time warp
+-- @field E_SNOVA supernova occurs
 
 --- Event table (of the table with the following field names)
 -- @table Event
@@ -382,6 +384,181 @@ M.Game = {
     snap = false,
     helps = 0,
     captives = 0,
+}
+
+--- Per move information
+-- @table Move
+-- @field free boolean - true if a move is free (without inducing attacks)
+-- @field endgame Game status: 1 if won, 0 if ongoing, -1 if lost
+-- @field shldchg boolean - true if shields changed this move
+-- @field newquad 2 if just entered this quadrant, 1 after the initquad, 0 if staying in the quadrant for more than a turn
+-- @field resting boolean - true if this move is a rest
+-- @field time Time used in this move
+M.Move = {
+    free = false,
+    endgame = 0,
+    shldchg = false,
+    newquad = 0,
+    resting = false,
+    time = 0,
+}
+
+--- Parametric information
+-- @table Param
+-- @field bases Number of starbases
+-- @field klings Number of Klingons
+-- @field date Stardate
+-- @field time Time left
+-- @field resource Federation resources
+-- @field energy Starship's energy
+-- @field shield Energy in shields
+-- @field reserves Life support reserves
+-- @field crew Number of crew
+-- @field brigfree space left in brig
+-- @field torped Number of photon torpedoes
+-- @field damfac Table of damage factor (in device names)
+-- @field dockfac Docked repair time factor
+-- @field regenfac Regeneration factor
+-- @field stopengy Energy to do emergency stop
+-- @field shupengy Energy to put up sheilds
+-- @field klingpwr Klingon initial power
+-- @field warptime Time chewer multiplier
+-- @field phasfac Klingon phaser power eater factor
+-- @field moveprob Table of Probability that a Klingon moves (in Klingon Move Indices)
+-- @field movefac Table of Klingon move distance multiplier (in Klingon Move Indices)
+-- @field eventdly Table of event time multipliers
+-- @field navigcrud Table of navigation crudup factor (of 2 elements)
+-- @field cloakenergy Cloaking device energy per stardate
+-- @field damprob Table of damage probability (in device names) (sum of damage probabilities must add to 1000)
+-- @field hitfac Klingon attack factor
+-- @field klingcrew Number of Klingons in a crew
+-- @field srndrprob Surrender probability
+-- @field energylow Low energy mark to declare Condition YELLOW
+M.Param = {
+    bases = 0,
+    klings = 0,
+    date = 0,
+    time = 0,
+    resource = 0,
+    energy = 0,
+    shield = 0,
+    reserves = 0,
+    crew = 0,
+    brigfree = 0,
+    torped = 0,
+    damfac = {
+        ["WARP"] = 0,
+        ["SRSCAN"] = 0,
+        ["LRSCAN"] = 0,
+        ["PHASER"] = 0,
+        ["TORPED"] = 0,
+        ["IMPULSE"] = 0,
+        ["SHIELD"] = 0,
+        ["COMPUTER"] = 0,
+        ["SSRADIO"] = 0,
+        ["LIFESUP"] = 0,
+        ["SINS"] = 0,
+        ["CLOAK"] = 0,
+        ["XPORTER"] = 0,
+    },
+    dockfac = 0,
+    regenfac = 0,
+    stopengy = 0,
+    shupengy = 0,
+    klingpwr = 0,
+    warptime = 0,
+    phasfac = 0,
+    moveprob = pl.tablex.new(M.KM_NUMBER, 0),
+    movefac = pl.tablex.new(M.KM_NUMBER, 0),
+    eventdly = {
+        ["E_LRTB"] = 0,
+        ["E_KATSB"] = 0,
+        ["E_KDESB"] = 0,
+        ["E_ISSUE"] = 0,
+        ["E_ENSLV"] = 0,
+        ["E_REPRO"] = 0,
+        ["E_FIXDV"] = 0,
+        ["E_ATTACK"] = 0,
+        ["E_SNAP"] = 0,
+        ["E_SNOVA"] = 0,
+    },
+    navigcrud = pl.tablex.new(2, 0),
+    cloakenergy = 0,
+    damprob = {
+        ["WARP"] = 0,
+        ["SRSCAN"] = 0,
+        ["LRSCAN"] = 0,
+        ["PHASER"] = 0,
+        ["TORPED"] = 0,
+        ["IMPULSE"] = 0,
+        ["SHIELD"] = 0,
+        ["COMPUTER"] = 0,
+        ["SSRADIO"] = 0,
+        ["LIFESUP"] = 0,
+        ["SINS"] = 0,
+        ["CLOAK"] = 0,
+        ["XPORTER"] = 0,
+    },
+    hitfac = 0,
+    klingcrew = 0,
+    srndrprob = 0,
+    energylow = 0,
+}
+
+--- Other information kept in a snapshot
+-- @table Now
+-- @field bases Number of starbases
+-- @field klings Number of klingons
+-- @field date Stardate
+-- @field time Time Left
+-- @field resource Federation resources
+-- @field distressed Number of currently distressed quadrants
+-- @field eventptr Pointer (or a copy) to a event table
+-- @field base Table of locations of starbases (in {x, y} coordinates)
+M.Now = {
+    bases = 0,
+    klings = 0,
+    date = 0,
+    time = 0,
+    resource = 0,
+    distressed = 0,
+    eventptr = {}, -- @todo what to do with this type?
+    base = pl.tablex.new(M.MAXBASES, {x = 0, y = 0}),
+}
+
+--- Other stuff, which is not dumped in a shapshot
+-- @table Etc
+-- @field kling Table of sorted Klingon list
+-- @field nkling Number of Klingons in this sector (<0 means automatic override mode)
+-- @field starbase Table of starbase coordinates in current quadrant (in {x, y})
+-- @field snapshot Snapshot for time warp
+-- @field statreport boolean - true to get a status report on a short range scan
+M.Etc = {
+    kling = pl.tablex.new(M.MAXKLQUAD,
+        {
+--- Klingon list
+-- @table kling
+-- @field x X coordinate
+-- @field y Y coordinate
+-- @field power Power left
+-- @field dist Distance to Enterprise
+-- @field avgdist Average of distance over this move
+-- @field srndreq boolean - true if surrender has been requested
+            x = 0,
+            y = 0,
+            power = 0,
+            dist = 0,
+            avgdist = 0,
+            srndreq = false,
+        }
+    ),
+    nkling = 0,
+    starbase = {
+        x = 0, 
+        y = 0,
+    },
+    snapshot = {}, -- @todo what should be in this variable?
+    statreport = false,
 }
 
 --- Game length table (to be migrated to setup module)
