@@ -77,6 +77,8 @@ SUCH DAMAGE.
 --- Make module strict by Penlight pl.strict.module()
 local strict = require "pl.strict"
 local M = strict.module()
+--- Shorthand for trek.gstate prefix
+local V = trek.gstate
 
 --- Game length table
 -- @table Lentab
@@ -117,9 +119,42 @@ local M.Skitab = {
     ["i"] = 6, ["impossible"] = 6,
 }
 
+--- Global Game parameter
+local Game = V.Game
+--- Global Param parameter
+local Param = V.Param
+--- Global Ship parameter
+local Ship = V.Ship
+
 --- Setup Luatrek global variables
 function M.setup ()
-
+    local r = 0
+    while r == 0 do
+        r = trek.getpar.getcodpar("What length game", M.Lentab)
+        if r < 0 then
+            -- @todo check if restartgame() return a value
+        end
+    end -- loop breaks when r > 0
+    Game.length = r
+    Game.skill = trek.getpar.getcodpar("What skill game", M.Skitab)
+    Game.tourn = false
+    Game.passwd = trek.getpar.getstrpar("Enter tournament code")
+    if Game.passwd == "tournament" then
+        Game.tourn = true
+        local d = 0
+        for c in str:gmatch"." do
+            d = bit32.lrotate(bit32.bxor(d, c), 1)
+        end
+        math.randomseed(d)
+    end
+    Param.bases = math.random(0, (6 - Game.skill)) + 2
+    if Game.skill == 6 then
+        Param.bases = 1
+    end
+    Now.bases = Param.bases
+    Param.time = 6 * Game.length + 2
+    Now.time = Param.time
+    -- @todo more to go
 end
 
 -- End of module
