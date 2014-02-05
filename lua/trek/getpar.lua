@@ -126,6 +126,20 @@ function M.getynpar (prompt)
     -- NOTREACHED
 end
 
+--- Get string parameter
+-- repeating until non-null string is entered
+-- @string prompt (if not string, converted to string)
+-- @treturn string result of input
+function M.getstrpar (prompt)
+    while true do
+        local s = M.getstring(prompt)
+        if string.len(s) > 0 then
+            return s
+        end
+    end
+    -- NOTREACHED
+end
+
 --- Check command word
 -- by finding the command word in the given table 
 -- and return the word when found;
@@ -184,6 +198,7 @@ function M.getcodpar (prompt, wordtab)
     until val -- not nil
     return val, num, t
 end
+
 
 -- End of module
 return M
