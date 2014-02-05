@@ -78,7 +78,7 @@ SUCH DAMAGE.
 local strict = require "pl.strict"
 local M = strict.module()
 --- Shorthand for trek.gstate prefix
-local V = trek.gstate
+local V = require "trek.gstate"
 
 --- Game length table
 -- @table Lentab
@@ -89,7 +89,7 @@ local V = trek.gstate
 -- @field l -> long
 -- @field long Long game
 -- @field restart For restarting the game (Note: in bsdtrek it's NULL but the code compares NULL to 0 and that is BAD)
-local M.Lentab = {
+local Lentab = {
     ["s"] = 1, ["short"] = 1,
     ["m"] = 2, ["medium"] = 2,
     ["l"] = 4, ["long"] = 4,
@@ -110,7 +110,7 @@ local M.Lentab = {
 -- @field commodore Commodore
 -- @field i -> impossible
 -- @field impossible Impossible
-local M.Skitab = {
+local Skitab = {
     ["n"] = 1, ["novice"] = 1,
     ["f"] = 2, ["fair"] = 2,
     ["g"] = 3, ["good"] = 3,
@@ -125,18 +125,20 @@ local Game = V.Game
 local Param = V.Param
 --- Global Ship parameter
 local Ship = V.Ship
+--- Global Now parameter
+local Now = V.Now
 
 --- Setup Luatrek global variables
 function M.setup ()
     local r = 0
     while r == 0 do
-        r = trek.getpar.getcodpar("What length game", M.Lentab)
+        r = trek.getpar.getcodpar("What length game", Lentab)
         if r < 0 then
             -- @todo check if restartgame() return a value
         end
     end -- loop breaks when r > 0
     Game.length = r
-    Game.skill = trek.getpar.getcodpar("What skill game", M.Skitab)
+    Game.skill = trek.getpar.getcodpar("What skill game", Skitab)
     Game.tourn = false
     Game.passwd = trek.getpar.getstrpar("Enter tournament code")
     if Game.passwd == "tournament" then
