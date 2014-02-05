@@ -140,8 +140,9 @@ function M.setup ()
     Game.length = r
     Game.skill = trek.getpar.getcodpar("What skill game", Skitab)
     Game.tourn = false
-    Game.passwd = trek.getpar.getstrpar("Enter tournament code")
+    Game.passwd = trek.getpar.getstrpar("Enter a password")
     if Game.passwd == "tournament" then
+        Game.passwd = trek.getpar.getstrpar("Enter tournament code")
         Game.tourn = true
         local d = 0
         for c in str:gmatch"." do
@@ -173,6 +174,38 @@ function M.setup ()
     Ship.shield = Param.shield
     Param.resource = Param.klings * Param.time
     Now.resource = Param.resource
+    Param.reserves = (6 - Game.skill) * 2
+    Ship.reserves = Param.reserves
+    Param.crew = 387
+    Ship.crew = Param.crew
+    Param.brigfree = 400
+    Ship.brigfree = Param.brigfree
+    Ship.shldup = 1
+    Ship.cond = "GREEN"
+    Ship.warp = 5.0
+    Ship.warp2 = 25.0
+    Ship.warp3 = 125.0
+    Ship.sinsbad = 0
+    Ship.cloaked = 0
+    Param.date = (math.random(0, 20) + 20) * 100;
+    Now.date = Param.date
+    for k, v in pairs(Param.damfac) do
+        Param.damfac[k] = math.log(Game.skill + 0.5)
+    end
+    -- these probabilities must sum to 1000
+    Param.damprob["WARP"] = 70     -- warp drive            7.0%
+    Param.damprob["SRSCAN"] = 110  -- short range scanners 11.0%
+    Param.damprob["LRSCAN"] = 110  -- long range scanners  11.0%
+    Param.damprob["PHASER"] = 125  -- phasers              12.5%
+    Param.damprob["TORPED"] = 125  -- photon torpedoes     12.5%
+    Param.damprob["IMPULSE"] = 75  -- impulse engines       7.5%
+    Param.damprob["SHIELD"] = 150  -- shield control       15.0%
+    Param.damprob["COMPUTER"] = 20 -- computer              2.0%
+    Param.damprob["SSRADIO"] = 35  -- subspace radio        3.5%
+    Param.damprob["LIFESUP"] = 30  -- life support          3.0%
+    Param.damprob["SINS"] = 20     -- navigation system     2.0%
+    Param.damprob["CLOAK"] = 50    -- cloaking device       5.0%
+    Param.damprob["XPORTER"] = 80  -- transporter           8.0%
 
     -- @todo more to go
 end
