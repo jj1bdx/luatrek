@@ -84,6 +84,7 @@ pl = require "pl.import_into"()
 -- load all submodules (list all submodules here)
 M.getpar = require "trek.getpar"
 M.gstate = require "trek.gstate"
+M.setup = require "trek.setup"
 
 -- End of module
 return M
