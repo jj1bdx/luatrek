@@ -561,45 +561,6 @@ M.Etc = {
     statreport = false,
 }
 
---- Game length table (to be migrated to setup module)
--- @table Lentab
--- @field s -> short
--- @field short Short game
--- @field m -> medium
--- @field medium Medium game
--- @field l -> long
--- @field long Long game
--- @field restart For restarting the game (Note: in bsdtrek it's NULL but the code compares NULL to 0 and that is BAD)
-M.Lentab = {
-    ["s"] = 1, ["short"] = 1,
-    ["m"] = 2, ["medium"] = 2,
-    ["l"] = 4, ["long"] = 4,
-    ["restart"] = -1, 
-}
-
---- Game skill table (to be migrated to setup module)
--- @table Skitab
--- @field n -> novice
--- @field novice Novice
--- @field f -> fair
--- @field fair Fair
--- @field g -> good
--- @field good Good
--- @field e -> expert
--- @field expert Expert
--- @field c -> commodore
--- @field commodore Commodore
--- @field i -> impossible
--- @field impossible Impossible
-M.Skitab = {
-    ["n"] = 1, ["novice"] = 1,
-    ["f"] = 2, ["fair"] = 2,
-    ["g"] = 3, ["good"] = 3,
-    ["e"] = 4, ["expert"] = 4,
-    ["c"] = 5, ["commodore"] = 5,
-    ["i"] = 6, ["impossible"] = 6,
-}
-
 -- End of module
 return M
 
