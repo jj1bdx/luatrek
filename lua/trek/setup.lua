@@ -156,6 +156,24 @@ function M.setup ()
     Now.bases = Param.bases
     Param.time = 6 * Game.length + 2
     Now.time = Param.time
+    local klingrate = 3.5 * (math.random() + 0.75)
+    if klingrate < 5 then
+        klingrate = 5
+    end
+    -- @warning On the bsdtrek the max value is 127 but not here
+    Param.klings = Game.skill * Game.length * klingrate
+    Now.klings = Param.klings
+    Param.energy = 5000
+    Ship.energy = Param.energy
+    Param.torped = 0
+    Ship.torped = Param.torped
+    Ship.ship = "ENTERPRISE"
+    Ship.shipname = "Enterprise"
+    Param.shield = 1500
+    Ship.shield = Param.shield
+    Param.resource = Param.klings * Param.time
+    Now.resource = Param.resource
+
     -- @todo more to go
 end
 
