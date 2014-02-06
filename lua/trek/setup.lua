@@ -152,8 +152,8 @@ function M.setup ()
     if Game.passwd == "tournament" then
         Game.passwd = trek.getpar.getstrpar("Enter tournament code")
         Game.tourn = true
-        for c in str:gmatch"." do
-            seed = bit32.lrotate(bit32.bxor(seed, c), 1)
+        for c in Game.passwd:gmatch"." do
+            seed = bit32.lrotate(bit32.bxor(seed, c:byte()), 1)
         end
     else
         seed = os.time()
