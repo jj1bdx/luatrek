@@ -108,7 +108,7 @@ local Etc = V.Etc
 -- that the condition is RED, and he is given a chance to put
 -- his shields up if the computer is working.
 --
--- @boolean f The flag `f' is set to disable the check for condition red.
+-- @bool f The flag `f' is set to disable the check for condition red.
 -- This mode is used in situations where you know you are going
 -- to be docked, i.e., abandon() and help().
 function M.initquad (f)
