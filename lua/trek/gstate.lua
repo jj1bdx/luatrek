@@ -243,7 +243,7 @@ M.Quad = pl.array2d.new(M.NQUADS, M.NQUADS,
         }
     end
 )
-    
+
 --- Sector Map Code table for the short range sensor display
 -- (Note: all codes (table keys) are strings)
 -- @table Sectdisp
