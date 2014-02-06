@@ -347,6 +347,21 @@ function M.setup ()
         kleft = kleft - klump
     end
     -- initialize this quadrant
+    pl.utils.printf("%d Klingons\n%d starbase", Param.klings, Param.bases);
+    if Param.bases > 1 then
+        pl.utils.printf("s")
+    end
+    pl.utils.printf(" at %d,%d", Now.base[1].x, Now.base[2].y);
+    if Param.bases > 1 then
+        for i = 2, Param.bases do
+            pl.utils.printf(", %d,%d", Now.base[i].x, Now.base[i].y);
+        end
+    end
+    pl.utils.printf("\nIt takes %d units to kill a Klingon\n", Param.klingpwr);
+    Move.free = 0;
+    -- @todo initquad(0);
+    -- @todo srscan(1);
+    -- @todo attack(0);
     
     -- @todo more to go
 end
