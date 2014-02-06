@@ -19,7 +19,7 @@
 
 ## Random number functions
 
-* C int ranf(int x) -> Lua math.random(0, x)
+* C int ranf(int x) -> Lua math.random(0, (x - 1))
 * C double franf(void) -> Lua math.random()
 * C void srand(unsigned s) or void srandom(unsigned s) -> Lua math.randomseed(s)
 * Do we need to use MT19937 in Luarocks lrandom package? Probably not.
