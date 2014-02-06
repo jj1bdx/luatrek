@@ -79,6 +79,22 @@ local strict = require "pl.strict"
 local M = strict.module()
 --- Shorthand for trek.gstate prefix
 local V = require "trek.gstate"
+--- Global Game table
+local Game = V.Game
+--- Global Param table
+local Param = V.Param
+--- Global Ship table
+local Ship = V.Ship
+--- Global Now table
+local Now = V.Now
+--- Global Event table
+local Event = V.Event
+--- Global Quad table
+local Quad = V.Quad
+--- Global Sect table
+local Sect = V.Sect
+--- Global Move table
+local Move = V.Sect
 
 --- Game length table
 -- @table Lentab
@@ -119,15 +135,6 @@ local Skitab = {
     ["i"] = 6, ["impossible"] = 6,
 }
 
---- Global Game parameter
-local Game = V.Game
---- Global Param parameter
-local Param = V.Param
---- Global Ship parameter
-local Ship = V.Ship
---- Global Now parameter
-local Now = V.Now
-
 --- Setup Luatrek global variables
 function M.setup ()
     local r = 0
@@ -150,9 +157,10 @@ function M.setup ()
         end
         math.randomseed(d)
     end
-    Param.bases = math.random(0, (6 - Game.skill)) + 2
     if Game.skill == 6 then
         Param.bases = 1
+    else
+        Param.bases = math.random(2, (7 - Game.skill))
     end
     Now.bases = Param.bases
     Param.time = 6 * Game.length + 2
@@ -187,7 +195,7 @@ function M.setup ()
     Ship.warp3 = 125.0
     Ship.sinsbad = 0
     Ship.cloaked = 0
-    Param.date = (math.random(0, 20) + 20) * 100;
+    Param.date = math.random(20, 39) * 100;
     Now.date = Param.date
     for k, v in pairs(Param.damfac) do
         Param.damfac[k] = math.log(Game.skill + 0.5)
@@ -206,7 +214,140 @@ function M.setup ()
     Param.damprob["SINS"] = 20     -- navigation system     2.0%
     Param.damprob["CLOAK"] = 50    -- cloaking device       5.0%
     Param.damprob["XPORTER"] = 80  -- transporter           8.0%
-
+    -- check to see if the sum of Param.damprob is 1000
+    local sum = 0
+    for k, v in pairs(Param.damprob) do
+        sum = sum + v
+    end
+    if sum ~= 1000 then
+        error(string.format("LUATREK SYSERR: Device probabilities sum to %d\n", sum))
+    end
+    Param.dockfac = 0.5
+    Param.regenfac = (5 - Game.skill) * 0.05
+    if Param.regenfac < 0.0 then
+        Param.regenfac = 0.0
+    end
+    Param.warptime = 10
+    Param.stopengy = 50
+    Param.shupengy = 40
+    Param.klingpwr = 100 + 150 * Game.skill
+    if Game.skill >= 6 then
+        Param.klingpwr = Param.klingpwr + 150
+    end
+    Param.phasfac = 0.8
+    Param.hitfac = 0.5
+    Param.klingcrew = 200
+    Param.srndrprob = 0.0035
+    Param.moveprob[V.KM_OB] = 45
+    Param.movefac[V.KM_OB] = .09
+    Param.moveprob[V.KM_OA] = 40
+    Param.movefac[V.KM_OA] = -0.05
+    Param.moveprob[V.KM_EB] = 40
+    Param.movefac[V.KM_EB] = 0.075
+    Param.moveprob[V.KM_EA] = 25 + 5 * Game.skill
+    Param.movefac[V.KM_EA] = -0.06 * Game.skill
+    Param.moveprob[V.KM_LB] = 0
+    Param.movefac[V.KM_LB] = 0.0
+    Param.moveprob[V.KM_LA] = 10 + 10 * Game.skill
+    Param.movefac[V.KM_LA] = 0.25
+    Param.eventdly["E_SNOVA"] = 0.5;
+    Param.eventdly["E_LRTB"] = 25.0;
+    Param.eventdly["E_KATSB"] = 1.0;
+    Param.eventdly["E_KDESB"] = 3.0;
+    Param.eventdly["E_ISSUE"] = 1.0;
+    Param.eventdly["E_SNAP"] = 0.5;
+    Param.eventdly["E_ENSLV"] = 0.5;
+    Param.eventdly["E_REPRO"] = 2.0;
+    Param.navigcrud[0] = 1.50;
+    Param.navigcrud[1] = 0.75;
+    Param.cloakenergy = 1000;
+    Param.energylow = 1000;
+    for k, v in ipairs(Event) do
+        Event[k].date = 1e50
+        Event[k].evcode = ""
+    end
+    -- @todo xsched(E_SNOVA, 1, 0, 0, 0);
+    -- @todo xsched(E_LRTB, Param.klings, 0, 0, 0);
+    -- @todo xsched(E_KATSB, 1, 0, 0, 0);
+    -- @todo xsched(E_ISSUE, 1, 0, 0, 0);
+    -- @todo xsched(E_SNAP, 1, 0, 0, 0);
+    Ship.sectx = math.random(V.NSECTS)
+    Ship.secty = math.random(V.NSECTS)
+    Game.killk = 0
+    Game.kills = 0
+    Game.killb = 0
+    Game.deaths = 0
+    Game.negenbar = 0
+    Game.captives = 0
+    Game.killinhab = 0
+    Game.helps = 0
+    Game.killed = false
+    Game.snap = false
+    Move.endgame = 0
+    -- setup stars
+    for i = 1, V.NQUADS do
+        for j = 1, V.NQUADS do
+            local q = Quad[i][j]
+            local stars = math.random(1, 9)
+            local holes = math.floor(math.random(0, 2) - (stars / 5))
+            if holes < 0 then
+                holes = 0
+            end
+            q.klings = 0
+            q.bases = 0
+            q.scanned = -1
+            q.stars = stars
+            q.holes = holes
+            q.systemname = 0
+        end
+    end
+    -- select inhabited starsystems
+    for d = 1, #V.Systemname do
+        local i, j, q
+        repeat
+            i = math.random(V.NQUADS)
+            j = math.random(V.NQUADS)
+            q = Quad[i][j]
+        until q.systemname == 0
+        q.systemname = d
+        q.distressed = 0
+    end
+    -- position starbases
+    for i = 1, Param.bases do
+        local ix, iy, q
+        repeat
+            ix = math.random(V.NQUADS)
+            iy = math.random(V.NQUADS)
+            q = Quad[ix][iy]
+        until q.bases == 0
+        q.bases = 1
+        Now.base[i].x = ix
+        Now.base[i].y = iy
+        q.scanned = 1001
+        -- start the Enterprise near starbase
+        if i == 1 then
+            Ship.quadx = ix
+            Ship.quady = iy
+        end
+    end
+    -- position klingons
+    local kleft = Param.klings
+    while kleft > 0 do
+        local klump = math.random(1, 4)
+        if klump > kleft then
+            klump = kleft
+        end
+        local ix, iy, q
+        repeat
+            ix = math.random(V.NQUADS)
+            iy = math.random(V.NQUADS)
+            q = Quad[ix][iy]
+        until (q.klings + klump) <= V.MAXKLQUAD
+        q.klings = q.klings + klump
+        kleft = kleft - klump
+    end
+    -- initialize this quadrant
+    
     -- @todo more to go
 end
 
