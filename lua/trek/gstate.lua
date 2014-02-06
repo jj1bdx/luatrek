@@ -531,15 +531,15 @@ M.Now = {
 
 --- Other stuff, which is not dumped in a shapshot
 -- @table Etc
--- @field kling Table of sorted Klingon list
+-- @field klingon Table of sorted Klingon list
 -- @field nkling Number of Klingons in this sector (<0 means automatic override mode)
 -- @field starbase Table of starbase coordinates in current quadrant (in {x, y})
 -- @field snapshot Snapshot for time warp
 -- @field statreport boolean - true to get a status report on a short range scan
 M.Etc = {
-    kling = pl.tablex.new(M.MAXKLQUAD,
+    klingon = pl.tablex.new(M.MAXKLQUAD,
 --- Klingon list
--- @table kling
+-- @table klingon
 -- @field x X coordinate
 -- @field y Y coordinate
 -- @field power Power left
