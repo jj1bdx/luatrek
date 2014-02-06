@@ -155,7 +155,7 @@ function M.initquad (f)
         local rx, ry = M.sector()
         Sect[rx][ry] = "INHABIT"
         -- Inhabited star is a star anyway
-        nstars -= 1
+        nstars = nstars - 1
     end
     -- initialize black holes
     for i = 1, nholes do
@@ -177,7 +177,7 @@ function M.sector ()
     repeat
         local i = math.random(V.NSECTS)
         local j = math.random(V.NSECTS)
-    until Sect[i][j] != "EMPTY"
+    until Sect[i][j] ~= "EMPTY"
     return i, j
 end
 
