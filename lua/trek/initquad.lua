@@ -95,6 +95,8 @@ local Quad = V.Quad
 local Sect = V.Sect
 --- Global Move table
 local Move = V.Sect
+--- Global Etc table
+local Etc = V.Etc
 
 --- Parameterize quadrant upon entering
 -- A quadrant is initialized from the information held in the
@@ -106,7 +108,7 @@ local Move = V.Sect
 -- that the condition is RED, and he is given a chance to put
 -- his shields up if the computer is working.
 --
--- The flag `f' is set to disable the check for condition red.
+-- @boolean f The flag `f' is set to disable the check for condition red.
 -- This mode is used in situations where you know you are going
 -- to be docked, i.e., abandon() and help().
 function M.initquad (f)
@@ -174,9 +176,10 @@ end
 -- @treturn int Sector coordinate X
 -- @treturn int Sector coordinate Y
 function M.sector ()
+    local i, j
     repeat
-        local i = math.random(V.NSECTS)
-        local j = math.random(V.NSECTS)
+        i = math.random(V.NSECTS)
+        j = math.random(V.NSECTS)
     until Sect[i][j] ~= "EMPTY"
     return i, j
 end
