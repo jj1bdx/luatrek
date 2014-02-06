@@ -148,15 +148,17 @@ function M.setup ()
     Game.skill = trek.getpar.getcodpar("What skill game", Skitab)
     Game.tourn = false
     Game.passwd = trek.getpar.getstrpar("Enter a password")
+    local seed = 0
     if Game.passwd == "tournament" then
         Game.passwd = trek.getpar.getstrpar("Enter tournament code")
         Game.tourn = true
-        local d = 0
         for c in str:gmatch"." do
-            d = bit32.lrotate(bit32.bxor(d, c), 1)
+            seed = bit32.lrotate(bit32.bxor(seed, c), 1)
         end
-        math.randomseed(d)
+    else
+        seed = os.time()
     end
+    math.randomseed(seed)
     if Game.skill == 6 then
         Param.bases = 1
     else
@@ -165,12 +167,9 @@ function M.setup ()
     Now.bases = Param.bases
     Param.time = 6 * Game.length + 2
     Now.time = Param.time
-    local klingrate = 3.5 * (math.random() + 0.75)
-    if klingrate < 5 then
-        klingrate = 5
-    end
     -- @warning On the bsdtrek the max value is 127 but not here
-    Param.klings = Game.skill * Game.length * klingrate
+    Param.klings = math.floor(Game.skill * Game.length * 
+                    (5.0 + (math.random() * 1.125)))
     Now.klings = Param.klings
     Param.energy = 5000
     Ship.energy = Param.energy
@@ -230,7 +229,7 @@ function M.setup ()
     Param.warptime = 10
     Param.stopengy = 50
     Param.shupengy = 40
-    Param.klingpwr = 100 + 150 * Game.skill
+    Param.klingpwr = 100 + (150 * Game.skill)
     if Game.skill >= 6 then
         Param.klingpwr = Param.klingpwr + 150
     end
@@ -244,11 +243,11 @@ function M.setup ()
     Param.movefac[V.KM_OA] = -0.05
     Param.moveprob[V.KM_EB] = 40
     Param.movefac[V.KM_EB] = 0.075
-    Param.moveprob[V.KM_EA] = 25 + 5 * Game.skill
+    Param.moveprob[V.KM_EA] = 25 + (5 * Game.skill)
     Param.movefac[V.KM_EA] = -0.06 * Game.skill
     Param.moveprob[V.KM_LB] = 0
     Param.movefac[V.KM_LB] = 0.0
-    Param.moveprob[V.KM_LA] = 10 + 10 * Game.skill
+    Param.moveprob[V.KM_LA] = 10 + (10 * Game.skill)
     Param.movefac[V.KM_LA] = 0.25
     Param.eventdly["E_SNOVA"] = 0.5;
     Param.eventdly["E_LRTB"] = 25.0;
@@ -351,7 +350,7 @@ function M.setup ()
     if Param.bases > 1 then
         pl.utils.printf("s")
     end
-    pl.utils.printf(" at %d,%d", Now.base[1].x, Now.base[2].y);
+    pl.utils.printf(" at %d,%d", Now.base[1].x, Now.base[1].y);
     if Param.bases > 1 then
         for i = 2, Param.bases do
             pl.utils.printf(", %d,%d", Now.base[i].x, Now.base[i].y);
