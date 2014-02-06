@@ -89,10 +89,6 @@ M.NSECTS = 10
 --- dimension of galaxy in quadrants
 M.NQUADS = 8
 
---- number of quadrants which are inhabited
--- (#Systemname + 1)
-M.NINHAB = 32
-
 --- max number of concurrently pending events
 M.MAXEVENTS = 25
 
