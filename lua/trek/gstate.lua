@@ -231,17 +231,19 @@ M.KM_LA = 5 -- Leave quadrant, After attack
 --  (>= 1: the index into the Event table which will have the system name,
 --   0: not distressed)
 M.Quad = pl.array2d.new(M.NQUADS, M.NQUADS,
-    { 
-        bases = 0, 
-        klings = 0,
-        holes = 0,
-        scanned = -1,
-        starts = 0,
-        systemname = 0,
-        distressed = 0,
-    }
+    function (i, j) 
+        return {
+            bases = 0,
+            klings = 0,
+            holes = 0,
+            scanned = -1,
+            starts = 0,
+            systemname = 0,
+            distressed = 0,
+        }
+    end
 )
-
+    
 --- Sector Map Code table for the short range sensor display
 -- (Note: all codes (table keys) are strings)
 -- @table Sectdisp
