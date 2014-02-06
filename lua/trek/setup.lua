@@ -358,7 +358,7 @@ function M.setup ()
     end
     pl.utils.printf("\nIt takes %d units to kill a Klingon\n", Param.klingpwr);
     Move.free = 0;
-    -- @todo initquad(0);
+    trek.initquad.initquad(false)
     -- @todo srscan(1);
     -- @todo attack(0);
     
