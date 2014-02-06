@@ -158,22 +158,22 @@ M.Systemname = {
 -- @field SHUTTLE Shuttlecraft
 M.Device = {
     ["WARP"] = { name = "warp drive", person = "Scotty" },
-    ["SRSCAN"] = { name = "S.R. scanners", person ="Scotty" }, 
-    ["LRSCAN"] = { name = "L.R. scanners", person = "Scotty" }, 
-    ["PHASER"] = { name = "phasers", person = "Sulu" }, 
-    ["TORPED"] = { name = "photon tubes", person = "Sulu" }, 
-    ["IMPULSE"] = { name = "impulse engines", person = "Scotty" }, 
-    ["SHIELD"] = { name = "shield control", person = "Sulu" }, 
-    ["COMPUTER"] = { name = "computer", person = "Spock" }, 
-    ["SSRADIO"] = { name = "subspace radio", person = "Uhura" }, 
-    ["LIFESUP"] = { name = "life support", person = "Scotty" }, 
-    ["SINS"] = { name = "navigation system", person = "Chekov" }, 
-    ["CLOAK"] = { name = "cloaking device", person = "Scotty" }, 
-    ["XPORTER"] = { name = "transporter", person = "Scotty" }, 
-    ["SHUTTLE"] = { name = "shuttlecraft", person = "Scotty" }, 
+    ["SRSCAN"] = { name = "S.R. scanners", person ="Scotty" },
+    ["LRSCAN"] = { name = "L.R. scanners", person = "Scotty" },
+    ["PHASER"] = { name = "phasers", person = "Sulu" },
+    ["TORPED"] = { name = "photon tubes", person = "Sulu" },
+    ["IMPULSE"] = { name = "impulse engines", person = "Scotty" },
+    ["SHIELD"] = { name = "shield control", person = "Sulu" },
+    ["COMPUTER"] = { name = "computer", person = "Spock" },
+    ["SSRADIO"] = { name = "subspace radio", person = "Uhura" },
+    ["LIFESUP"] = { name = "life support", person = "Scotty" },
+    ["SINS"] = { name = "navigation system", person = "Chekov" },
+    ["CLOAK"] = { name = "cloaking device", person = "Scotty" },
+    ["XPORTER"] = { name = "transporter", person = "Scotty" },
+    ["SHUTTLE"] = { name = "shuttlecraft", person = "Scotty" },
 }
 
---- You lose codes and messages 
+--- You lose codes and messages
 -- (Note: listed field names are actually table keys in strings)
 -- @table Losemsg
 -- @field L_NOTIME Ran out of time
@@ -190,19 +190,19 @@ M.Device = {
 -- @field L_CAPTURED Captured by Klingons
 -- @field L_NOCREW You ran out of crew
 M.Losemsg = {
-    ["L_NOTIME"] = "You ran out of time", 
-    ["L_NOENGY"] = "You ran out of energy", 
-    ["L_DSTRYD"] = "You have been destroyed", 
-    ["L_NEGENB"] = "You ran into the negative energy barrier", 
-    ["L_SUICID"] = "You destroyed yourself by nova'ing that star", 
-    ["L_SNOVA"] = "You have been caught in a supernova", 
-    ["L_NOLIFE"] = "You just suffocated in outer space", 
-    ["L_NOHELP"] = "You could not be rematerialized", 
-    ["L_TOOFAST"] = "*** Ship's hull has imploded ***", 
-    ["L_STAR"] = "You have burned up in a star", 
-    ["L_DSTRCT"] = "Well, you destroyed yourself, but it didn't do any good", 
-    ["L_CAPTURED"] = "You have been captured by Klingons and mercilessly tortured", 
-    ["L_NOCREW"] = "Your last crew member died", 
+    ["L_NOTIME"] = "You ran out of time",
+    ["L_NOENGY"] = "You ran out of energy",
+    ["L_DSTRYD"] = "You have been destroyed",
+    ["L_NEGENB"] = "You ran into the negative energy barrier",
+    ["L_SUICID"] = "You destroyed yourself by nova'ing that star",
+    ["L_SNOVA"] = "You have been caught in a supernova",
+    ["L_NOLIFE"] = "You just suffocated in outer space",
+    ["L_NOHELP"] = "You could not be rematerialized",
+    ["L_TOOFAST"] = "*** Ship's hull has imploded ***",
+    ["L_STAR"] = "You have burned up in a star",
+    ["L_DSTRCT"] = "Well, you destroyed yourself, but it didn't do any good",
+    ["L_CAPTURED"] = "You have been captured by Klingons and mercilessly tortured",
+    ["L_NOCREW"] = "Your last crew member died",
 }
 
 --- Klingon move indices
@@ -231,7 +231,7 @@ M.KM_LA = 5 -- Leave quadrant, After attack
 --  (>= 1: the index into the Event table which will have the system name,
 --   0: not distressed)
 M.Quad = pl.array2d.new(M.NQUADS, M.NQUADS,
-    function (i, j) 
+    function (i, j)
         return {
             bases = 0,
             klings = 0,
@@ -263,7 +263,7 @@ M.Sectdisp = {
     ["QUEENE"] = "Q",
     ["KLINGON"] = "K",
     ["INHABIT"] = "@",
-    ["HOLE"] = " ", -- @todo Isn't this hard to recognize? 
+    ["HOLE"] = " ", -- @todo Isn't this hard to recognize?
 }
 
 --- Two dimensional table of the Sectors
@@ -293,15 +293,17 @@ M.Sect = pl.array2d.new(M.NSECTS, M.NSECTS, nil)
 -- @field hidden boolean - true if unreported (SSradio out)
 -- @field ghost boolean - true if actually already expired
 M.Event = pl.tablex.new(M.MAXEVENTS,
-    {
-        x = 0,
-        y = 0,
-        date = 0,
-        evcode = "",
-        systemname = 0, 
-        hidden = false,
-        ghost = false, 
-    }
+    function (i)
+        return {
+            x = 0,
+            y = 0,
+            date = 0,
+            evcode = "",
+            systemname = 0,
+            hidden = false,
+            ghost = false,
+        }
+    end
 )
 
 --- Starship status
@@ -521,7 +523,10 @@ M.Now = {
     resource = 0,
     distressed = 0,
     eventptr = {}, -- @todo what to do with this type?
-    base = pl.tablex.new(M.MAXBASES, {x = 0, y = 0}),
+    base = pl.tablex.new(M.MAXBASES,
+        function (i)
+            return {x = 0, y = 0}
+        end),
 }
 
 --- Other stuff, which is not dumped in a shapshot
@@ -533,7 +538,6 @@ M.Now = {
 -- @field statreport boolean - true to get a status report on a short range scan
 M.Etc = {
     kling = pl.tablex.new(M.MAXKLQUAD,
-        {
 --- Klingon list
 -- @table kling
 -- @field x X coordinate
@@ -542,17 +546,20 @@ M.Etc = {
 -- @field dist Distance to Enterprise
 -- @field avgdist Average of distance over this move
 -- @field srndreq boolean - true if surrender has been requested
-            x = 0,
-            y = 0,
-            power = 0,
-            dist = 0,
-            avgdist = 0,
-            srndreq = false,
-        }
+        function (i)
+            return {
+                x = 0,
+                y = 0,
+                power = 0,
+                dist = 0,
+                avgdist = 0,
+                srndreq = false,
+            }
+        end
     ),
     nkling = 0,
     starbase = {
-        x = 0, 
+        x = 0,
         y = 0,
     },
     snapshot = {}, -- @todo what should be in this variable?
