@@ -9,6 +9,11 @@
 * Convention: C NSECTS -> Lua V.NSECTS (where `local V = trek.gstate`)
 * Even shorter names can be locally defined per each module
 
+## Initialization and access to the tables
+
+* Array initialization in Lua pl.array2d.new() and pl.tablex.new() with a table *must* be done with an anonymous function which returns the table (as a constructor)
+* Lua has no pointer, so the access to each member element of C structures or Lua tables have to be performed by directly specifying the member (i.e., `c->member` must be rewritten to `c.member`)
+
 ## Module names
 
 * All modules are now under lua/trek/
@@ -43,4 +48,4 @@
 
 * Do we really need sleep() system calls? I don't think so. The sleep() calls are only used for game effects; they can be totally eliminated.
 * C utility.c syserr("string") -> Lua error(string.format("LUATREK SYSERR: %s\n", "error string"))
-* Array initialization in Lua needed -> Lua pl.array2d.new()
+* C printf() -> Lua pl.utils.printf()
