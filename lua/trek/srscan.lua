@@ -157,7 +157,7 @@ function M.srscan (f)
 					printf(", CLOAKED")
                 end
             elseif i == 3 then
-				printf("position      %2d,%2d/%2d,%2d",Ship.quadx, Ship.quady, Ship.sectx, Ship.secty)
+				printf("position      %d,%d/%d,%d",Ship.quadx, Ship.quady, Ship.sectx, Ship.secty)
             elseif i == 4 then
 				printf("warp factor   %.1f", Ship.warp)
             elseif i == 5 then
