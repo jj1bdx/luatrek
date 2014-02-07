@@ -86,6 +86,7 @@ M.damage = require "trek.damage"
 M.getpar = require "trek.getpar"
 M.gstate = require "trek.gstate"
 M.initquad = require "trek.initquad"
+M.schedule = require "trek.schedule"
 M.setup = require "trek.setup"
 M.srscan = require "trek.srscan"
 
