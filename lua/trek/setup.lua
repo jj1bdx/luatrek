@@ -173,7 +173,7 @@ function M.setup ()
     Now.klings = Param.klings
     Param.energy = 5000
     Ship.energy = Param.energy
-    Param.torped = 0
+    Param.torped = 10
     Ship.torped = Param.torped
     Ship.ship = "ENTERPRISE"
     Ship.shipname = "Enterprise"
