@@ -169,7 +169,9 @@ function M.srscan (f)
                 if Ship.shldup then
                     s = "up"
                 end
-                -- @todo if damaged("SHIELD") then s = "damaged" end
+                if trek.damage.damaged("SHIELD") then
+                    s = "damaged"
+                end
                 printf("shields       %s, %d%%", s, 100.0 * Ship.shield / Param.shield)
             elseif i == 8 then
                 printf("Klingons left %d", Now.klings)
@@ -177,10 +179,11 @@ function M.srscan (f)
                 printf("time left     %.2f", Now.time)
             elseif i == 10 then
                 printf("life support  ")
-                -- @todo if damaged(LIFESUP) then
-                --    printf("damaged, reserves = %.2f", Ship.reserves)
-                -- end
-                printf("active")
+                if trek.damage.damaged("LIFESUP") then
+                    printf("damaged, reserves = %.2f", Ship.reserves)
+                else 
+                    printf("active")
+                end
             end
         end
         printf("\n")
