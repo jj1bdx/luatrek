@@ -113,9 +113,9 @@ local Etc = V.Etc
 function M.srscan (f)
     -- printf shorthand
     local printf = pl.utils.printf
-    -- @todo if (f >= 0) and check_out("SRSCAN") then
-    --    return
-    -- end
+    if (f >= 0) and trek.damage.check_out("SRSCAN") then
+        return
+    end
     local statinfo = false
     if f ~= 0 then
         statinfo = true
