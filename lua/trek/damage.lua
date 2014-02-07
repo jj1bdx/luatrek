@@ -95,6 +95,10 @@ local Quad = V.Quad
 local Sect = V.Sect
 --- Global Move table
 local Move = V.Sect
+--- Global Device table
+local Device = V.Device
+--- shorthand for Penlight printf
+local printf = pl.utils.printf
 
 --- Check for damaged devices
 -- This is a boolean function which returns true if the
@@ -103,14 +107,51 @@ local Move = V.Sect
 -- @string dev Device identifier string
 -- @treturn bool true if broken, false if not
 function M.damaged (dev)
-    for i = 1, M.MAXEVENTS do
+    for i = 1, V.MAXEVENTS do
         local e = Event[i]
         if (e.evcode == "E_FIXDV") and (e.systemname == d) then
             return true
         end
     end
-	-- device fix not in event list -- device must not be broken
+    -- device fix not in event list -- device must not be broken
     return false
+end
+
+--- Check if a device is out
+-- The indicated device is checked to see if it is disabled.  If
+-- it is, an attempt is made to use the starbase device.  If both
+-- of these fails, it returns true (device is REALLY out),
+-- otherwise it returns false(I can get to it somehow).
+--
+-- It prints appropriate messages too.
+-- @string dev Device identifier string
+-- @treturn bool true if really broken, false if available somehow
+function M.check_out (dev)
+    -- check for device ok
+    if not M.damaged(dev) then
+        return false
+    end
+    -- report it as being dead
+    M.out(dev)
+    -- but if we are docked, we can go ahead anyhow
+    if Ship.cond ~= "DOCKED" then
+        return true
+    end
+    printf("  Using starbase %s\n", Device[dev].name)
+    return false
+end
+
+--- Announce device outage
+-- @string dev Device identifier string
+function M.out (dev)
+    local d = Device[dev]
+    printf("%s reports %s ", d.person, d.name)
+    if string.match(d.name, "s$") ~= nil then
+        printf("are")
+    else
+        printf("is")
+    end
+    printf(" damaged\n")
 end
 
 -- End of module
