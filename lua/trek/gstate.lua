@@ -567,6 +567,9 @@ M.Etc = {
     statreport = false,
 }
 
+--- Global trace flag, true if enabled
+M.Trace = false
+
 -- End of module
 return M
 
