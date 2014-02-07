@@ -140,6 +140,7 @@ function M.initquad (f)
     for i = 1, Etc.nkling do
         local rx, ry = M.sector()
         Sect[rx][ry] = "KLINGON"
+        Etc.klingon[i].x = rx
         Etc.klingon[i].y = ry
         Etc.klingon[i].power = Param.klingpwr
         Etc.klingon[i].srndreq = 0
@@ -180,7 +181,7 @@ function M.sector ()
     repeat
         i = math.random(V.NSECTS)
         j = math.random(V.NSECTS)
-    until Sect[i][j] ~= "EMPTY"
+    until Sect[i][j] == "EMPTY"
     return i, j
 end
 
