@@ -191,12 +191,12 @@ end
 
 --- Simplified reschedule function
 -- Parameters are the event itself and the division factor.
--- @param e Event itself to be deleted from the slot
+-- @param e Event itself 
 -- @number factor division factor
 function M.xresched (e, factor)
     -- @todo original xresched() in BSDtrek argument semantics is ambiguous
     -- @todo confirm Param.eventdly structure data semantics
-    return reschedule(e,
+    return M.reschedule(e,
             Param.eventdly[e.evcode] * Param.time * (-1 * math.log(math.random() + 0.001)) / factor)
 end
 
