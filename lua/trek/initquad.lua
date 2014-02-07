@@ -126,7 +126,9 @@ function M.initquad (f)
     if Etc.nkling > 0 and f == false then
         pl.utils.printf("Condition RED\n")
         Ship.cond = "RED"
-        -- @todo if (!damaged(COMPUTER)) shield(1);
+        if not trek.damage.damaged("COMPUTER") then
+            -- @todo shield(1);
+        end
     end
     -- clear out the quadrant
     for i = 1, V.NSECTS do
