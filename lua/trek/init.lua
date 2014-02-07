@@ -86,6 +86,7 @@ M.getpar = require "trek.getpar"
 M.gstate = require "trek.gstate"
 M.setup = require "trek.setup"
 M.initquad = require "trek.initquad"
+M.srscan = require "trek.srscan"
 
 -- End of module
 return M
