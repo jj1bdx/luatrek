@@ -289,7 +289,8 @@ M.Sect = pl.array2d.new(M.NSECTS, M.NSECTS, nil)
 -- @field y Coordinate Y
 -- @field date Trap date
 -- @field evcode Event code ("": unallocated)
--- @field systemname Index into Systemname table for reported distress calls
+-- @field systemname integer index into Systemname table for reported distress calls /
+-- string index into device identifier to identify damaged device
 -- @field hidden boolean - true if unreported (SSradio out)
 -- @field ghost boolean - true if actually already expired
 M.Event = pl.tablex.new(M.MAXEVENTS,
@@ -299,7 +300,7 @@ M.Event = pl.tablex.new(M.MAXEVENTS,
             y = 0,
             date = 0,
             evcode = "",
-            systemname = 0,
+            systemname = 0, -- @warning both number/string possible
             hidden = false,
             ghost = false,
         }
