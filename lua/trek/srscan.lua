@@ -126,12 +126,12 @@ function M.srscan (f)
     if f > 0 then
         Etc.statreport = true
     end
-	local q = Quad[Ship.quadx][Ship.quady]
+    local q = Quad[Ship.quadx][Ship.quady]
     if f >= 0 then
-		printf("\nShort range sensor scan\n")
-		q.scanned = (q.klings * 100) + (q.bases * 10) + q.stars
+        printf("\nShort range sensor scan\n")
+        q.scanned = (q.klings * 100) + (q.bases * 10) + q.stars
         -- Sector coordinate value: 1 - 10, three letters needed
-		printf("   ")
+        printf("   ")
         for i = 1, V.NSECTS do
             printf("%-2d ", i)
         end
@@ -139,56 +139,56 @@ function M.srscan (f)
     end
     for i = 1, V.NSECTS do
         if f >= 0 then
-			printf("%2d ", i)
-			for j = 1, V.NSECTS do
-				printf("%s  ", V.Sectdisp[Sect[i][j]])
+            printf("%2d ", i)
+            for j = 1, V.NSECTS do
+                printf("%s  ", V.Sectdisp[Sect[i][j]])
             end
-			printf("%2d", i)
-			if statinfo then
-				printf("   ")
+            printf("%2d", i)
+            if statinfo then
+                printf("   ")
             end
         end
         if statinfo then
             if i == 1 then
-				printf("stardate      %.2f", Now.date)
+                printf("stardate      %.2f", Now.date)
             elseif i == 2 then
-				printf("condition     %s", Ship.cond)
-				if Ship.cloaked then
-					printf(", CLOAKED")
+                printf("condition     %s", Ship.cond)
+                if Ship.cloaked then
+                    printf(", CLOAKED")
                 end
             elseif i == 3 then
-				printf("position      %d,%d/%d,%d",Ship.quadx, Ship.quady, Ship.sectx, Ship.secty)
+                printf("position      %d,%d/%d,%d",Ship.quadx, Ship.quady, Ship.sectx, Ship.secty)
             elseif i == 4 then
-				printf("warp factor   %.1f", Ship.warp)
+                printf("warp factor   %.1f", Ship.warp)
             elseif i == 5 then
-				printf("total energy  %d", Ship.energy)
+                printf("total energy  %d", Ship.energy)
             elseif i == 6 then
-				printf("torpedoes     %d", Ship.torped)
+                printf("torpedoes     %d", Ship.torped)
             elseif i == 7 then
-				local s = "down"
-				if Ship.shldup then
-					s = "up"
+                local s = "down"
+                if Ship.shldup then
+                    s = "up"
                 end
-				-- @todo if damaged("SHIELD") then s = "damaged" end
-				printf("shields       %s, %d%%", s, 100.0 * Ship.shield / Param.shield)
+                -- @todo if damaged("SHIELD") then s = "damaged" end
+                printf("shields       %s, %d%%", s, 100.0 * Ship.shield / Param.shield)
             elseif i == 8 then
-				printf("Klingons left %d", Now.klings)
+                printf("Klingons left %d", Now.klings)
             elseif i == 9 then
-				printf("time left     %.2f", Now.time)
+                printf("time left     %.2f", Now.time)
             elseif i == 10 then
-				printf("life support  ")
-				-- @todo if damaged(LIFESUP) then
-				--	printf("damaged, reserves = %.2f", Ship.reserves)
-				-- end
-				printf("active")
+                printf("life support  ")
+                -- @todo if damaged(LIFESUP) then
+                --    printf("damaged, reserves = %.2f", Ship.reserves)
+                -- end
+                printf("active")
             end
         end
-		printf("\n")
+        printf("\n")
     end
-	if f < 0 then
-		printf("current crew  %d\n", Ship.crew)
-		printf("brig space    %d\n", Ship.brigfree)
-		printf("Klingon power %d\n", Param.klingpwr)
+    if f < 0 then
+        printf("current crew  %d\n", Ship.crew)
+        printf("brig space    %d\n", Ship.brigfree)
+        printf("Klingon power %d\n", Param.klingpwr)
         local Lentab = {
             [1] = "short",
             [2] = "medium",
@@ -202,21 +202,21 @@ function M.srscan (f)
             [5] = "commodore",
             [6] = "impossible",
         }
-		printf("Length, Skill %s, %s\n", Lentab[Game.length], Skitab[Game.skill])
-		return
-    end	
-	printf("   ")
+        printf("Length, Skill %s, %s\n", Lentab[Game.length], Skitab[Game.skill])
+        return
+    end    
+    printf("   ")
     for i = 1, V.NSECTS do
         printf("%-2d ", i)
     end
-	printf("\n")
+    printf("\n")
 
-	if q.distressed ~= 0 then
-		printf("Distressed ")
+    if q.distressed ~= 0 then
+        printf("Distressed ")
     end
-	if q.systemname > 0 then
-		-- @todo fix to printf("Starsystem %s\n", systemname(q));
-		printf("Starsystem %s\n", V.Systemname[q.systemname]);
+    if q.systemname > 0 then
+        -- @todo fix to printf("Starsystem %s\n", systemname(q));
+        printf("Starsystem %s\n", V.Systemname[q.systemname]);
     end
 end
 
