@@ -265,11 +265,12 @@ function M.setup ()
         Event[k].date = 1e50
         Event[k].evcode = ""
     end
-    -- @todo xsched(E_SNOVA, 1, 0, 0, 0);
-    -- @todo xsched(E_LRTB, Param.klings, 0, 0, 0);
-    -- @todo xsched(E_KATSB, 1, 0, 0, 0);
-    -- @todo xsched(E_ISSUE, 1, 0, 0, 0);
-    -- @todo xsched(E_SNAP, 1, 0, 0, 0);
+    local xsched = trek.schedule.xsched
+    xsched("E_SNOVA", 1, 0, 0, 0, false, false)
+    xsched("E_LRTB", Param.klings, 0, 0, 0, false, false)
+    xsched("E_KATSB", 1, 0, 0, 0, false, false)
+    xsched("E_ISSUE", 1, 0, 0, 0, false, false)
+    xsched("E_SNAP", 1, 0, 0, 0, false, false)
     Ship.sectx = math.random(V.NSECTS)
     Ship.secty = math.random(V.NSECTS)
     Game.killk = 0
