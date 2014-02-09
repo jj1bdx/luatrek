@@ -91,6 +91,7 @@ M.schedule = require "trek.schedule"
 M.setup = require "trek.setup"
 M.shield = require "trek.shield"
 M.srscan = require "trek.srscan"
+M.warp = require "trek.warp"
 
 -- End of module
 return M
