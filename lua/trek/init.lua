@@ -87,11 +87,11 @@ M.damage = require "trek.damage"
 M.getpar = require "trek.getpar"
 M.gstate = require "trek.gstate"
 M.initquad = require "trek.initquad"
+M.scan = require "trek.scan"
 M.schedule = require "trek.schedule"
 M.score = require "trek.score"
 M.setup = require "trek.setup"
 M.shield = require "trek.shield"
-M.srscan = require "trek.srscan"
 M.warp = require "trek.warp"
 
 -- End of module
