@@ -82,6 +82,7 @@ local M = strict.module()
 pl = require "pl.import_into"()
 
 -- load all submodules (list all submodules here)
+M.compkl = require "trek.compkl"
 M.damage = require "trek.damage"
 M.getpar = require "trek.getpar"
 M.gstate = require "trek.gstate"
