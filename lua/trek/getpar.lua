@@ -215,6 +215,26 @@ function M.getcodpar (prompt, wordtab)
     return val, num, t
 end
 
+--- Get course and distance
+-- The user is asked for a course and distance.  This is used by
+-- move, impulse, and some of the computer functions.
+-- @treturn bool true for success, false for an invalid input (meaning to drop the request)
+-- @treturn number course (0 - 360, -1 if failed)
+-- @treturn number distance (0 - 15, -1 if failed)
+function M.getcodi ()
+    local co = M.getnumpar("Course")
+    -- course must be in the interval [0, 360]
+    if (co < 0) or (co > 360) then
+        return false, -1, -1
+    end
+    local di = M.getnumpar("Distance")
+    -- distance must be in the interval [0, 15]
+    if (di <= 0.0) or (di > 15.0) then
+        return false, -1, -1
+    end
+    -- good return
+    return 0, co, di
+end
 
 -- End of module
 return M
