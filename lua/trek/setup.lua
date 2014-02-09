@@ -187,7 +187,7 @@ function M.setup ()
     Ship.crew = Param.crew
     Param.brigfree = 400
     Ship.brigfree = Param.brigfree
-    Ship.shldup = 1
+    Ship.shldup = true
     Ship.cond = "GREEN"
     Ship.warp = 5.0
     Ship.warp2 = 25.0
