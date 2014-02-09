@@ -266,22 +266,10 @@ M.Sectdisp = {
     ["HOLE"] = " ", -- @todo Isn't this hard to recognize?
 }
 
---- Two dimensional table of the Sectors
+--- Two dimensional table of the Sectors 
+-- initially filled with string "EMPTY"
 -- @table Sect
-M.Sect = pl.array2d.new(M.NSECTS, M.NSECTS, nil)
-
---- Event codes (represented in string)
--- @table Event_codes
--- @field E_LRTB  long range tractor beam
--- @field E_KATSB Klingon attacks starbase
--- @field E_KDESB Klingon destroys starbase
--- @field E_ISSUE distress call is issued
--- @field E_ENSLV Klingons enslave a quadrant
--- @field E_REPRO a Klingon is reproduced
--- @field E_FIXDV fix a device
--- @field E_ATTACK Klingon attack during rest period
--- @field E_SNAP take a snapshot for time warp
--- @field E_SNOVA supernova occurs
+M.Sect = pl.array2d.new(M.NSECTS, M.NSECTS, "EMPTY")
 
 --- Event table (of the table with the following field names)
 -- @table Event
@@ -472,6 +460,18 @@ M.Param = {
     moveprob = pl.tablex.new(M.KM_NUMBER, 0),
     movefac = pl.tablex.new(M.KM_NUMBER, 0),
     eventdly = {
+--- Event codes (represented in string)
+-- @table Event_codes
+-- @field E_LRTB  long range tractor beam
+-- @field E_KATSB Klingon attacks starbase
+-- @field E_KDESB Klingon destroys starbase
+-- @field E_ISSUE distress call is issued
+-- @field E_ENSLV Klingons enslave a quadrant
+-- @field E_REPRO a Klingon is reproduced
+-- @field E_FIXDV fix a device
+-- @field E_ATTACK Klingon attack during rest period
+-- @field E_SNAP take a snapshot for time warp
+-- @field E_SNOVA supernova occurs
         ["E_LRTB"] = 0,
         ["E_KATSB"] = 0,
         ["E_KDESB"] = 0,
@@ -514,7 +514,8 @@ M.Param = {
 -- @field time Time Left
 -- @field resource Federation resources
 -- @field distressed Number of currently distressed quadrants
--- @field eventptr Pointer (or a copy) to a event table
+-- @field eventptr Pointer (or a copy) to a event table, 
+--        filled "NOEVENT" if empty
 -- @field base Table of locations of starbases (in {x, y} coordinates)
 M.Now = {
     bases = 0,
@@ -523,7 +524,18 @@ M.Now = {
     time = 0,
     resource = 0,
     distressed = 0,
-    eventptr = {}, -- @todo what to do with this type?
+    eventptr = {
+        ["E_LRTB"] = "NOEVENT",
+        ["E_KATSB"] = "NOEVENT",
+        ["E_KDESB"] = "NOEVENT",
+        ["E_ISSUE"] = "NOEVENT",
+        ["E_ENSLV"] = "NOEVENT",
+        ["E_REPRO"] = "NOEVENT",
+        ["E_FIXDV"] = "NOEVENT",
+        ["E_ATTACK"] = "NOEVENT",
+        ["E_SNAP"] = "NOEVENT",
+        ["E_SNOVA"] = "NOEVENT",
+    },
     base = pl.tablex.new(M.MAXBASES,
         function (i)
             return {x = 0, y = 0}
