@@ -3,7 +3,9 @@
 trek = require "trek"
 local V = trek.gstate
 trek.setup.setup()
-trek.srscan.srscan(-1)
+trek.damage.damage("LRSCAN", 0.1)
+trek.scan.srscan(-1)
+trek.damage.dcrept()
 
 for i = 1, V.Etc.nkling do
     local k = V.Etc.klingon[i]
