@@ -147,7 +147,7 @@ function M.initquad (f)
         Etc.klingon[i].power = Param.klingpwr
         Etc.klingon[i].srndreq = 0
     end
-    -- @todo compkldist(1);
+    trek.compkl.compkldist(true)
     -- initialize star base
     if nbases > 0 then
         local rx, ry = M.sector()
