@@ -145,11 +145,11 @@ end
 --- Reschedule an event
 -- The event pointed to by 'e' is rescheduled to the current
 -- time plus 'offset'.
--- @param e1 Event itself
+-- @param e Event itself
 -- @number offset date offset plus the current time
-function M.reschedule (e1, offset)
+function M.reschedule (e, offset)
     local date = Now.date + offset
-    e1.date = date
+    e.date = date
     if V.Trace then
         printf("reschedule: type %s parm %d %d %s %s %s @ %.2f\n", 
                 e.evcode, e.x, e.y, e.systemname, e.hidden, e.ghost, date)
@@ -162,8 +162,7 @@ end
 -- @param e Event itself to be deleted from the slot
 function M.unschedule (e)
     local oldevcode = e.evcode
-    -- @todo define Now.eventptr[] as a table of Event codes
-    Now.eventptr[oldevcode] = nil
+    Now.eventptr[oldevcode] = "NOEVENT"
     e.date = 1e50
     e.evcode = ""
     if V.Trace then
@@ -194,8 +193,7 @@ end
 -- @param e Event itself 
 -- @number factor division factor
 function M.xresched (e, factor)
-    -- @todo original xresched() in BSDtrek argument semantics is ambiguous
-    -- @todo confirm Param.eventdly structure data semantics
+    -- @todo confirm original argument semantics of xresched() in BSDtrek
     return M.reschedule(e,
             Param.eventdly[e.evcode] * Param.time * (-1 * math.log(math.random() + 0.001)) / factor)
 end
