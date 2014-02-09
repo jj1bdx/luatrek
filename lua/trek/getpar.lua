@@ -126,6 +126,22 @@ function M.getynpar (prompt)
     -- NOTREACHED
 end
 
+--- Get number parameter
+-- repeating until a number is entered
+-- @string prompt (if not string, converted to string)
+-- @treturn number returned value
+function M.getnumpar (prompt)
+    while true do
+        local s = M.getstring(prompt)
+        local d = tonumber(s)
+        if d then
+            return d
+        end
+        io.write("invalid input; please enter a number\n")
+    end
+    -- NOTREACHED
+end
+
 --- Get string parameter
 -- repeating until non-null string is entered
 -- @string prompt (if not string, converted to string)
