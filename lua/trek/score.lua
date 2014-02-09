@@ -190,9 +190,11 @@ function M.score ()
     return s
 end
 
---- Signal game won
--- This routine prints out the win message, arranges to print out
+--- Signal game won:
+-- this routine prints out the win message, arranges to print out
 -- your score, tells you if you have a promotion coming to you.
+-- This function generates an error() exception with
+-- code "ENDOFGAME".
 --
 -- Pretty straightforward, although the promotion algorithm is
 -- pretty off the wall.
@@ -217,12 +219,16 @@ function M.win ()
         end
     end
     -- @todo confirm signaling condition of ending a game
+    -- @todo ensure pcall() for function calling this
+    error({code = "ENDOFGAME"})
 end
 
---- Print out loser messages
--- The messages are printed out, the score is computed and
+--- Print out loser messages:
+-- the messages are printed out, the score is computed and
 -- printed, and the game is restarted.  Oh yeh, any special
 -- actions which need be taken are taken.
+-- This function generates an error() exception with
+-- code "ENDOFGAME".
 -- @string why Lose reason code
 function M.lose (why)
     Game.killed = 1
@@ -233,6 +239,72 @@ function M.lose (why)
     Move.endgame = -1
     M.score()
     -- @todo confirm signaling condition of ending a game
+    -- @todo ensure pcall() for function calling this
+    error({code = "ENDOFGAME"})
+end
+
+--- Check for condition after a move:
+-- various ship conditions are checked.  First we check
+-- to see if we have already lost the game, due to running
+-- out of life support reserves, running out of energy,
+-- or running out of crew members.  The check for running
+-- out of time is in events().
+-- 
+-- If we are in automatic override mode (Etc.nkling < 0), we
+-- don't want to do anything else, lest we call autover
+-- recursively.
+-- 
+-- In the normal case, if there is a supernova, we call
+-- autover() to help us escape.  If after calling autover()
+-- we are still in the grips of a supernova, we get burnt
+-- up.
+-- 
+-- If there are no Klingons in this quadrant, we nullify any
+-- distress calls which might exist.
+-- 
+-- We then set the condition code, based on the energy level
+-- and battle conditions.
+function M.checkcond()
+    -- see if we are still alive and well
+    -- @todo ensure pcall() for calling M.lose()
+    if Ship.reserves < 0.0 then
+        M.lose(L_NOLIFE)
+    end
+    if Ship.energy <= 0 then
+        M.lose(L_NOENGY)
+    end
+    if Ship.crew <= 0 then
+        M.lose(L_NOCREW)
+    end
+    -- if in auto override mode, ignore the rest
+    if Etc.nkling < 0 then
+        return
+    end
+    -- call in automatic override if appropriate
+    if Quad[Ship.quadx][Ship.quady].stars < 0 then
+        -- @todo autover();
+    end
+    if Quad[Ship.quadx][Ship.quady].stars < 0 then
+        M.lose(L_SNOVA)
+    end
+    -- nullify distress call if appropriate
+    if Etc.nkling <= 0 then
+        -- @todo killd(Ship.quadx, Ship.quady, 1)
+    end
+    -- set condition code
+    if Ship.cond == "DOCKED" then
+        return
+    end
+    if Etc.nkling > 0 then
+        Ship.cond = "RED"
+        return
+    end
+    if Ship.energy < Param.energylow then
+        Ship.cond = "YELLOW"
+        return
+    end
+    Ship.cond = "GREEN"
+    return
 end
 
 -- End of module
