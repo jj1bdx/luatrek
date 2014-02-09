@@ -146,7 +146,7 @@ end
 function M.out (dev)
     local d = Device[dev]
     printf("%s reports %s ", d.person, d.name)
-    if string.match(d.name, "s$") ~= nil then
+    if string.match(d.name, "s$") then
         printf("are")
     else
         printf("is")
