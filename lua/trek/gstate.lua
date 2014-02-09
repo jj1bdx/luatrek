@@ -515,7 +515,7 @@ M.Param = {
 -- @field resource Federation resources
 -- @field distressed Number of currently distressed quadrants
 -- @field eventptr Pointer (or a copy) to a event table, 
---        filled "NOEVENT" if empty
+-- filled "NOEVENT" if empty
 -- @field base Table of locations of starbases (in {x, y} coordinates)
 M.Now = {
     bases = 0,
