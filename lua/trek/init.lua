@@ -88,6 +88,7 @@ M.gstate = require "trek.gstate"
 M.initquad = require "trek.initquad"
 M.schedule = require "trek.schedule"
 M.setup = require "trek.setup"
+M.shield = require "trek.shield"
 M.srscan = require "trek.srscan"
 
 -- End of module
