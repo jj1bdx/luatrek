@@ -99,6 +99,15 @@ local Move = V.Sect
 local Etc = V.Etc
 --- shorthand for pl.utils.printf
 local printf = pl.utils.printf
+--- Game.skill value to skill word conversion table
+local Skitab = {
+    [1] = "novice",
+    [2] = "fair",
+    [3] = "good",
+    [4] = "expert",
+    [5] = "commodore",
+    [6] = "impossible",
+}
 
 --- Calculate and print out the current game score
 -- @treturn number current score
@@ -131,14 +140,6 @@ function M.score ()
         u = Game.skill
         t = 100 * u
         s = s + t
-        local Skitab = {
-            [1] = "novice",
-            [2] = "fair",
-            [3] = "good",
-            [4] = "expert",
-            [5] = "commodore",
-            [6] = "impossible",
-        }
         printf("Bonus for winning a %s game --> %d\n", Skitab[u], t)
     end
     if Game.killed then
@@ -187,6 +188,51 @@ function M.score ()
     end
     printf("\n***  TOTAL --> %d\n", s)
     return s
+end
+
+--- Signal game won
+-- This routine prints out the win message, arranges to print out
+-- your score, tells you if you have a promotion coming to you.
+--
+-- Pretty straightforward, although the promotion algorithm is
+-- pretty off the wall.
+function M.win ()
+    printf("\nCongratulations, you have saved the Federation\n")
+    Move.endgame = 1
+    -- print and return the score
+    local s = M.score()
+    -- decide if she gets a promotion
+    if (Game.helps == 0 and
+        Game.killb == 0 and
+        Game.killinhab == 0 and
+        ((5 * Game.kills) + Game.deaths) < 100 and
+        s >= 1000 and
+        Ship.ship == "ENTERPRISE") then
+        printf("In fact, you are promoted one step in rank,\n")
+        if Game.skill >= 6 then
+            printf("to the exalted rank of Commodore Emeritus\n")
+        else
+            printf("from %s to %s",
+                   Skitab[Game.skill], Skitab[Game.skill + 1])
+        end
+    end
+    -- @todo confirm signaling condition of ending a game
+end
+
+--- Print out loser messages
+-- The messages are printed out, the score is computed and
+-- printed, and the game is restarted.  Oh yeh, any special
+-- actions which need be taken are taken.
+-- @string why Lose reason code
+function M.lose (why)
+    Game.killed = 1
+    printf("\n%s\n", V.Losemsg[why])
+    if why == "L_NOTIME" then
+        Game.killed = 0
+    end
+    Move.endgame = -1
+    M.score()
+    -- @todo confirm signaling condition of ending a game
 end
 
 -- End of module
