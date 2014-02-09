@@ -109,7 +109,7 @@ local printf = pl.utils.printf
 function M.damaged (dev)
     for i = 1, V.MAXEVENTS do
         local e = Event[i]
-        if (e.evcode == "E_FIXDV") and (e.systemname == d) then
+        if (e.evcode == "E_FIXDV") and (e.systemname == dev) then
             return true
         end
     end
@@ -171,7 +171,7 @@ function M.damage (dev, dam)
     end
     printf("        %s damaged\n", Device[dev].name)
     -- find actual length till it will be fixed
-    if Ship.cond == DOCKED then
+    if Ship.cond == "DOCKED" then
         dam = dam * Param.dockfac
     end
     -- set the damage flag
@@ -192,6 +192,49 @@ function M.damage (dev, dam)
         end
     end
     error("LUATREK SYSERR: Cannot find old damages %s\n", dev)
+end
+
+--- Damage control report
+-- Print damages and time to fix.  This is taken from the event
+-- list.  A couple of factors are set up, based on whether or not
+-- we are docked.  (One of these factors will always be 1.0.)
+-- The event list is then scanned for damage fix events, the
+-- time until they occur is determined, and printed out.  The
+-- magic number DAMFAC is used to tell how much faster you can
+-- fix things if you are docked.
+function M.dcrept ()
+    -- set up the magic factors to output the time till fixed
+    local m1, m2
+    if Ship.cond == "DOCKED" then
+        m1 = 1.0 / Param.dockfac
+        m2 = 1.0
+    else
+        m1 = 1.0;
+        m2 = Param.dockfac
+    end
+    printf("Damage control report:\n")
+    local f = true
+    -- scan for damages
+    for i = 1, V.MAXEVENTS do
+        local e = Event[i]
+        if e.evcode == "E_FIXDV" then
+            -- output the title first time
+            if f then
+                printf("%-24s  repair times\n", "")
+                printf("%-24sin flight  docked\n", "device")
+                f = false
+            end
+            -- compute time till fixed, then adjust by the magic factors
+            local x = e.date - Now.date
+            printf("%-24s%7.2f  %7.2f\n",
+                Device[e.systemname].name, x * m1 + 0.005, x * m2 + 0.005)
+            -- do a little consistancy checking
+        end
+    end
+    -- if everything is ok, reassure the nervous captain
+    if f then
+        printf("All devices functional\n")
+    end
 end
 
 -- End of module
