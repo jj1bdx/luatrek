@@ -154,6 +154,46 @@ function M.out (dev)
     printf(" damaged\n")
 end
 
+--- Schedule Ship.damages to a Device
+-- Device `dev' is damaged in an amount `dam'.  The damage is measured
+-- in stardates, and is an additional amount of damage.  It should
+-- be the amount to occur in non-docked mode.  The adjustment
+-- to docked mode occurs automatically if we are docked.
+--
+-- Note that the repair of the device occurs on a DATE, meaning
+-- that the dock() and undock() have to reschedule the event.
+-- @string dev Device identifier string
+-- @number dam damage amount
+function M.damage (dev, dam)
+    -- ignore zero damages
+    if dam < 0 then
+        return
+    end
+    printf("        %s damaged\n", Device[dev].name)
+    -- find actual length till it will be fixed
+    if Ship.cond == DOCKED then
+        dam = dam * Param.dockfac
+    end
+    -- set the damage flag
+    local f = M.damaged(dev)
+    if not f then
+        -- new damages -- schedule a fix
+        trek.schedule.schedule("E_FIXDV", dam, 0, 0, dev, false, false)
+        return
+    end
+    -- device already damaged -- add to existing damages
+    -- scan for old damages
+    for i = 1, V.MAXEVENTS do
+        local e = Event[i]
+        if (e.evcode == "E_FIXDV") and (e.systemname == dev) then
+            -- got the right one; add on the new damages
+            trek.schedule.reschedule(e, ((e.date - Now.date) + dam));
+            return
+        end
+    end
+    error("LUATREK SYSERR: Cannot find old damages %s\n", dev)
+end
+
 -- End of module
 return M
 
