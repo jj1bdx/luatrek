@@ -181,7 +181,7 @@ function M.shield (f)
         Move.shldchg = 1
     end
     return
-}
+end
 
 -- End of module
 return M
