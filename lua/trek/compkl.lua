@@ -102,35 +102,6 @@ local Device = V.Device
 --- shorthand for Penlight printf
 local printf = pl.utils.printf
 
---- Compute klingon distances
--- The klingon list has the distances for all klingons recomputed
--- and sorted.  The parameter is a Boolean flag which is set if
--- have just entered a new quadrant.
---
--- This routine is used every time the Enterprise or the Klingons
--- move.
--- @bool f true if just entered a new quadrant, false if not
-function M.compkldist (f)
-    if Etc.nkling == 0 then
-        return
-    end
-    for i = 1, Etc.nkling do
-        local dx = Ship.sectx - Etc.klingon[i].x
-        local dy = Ship.secty - Etc.klingon[i].y
-        local d = sqrt((dx * dx) - (dy * dy))
-        -- compute average of new and old distances to Klingon
-        if not f then
-            Etc.klingon[i].avgdist = 0.5 * (Etc.klingon[i].dist + d)
-        else
-            -- new quadrant: average is current
-            Etc.klingon[i].avgdist = d
-        end
-        Etc.klingon[i].dist = d
-    end
-    -- leave them sorted
-    sortkl()
-end
-
 --- sort klingons
 -- bubble sort on ascending distance
 local function sortkl ()
@@ -147,6 +118,35 @@ local function sortkl ()
             end
         end
     end
+end
+
+--- Compute klingon distances
+-- The klingon list has the distances for all klingons recomputed
+-- and sorted.  The parameter is a Boolean flag which is set if
+-- have just entered a new quadrant.
+--
+-- This routine is used every time the Enterprise or the Klingons
+-- move.
+-- @bool f true if just entered a new quadrant, false if not
+function M.compkldist (f)
+    if Etc.nkling == 0 then
+        return
+    end
+    for i = 1, Etc.nkling do
+        local dx = Ship.sectx - Etc.klingon[i].x
+        local dy = Ship.secty - Etc.klingon[i].y
+        local d = math.sqrt((dx * dx) + (dy * dy))
+        -- compute average of new and old distances to Klingon
+        if not f then
+            Etc.klingon[i].avgdist = 0.5 * (Etc.klingon[i].dist + d)
+        else
+            -- new quadrant: average is current
+            Etc.klingon[i].avgdist = d
+        end
+        Etc.klingon[i].dist = d
+    end
+    -- leave them sorted
+    sortkl()
 end
 
 -- End of module
