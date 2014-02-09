@@ -1,6 +1,6 @@
 #!/usr/bin/env lua
---- Short range sensor scan
--- @module trek.srscan
+--- Luatrek sensor scan functions
+-- @module trek.scan
 -- @alias M
 
 -- Luatrek license statement
@@ -98,7 +98,7 @@ local Move = V.Sect
 --- Global Etc table
 local Etc = V.Etc
 
---- Short range sensor scanner
+--- Short range sensor scanner:
 -- A short range scan is taken of the current quadrant.  If the
 -- flag 'f' is one, it is an "auto srscan".  It does a status
 -- report and a srscan.
