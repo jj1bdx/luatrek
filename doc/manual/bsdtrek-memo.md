@@ -11,8 +11,9 @@
 
 ## Initialization and access to the tables
 
-* Array initialization in Lua pl.array2d.new() and pl.tablex.new() with a table *must* be done with an anonymous function which returns the table (as a constructor)
-* Lua has no pointer, so the access to each member element of C structures or Lua tables have to be performed by directly specifying the member (i.e., `c->member` must be rewritten to `c.member`)
+* Placeholder for table initialization must not be `nil` unless allowing the table to be deleted; a placeholder string will suffice
+* Array/table initialization in Lua pl.array2d.new() and pl.tablex.new() with a table *must* be done with an anonymous function which returns the table, as this is the only way to pass the constructor to the Penlight functions
+* Lua has no pointer and has only reference, so the access to each member element of C structures or Lua tables have to be performed by directly specifying the member (i.e., `c->member` must be rewritten to `c.member`)
 
 ## Module names
 
