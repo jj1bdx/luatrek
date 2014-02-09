@@ -191,7 +191,7 @@ function M.damage (dev, dam)
             return
         end
     end
-    error("LUATREK SYSERR: Cannot find old damages %s\n", dev)
+    error(string.format("LUATREK SYSERR: Cannot find old damages %s\n", dev))
 end
 
 --- Damage control report
