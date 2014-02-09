@@ -192,8 +192,8 @@ function M.setup ()
     Ship.warp = 5.0
     Ship.warp2 = 25.0
     Ship.warp3 = 125.0
-    Ship.sinsbad = 0
-    Ship.cloaked = 0
+    Ship.sinsbad = false
+    Ship.cloaked = false
     Param.date = math.random(20, 39) * 100;
     Now.date = Param.date
     for k, v in pairs(Param.damfac) do
