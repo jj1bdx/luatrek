@@ -136,8 +136,8 @@ function M.schedule (type, offset, x, y, systemname, hidden, ghost)
             return e
         end
     end
-    error("LUATREK SYSERR: Cannot schedule event %d parm %d %d %s %s %s", 
-           type, x, y, systemname, hidden, ghost)
+    error(string.format("LUATREK SYSERR: Cannot schedule event %d parm %d %d %s %s %s",
+           type, x, y, systemname, hidden, ghost))
     -- NOTREACHED
     return nil
 end
