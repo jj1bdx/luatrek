@@ -237,6 +237,39 @@ function M.dcrept ()
     end
 end
 
+--- Rest for repairs:
+-- you sit around and wait for repairs to happen.  Actually, you
+-- sit around and wait for anything to happen.  I do want to point
+-- out however, that Klingons are not as patient as you are, and
+-- they tend to attack you while you are resting.
+--
+-- You can never rest through a long range tractor beam.
+--
+-- In events() you will be given an opportunity to cancel the
+-- rest period if anything momentous happens.
+function M.rest ()
+    -- get the time to rest
+    local t = trek.getpar.getnumpar("How long")
+    if t <= 0.0 then
+        return
+    end
+    local percent = 100 * t / Now.time
+    if percent >= 70.0 then
+        printf("Spock: That would take %.2f%% of our remaining time.\n", percent)
+        if not getynpar("Are you really certain that is wise") then
+            return
+        end
+    end
+    Move.time = t
+    -- boundary condition is the long range tractor beam
+    t = Now.eventptr["E_LRTB"].date - Now.date
+    if (Ship.cond ~= "DOCKED") and (Move.time > t) then
+        Move.time = t + 0.0001
+    end
+    Move.free = 0
+    Move.resting = 1
+end
+
 -- End of module
 return M
 
