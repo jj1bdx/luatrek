@@ -127,7 +127,7 @@ function M.initquad (f)
         pl.utils.printf("Condition RED\n")
         Ship.cond = "RED"
         if not trek.damage.damaged("COMPUTER") then
-            -- @todo shield(1);
+            trek.shield.shield(1);
         end
     end
     -- clear out the quadrant
