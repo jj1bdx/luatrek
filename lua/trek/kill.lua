@@ -108,7 +108,7 @@ local printf = pl.utils.printf
 -- and the game is won if that was the last klingon.
 -- @int ix Klingon's Sector X coordinate
 -- @int iy Klingon's Sector Y coordinate
-function killk (ix, iy)
+function M.killk (ix, iy)
     printf("   *** Klingon at %d,%d destroyed ***\n", ix, iy)
     -- remove the scoundrel
     Now.klings = Now.klings - 1
@@ -142,7 +142,7 @@ end
 --- Handle a starbase's death
 -- @int qx Klingon's Quadrant X coordinate
 -- @int qy Klingon's Quadrant Y coordinate
-function killb (qx, qy)
+function M.killb (qx, qy)
     local q = Quad[qx][qy]
     if q.bases <= 0 then
         return
@@ -189,7 +189,7 @@ end
 -- @int x when f == 0, Quadrant X coordinate: else Sector X coordinate
 -- @int y when f == 0, Quadrant Y coordinate: else Sector Y coordinate
 -- @int f f ~= 0: this quadrant, f < 0: Entreprise's fault
-function killk (x, y, f)
+function M.killk (x, y, f)
     -- current quadrant
     local q = Quad[Ship.quadx][Ship.quady]
     if f ~= 0 then
@@ -222,7 +222,7 @@ end
 -- @int x when f == 0, Quadrant X coordinate
 -- @int y when f == 0, Quadrant Y coordinate
 -- @bool f true if user is to be informed
-function killd (x, y, f)
+function M.killd (x, y, f)
     local q = Quad[x][y]
     for i = i, V.MAXEVENTS do
         local e = Event[i]
