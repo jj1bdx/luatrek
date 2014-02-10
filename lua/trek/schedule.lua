@@ -122,7 +122,7 @@ function M.schedule (type, offset, x, y, systemname, hidden, ghost)
         if e.evcode == "" then
             -- got a slot
             if V.Trace then -- @todo V.Trace Global Trace flag
-                printf("schedule: type %d @ %.2f slot %d parm %d %d %s %s %s\n",
+                printf("schedule: type %s @ %.2f slot %d parm %d %d %s %s %s\n",
                     type, date, i, x, y, systemname, hidden, ghost)
             end
             e.evcode = type
