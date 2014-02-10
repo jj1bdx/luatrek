@@ -1,5 +1,5 @@
 #!/usr/bin/env lua
---- Luatrek ship damage control and report
+--- Ship damage control and report
 -- @module trek.damage
 -- @alias M
 
@@ -100,8 +100,8 @@ local Device = V.Device
 --- shorthand for Penlight printf
 local printf = pl.utils.printf
 
---- Check for damaged devices
--- This is a boolean function which returns true if the
+--- Check for damaged devices:
+-- this is a boolean function which returns true if the
 -- specified device is broken.  It does this by checking the
 -- event list for a "device fix" action on that device.
 -- @string dev Device identifier string
@@ -117,8 +117,8 @@ function M.damaged (dev)
     return false
 end
 
---- Check if a device is out
--- The indicated device is checked to see if it is disabled.  If
+--- Check if a device is out:
+-- the indicated device is checked to see if it is disabled.  If
 -- it is, an attempt is made to use the starbase device.  If both
 -- of these fails, it returns true (device is REALLY out),
 -- otherwise it returns false(I can get to it somehow).
@@ -154,8 +154,8 @@ function M.out (dev)
     printf(" damaged\n")
 end
 
---- Schedule Ship.damages to a Device
--- Device `dev' is damaged in an amount `dam'.  The damage is measured
+--- Schedule Ship.damages to a Device:
+-- device `dev' is damaged in an amount `dam'.  The damage is measured
 -- in stardates, and is an additional amount of damage.  It should
 -- be the amount to occur in non-docked mode.  The adjustment
 -- to docked mode occurs automatically if we are docked.
@@ -194,8 +194,8 @@ function M.damage (dev, dam)
     error(string.format("LUATREK SYSERR: Cannot find old damages %s\n", dev))
 end
 
---- Damage control report
--- Print damages and time to fix.  This is taken from the event
+--- Damage control report:
+-- print damages and time to fix.  This is taken from the event
 -- list.  A couple of factors are set up, based on whether or not
 -- we are docked.  (One of these factors will always be 1.0.)
 -- The event list is then scanned for damage fix events, the
