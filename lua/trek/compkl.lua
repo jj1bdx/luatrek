@@ -102,7 +102,7 @@ local Device = V.Device
 --- shorthand for Penlight printf
 local printf = pl.utils.printf
 
---- sort klingons
+--- Sort klingons:
 -- bubble sort on ascending distance
 local function sortkl ()
     local m = Etc.nkling - 1
@@ -120,8 +120,8 @@ local function sortkl ()
     end
 end
 
---- Compute klingon distances
--- The klingon list has the distances for all klingons recomputed
+--- Compute klingon distances:
+-- the klingon list has the distances for all klingons recomputed
 -- and sorted.  The parameter is a Boolean flag which is set if
 -- have just entered a new quadrant.
 --
