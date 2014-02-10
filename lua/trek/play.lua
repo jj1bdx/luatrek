@@ -254,11 +254,11 @@ local Comtab =
 -- on how we are doing after the move.
 function M.play ()
     while true do
-        Move.free = 1
+        Move.free = true
         Move.time = 0.0
-        Move.shldchg = 0
+        Move.shldchg = false
         Move.newquad = 0
-        Move.resting = 0
+        Move.resting = false
         -- the command table is defined in trek (init.lua)
         -- because all function calls must be defined
         -- *before* the Comtab elements are assigned
