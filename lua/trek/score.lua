@@ -229,10 +229,10 @@ end
 -- code "ENDOFGAME".
 -- @string why Lose reason code
 function M.lose (why)
-    Game.killed = 1
+    Game.killed = true
     printf("\n%s\n", V.Losemsg[why])
     if why == "L_NOTIME" then
-        Game.killed = 0
+        Game.killed = false
     end
     Move.endgame = -1
     M.score()
@@ -263,13 +263,13 @@ end
 function M.checkcond()
     -- see if we are still alive and well
     if Ship.reserves < 0.0 then
-        M.lose(L_NOLIFE)
+        M.lose("L_NOLIFE")
     end
     if Ship.energy <= 0 then
-        M.lose(L_NOENGY)
+        M.lose("L_NOENGY")
     end
     if Ship.crew <= 0 then
-        M.lose(L_NOCREW)
+        M.lose("L_NOCREW")
     end
     -- if in auto override mode, ignore the rest
     if Etc.nkling < 0 then
@@ -280,7 +280,7 @@ function M.checkcond()
         -- @todo autover();
     end
     if Quad[Ship.quadx][Ship.quady].stars < 0 then
-        M.lose(L_SNOVA)
+        M.lose("L_SNOVA")
     end
     -- nullify distress call if appropriate
     if Etc.nkling <= 0 then
@@ -300,6 +300,47 @@ function M.checkcond()
     end
     Ship.cond = "GREEN"
     return
+end
+
+--- Self Destruct Sequence:
+-- the computer starts up the self destruct sequence.  Obviously,
+-- if the computer is out nothing can happen.  You get a countdown
+-- and a request for password.  This must match the password that
+-- you entered at the start of the game.
+--
+-- You get to destroy things when you blow up; hence, it is
+-- possible to win the game by destructing if you take the last
+-- Klingon with you.
+--
+-- Note: the effects of sleep()ing and the control characters of
+-- the original bsdtrek are all removed.
+function M.destruct ()
+    -- You cannot self-destroy when computer is damaged
+    if trek.damage.damaged("COMPUTER") then
+        trek.damage.out("COMPUTER")
+        return
+    end
+    printf("***** Entering into the self destruct sequence *****\n")
+    local checkpass = trek.getpar.getstrpar("Enter password verification")
+    if checkpass ~= Game.passwd then
+        printf("Self destruct sequence aborted\n")
+        return
+    end
+    printf("Password verified; self destruct sequence continues:\n")
+    printf("***** %s destroyed *****\n", Ship.shipname)
+    Game.killed = true
+    -- let's see what we can blow up!!!!
+    local zap = 20.0 * Ship.energy
+    Game.deaths = Game.deaths + Ship.crew
+    for i = 1, Etc.nkling do
+        if Etc.klingon[i].power * Etc.klingon[i].dist <= zap then
+            -- @todo killk(Etc.klingon[i].x, Etc.klingon[i].y)
+            -- @todo what to do then?
+        end
+    end
+    -- if we didn't kill the last Klingon (detected by killk),
+    -- then we lose....
+    M.lose("L_DSTRCT")
 end
 
 -- End of module
