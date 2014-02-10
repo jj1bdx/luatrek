@@ -236,7 +236,7 @@ function M.move (ramflag, course, p_time, speed)
             n = 0
             break
         end
-        if Sect[ix][iy] ~= EMPTY then
+        if Sect[ix][iy] ~= "EMPTY" then
             -- we just hit something
             if not damaged("COMPUTER") and ramflag <= 0 then
                 ix = math.floor(x - dx)
