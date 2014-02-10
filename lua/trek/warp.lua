@@ -100,8 +100,8 @@ local Etc = V.Etc
 --- shorthand for pl.utils.printf
 local printf = pl.utils.printf
 
---- Set warp factor an by external input
--- The warp factor is set for future move commands.  It is
+--- Set warp factor an by external input:
+-- the warp factor is set for future move commands.  It is
 -- checked for consistency.
 function M.setwarp ()
     local warpfac=trek.getpar.getnumpar("Warp factor");
