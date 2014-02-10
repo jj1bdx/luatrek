@@ -146,7 +146,7 @@ SUCH DAMAGE.
 --- Make module strict by Penlight pl.strict.module()
 local strict = require "pl.strict"
 local M = strict.module()
---- Shorthand for trek.gstate prefix
+--- Local trek.state shorthand
 local V = require "trek.gstate"
 --- Global Game table
 local Game = V.Game
@@ -169,7 +169,7 @@ local Etc = V.Etc
 --- shorthand for pl.utils.printf
 local printf = pl.utils.printf
 
---- The Main program
+--- The Main program: call this function to start the game
 function M.main()
     -- @todo No command option needed?
     printf("\nLuatrek version %s\n\n", V.Luatrek_version)
@@ -179,10 +179,11 @@ function M.main()
         local status, err = pcall(function ()
             -- play the game
             trek.setup.setup()
-            -- @todo M.play()
+            M.play()
             end)
         -- exception handling
         if not status then
+            -- end of game exception
             if err.code == "ENDOFGAME" then
                 printf("\nLuatrek: game over\n")
                 again = trek.getpar.getynpar("Another game")
@@ -197,6 +198,76 @@ function M.main()
         end
     end
     return
+end
+
+--- restart game
+function myreset ()
+    error({code = "ENDOFGAME"})
+end
+
+local Comtab =
+{
+    -- @todo functions commented out are all temporary
+    -- ["abandon"] = function () trek.abandon.abandon end,
+    -- ["capture"] = function () trek.capture.capture end,
+    ["cloak"] = function () trek.shield.shield(-1) end,
+    -- ["c"] = function () trek.computer.computer end,
+    -- ["computer"] = function () trek.computer.computer end,
+    ["da"] = function () trek.damage.dcrept() end,
+    ["damages"] = function () trek.damage.dcrept() end,
+    -- ["destruct"] = function () trek.destruct.destruct end,
+    -- ["dock"] = function () trek.dock.dock end,
+    -- ["dump"] = function () trek.dump.dumpgame end,
+    -- ["help"] = function () trek.help.help end,
+    -- ["i"] = function () trek.move.impluse end,
+    -- ["impulse"] = function () trek.move.impluse end,
+    ["l"] = function () trek.scan.lrscan() end,
+    ["lrscan"] = function () trek.scan.lrscan() end,
+    -- ["m"] = function () trek.move.dowarp end,
+    -- ["move"] = function () trek.move.dowarp end,
+    -- ["p"] = function () trek.phaser.phaser end,
+    -- ["phasers"] = function () trek.phaser.phaser end,
+    -- ["ram"] = function () trek.move.dowarp(1) end,
+    ["rest"] = function () trek.damage.rest() end,
+    ["s"] = function () trek.scan.srscan(0) end,
+    ["srscan"] = function () trek.scan.srscan(0) end,
+    ["sh"] = function () trek.shield.shield(0) end,
+    ["shield"] = function () trek.shield.shield(0) end,
+    ["st"] = function () trek.scan.srscan(-1) end,
+    ["status"] = function () trek.scan.srscan(-1) end,
+    ["terminate"] = function () myreset() end,
+    -- ["t"] = function () trek.torped.torped end,
+    -- ["torpedo"] = function () trek.torped.torped end,
+    -- ["undock"] = function () trek.dock.undock end,
+    ["v"] = function () trek.scan.visual() end,
+    ["visual"] = function () trek.scan.visual() end,
+    -- ["w"] = function () trek.move.setwarp end,
+    -- ["warp"] = function () trek.move.setwarp end,
+};
+
+--- Instruction read and main play loop:
+-- Well folks, this is it.  Here we have the guts of the game.
+-- This routine executes moves.  It sets up per-move variables,
+-- gets the command, and executes the command.  After the command,
+-- it calls events() to use up time, attack() to have Klingons
+-- attack if the move was not free, and checkcond() to check up
+-- on how we are doing after the move.
+function M.play ()
+    while true do
+        Move.free = 1
+        Move.time = 0.0
+        Move.shldchg = 0
+        Move.newquad = 0
+        Move.resting = 0
+        -- the command table is defined in trek (init.lua)
+        -- because all function calls must be defined
+        -- *before* the Comtab elements are assigned
+        local func = trek.getpar.getcodpar("Command", Comtab);
+        func()
+        -- @todo events(0)
+        -- @todo attack(0)
+        trek.score.checkcond()
+    end
 end
 
 -- End of module
