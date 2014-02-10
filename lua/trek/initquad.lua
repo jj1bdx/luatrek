@@ -105,8 +105,8 @@ local Etc = V.Etc
 -- sector.
 --
 -- If there are Klingons in the quadrant, the captain is informed
--- that the condition is RED, and he is given a chance to put
--- his shields up if the computer is working.
+-- that the condition is RED, and the captain is given a chance to put
+-- the shields up if the computer is working.
 --
 -- @bool f The flag `f' is set to disable the check for condition red.
 -- This mode is used in situations where you know you are going
