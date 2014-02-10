@@ -1,5 +1,5 @@
 #!/usr/bin/env lua
---- Luatrek game event schedule functions
+--- Event schedule functions
 -- @module trek.schedule
 -- @alias M
 
@@ -100,8 +100,8 @@ local Device = V.Device
 --- shorthand for Penlight printf
 local printf = pl.utils.printf
 
---- Schedule an event
--- An event of type 'type' is scheduled for time NOW + 'offset'
+--- Schedule an event:
+-- an event of type 'type' is scheduled for time NOW + 'offset'
 -- into the first available slot.  'x', 'y', 'systemname',
 -- 'hidden', 'ghost' are
 -- considered the attributes for this event.
@@ -142,8 +142,8 @@ function M.schedule (type, offset, x, y, systemname, hidden, ghost)
     return nil
 end
 
---- Reschedule an event
--- The event pointed to by 'e' is rescheduled to the current
+--- Reschedule an event:
+-- the event pointed to by 'e' is rescheduled to the current
 -- time plus 'offset'.
 -- @param e Event itself
 -- @number offset date offset plus the current time
@@ -157,8 +157,8 @@ function M.reschedule (e, offset)
     return
 end
 
---- Unschedule an event
--- The event at slot 'e' is deleted.
+--- Unschedule an event:
+-- the event at slot 'e' is deleted.
 -- @param e Event itself to be deleted from the slot
 function M.unschedule (e)
     local oldevcode = e.evcode
@@ -172,8 +172,8 @@ function M.unschedule (e)
     return
 end
 
---- Abbreviated schedule function
--- Parameters are the event code and a factor for the time figure.
+--- Abbreviated schedule function:
+-- parameters are the event code and a factor for the time figure.
 -- @string type Event code string
 -- @number factor division factor
 -- @number x attribute coordinate X
@@ -188,8 +188,8 @@ function M.xsched (type, factor, x, y, systemname, hidden, ghost)
               x, y, systemname, hidden, ghost)
 end
 
---- Simplified reschedule function
--- Parameters are the event itself and the division factor.
+--- Simplified reschedule function:
+-- parameters are the event itself and the division factor.
 -- @param e Event itself 
 -- @number factor division factor
 function M.xresched (e, factor)
