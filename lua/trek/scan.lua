@@ -1,5 +1,5 @@
 #!/usr/bin/env lua
---- Luatrek sensor scan functions
+--- Sensor scan functions
 -- @module trek.scan
 -- @alias M
 
@@ -101,7 +101,7 @@ local Etc = V.Etc
 local printf = pl.utils.printf
 
 --- Short range sensor scanner:
--- A short range scan is taken of the current quadrant.  If the
+-- a short range scan is taken of the current quadrant.  If the
 -- flag 'f' is one, it is an "auto srscan".  It does a status
 -- report and a srscan.
 -- If 'f' is -1, you get a status report only.  If it is zero,
@@ -224,7 +224,7 @@ function M.srscan (f)
 end
 
 --- Long range of scanners: 
--- A summary of the quadrants that surround you is printed.  The
+-- a summary of the quadrants that surround you is printed.  The
 -- hundreds digit is the number of Klingons in the quadrant,
 -- the tens digit is the number of starbases, and the units digit
 -- is the number of stars.  If the printout is "///" it means
@@ -295,7 +295,7 @@ local Visdelta = {
 }
 
 --- Visual scan:
--- A visual scan is made in a particular direction of three sectors
+-- a visual scan is made in a particular direction of three sectors
 -- in the general direction specified.  This takes time, and
 -- Klingons can attack you, so it should be done only when sensors
 -- are out.
