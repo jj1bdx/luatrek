@@ -233,7 +233,7 @@ function M.getcodi ()
         return false, -1, -1
     end
     -- good return
-    return 0, co, di
+    return true, co, di
 end
 
 -- End of module
