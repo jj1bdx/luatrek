@@ -256,7 +256,7 @@ function M.rest ()
     local percent = 100 * t / Now.time
     if percent >= 70.0 then
         printf("Spock: That would take %.2f%% of our remaining time.\n", percent)
-        if not getynpar("Are you really certain that is wise") then
+        if not trek.getpar.getynpar("Are you really certain that is wise") then
             return
         end
     end
