@@ -266,8 +266,8 @@ function M.rest ()
     if (Ship.cond ~= "DOCKED") and (Move.time > t) then
         Move.time = t + 0.0001
     end
-    Move.free = 0
-    Move.resting = 1
+    Move.free = false
+    Move.resting = true
 end
 
 -- End of module
