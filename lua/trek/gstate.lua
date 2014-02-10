@@ -582,6 +582,9 @@ M.Etc = {
 --- Global trace flag, true if enabled
 M.Trace = false
 
+--- Luatrek version string
+M.Luatrek_version = "0.001 pre-alpha"
+
 -- End of module
 return M
 
