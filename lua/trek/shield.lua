@@ -1,5 +1,5 @@
 #!/usr/bin/env lua
---- Luatrek spaceship shield and cloaking device control
+--- Spaceship shield and cloaking device control
 -- @module trek.shield
 -- @alias M
 
@@ -100,7 +100,7 @@ local Device = V.Device
 --- shorthand for Penlight printf
 local printf = pl.utils.printf
 
---- Shield and cloaking device control
+--- Shield and cloaking device control:
 -- 'f' is one for auto shield up (in case of Condition RED),
 -- zero for shield control, and negative one for cloaking
 -- device control.
