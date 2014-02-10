@@ -97,6 +97,8 @@ local Sect = V.Sect
 local Move = V.Sect
 --- Global Etc table
 local Etc = V.Etc
+-- printf shorthand
+local printf = pl.utils.printf
 
 --- Short range sensor scanner:
 -- A short range scan is taken of the current quadrant.  If the
@@ -111,8 +113,6 @@ local Etc = V.Etc
 -- The current quadrant is filled in on the computer chart.
 -- @int f 1 = auto srscan with status report, -1 = status report, 0 = srscan and optional status report
 function M.srscan (f)
-    -- printf shorthand
-    local printf = pl.utils.printf
     if (f >= 0) and trek.damage.check_out("SRSCAN") then
         return
     end
@@ -221,6 +221,61 @@ function M.srscan (f)
         -- @todo fix to printf("Starsystem %s\n", systemname(q));
         printf("Starsystem %s\n", V.Systemname[q.systemname]);
     end
+end
+
+--- Long range of scanners: 
+-- A summary of the quadrants that surround you is printed.  The
+-- hundreds digit is the number of Klingons in the quadrant,
+-- the tens digit is the number of starbases, and the units digit
+-- is the number of stars.  If the printout is "///" it means
+-- that that quadrant is rendered uninhabitable by a supernova.
+-- It also updates the "scanned" field of the quadrants it scans,
+-- for future use by the "chart" option of the computer.
+function M.lrscan ()
+    if trek.damage.check_out("LRSCAN") then
+        return
+    end
+    printf("Long range scan for quadrant %d,%d\n\n", Ship.quadx, Ship.quady)
+    -- print the header on top
+    -- left margin: three spaces
+    printf("   ")
+    for j = Ship.quady - 1, Ship.quady + 1 do
+        -- six spaces per column
+        if j < 1 or j > V.NQUADS then
+            printf("      ")
+        else
+            printf("  %2d  ", j)
+        end
+    end
+    -- scan the quadrants
+    for i = Ship.quadx - 1, Ship.quadx + 1 do
+        printf("\n   -------------------\n")
+        if i < 1 or i > V.NQUADS then
+            -- negative energy barrier
+            printf("   !  *  !  *  !  *  !")
+        else
+            -- print the left hand margin
+            printf("%2d !", i)
+            for j = Ship.quady - 1, Ship.quady + 1 do
+                if j < 1 or j > V.NQUADS then
+                    -- negative energy barrier again
+                    printf("  *  !")
+                else 
+                    local q = Quad[i][j]
+                    if q.stars < 0 then
+                        -- supernova
+                        printf(" /// !")
+                        q.scanned = 1000
+                    else
+                        q.scanned = q.klings * 100 + q.bases * 10 + q.stars
+                        printf(" %3d !", q.scanned)
+                    end
+                end
+            end
+        end
+    end
+    printf("\n   -------------------\n")
+    return
 end
 
 -- End of module
