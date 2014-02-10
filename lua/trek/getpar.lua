@@ -1,5 +1,5 @@
 #!/usr/bin/env lua
---- Functions of obtaining user input parameters
+--- User input parameter interface
 -- @module trek.getpar
 -- @alias M
 
@@ -215,8 +215,8 @@ function M.getcodpar (prompt, wordtab)
     return val, num, t
 end
 
---- Get course and distance
--- The user is asked for a course and distance.  This is used by
+--- Get course and distance:
+-- the user is asked for a course and distance.  This is used by
 -- move, impulse, and some of the computer functions.
 -- @treturn bool true for success, false for an invalid input (meaning to drop the request)
 -- @treturn number course (0 - 360, -1 if failed)
