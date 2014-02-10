@@ -334,8 +334,8 @@ function M.destruct ()
     Game.deaths = Game.deaths + Ship.crew
     for i = 1, Etc.nkling do
         if Etc.klingon[i].power * Etc.klingon[i].dist <= zap then
-            -- @todo killk(Etc.klingon[i].x, Etc.klingon[i].y)
-            -- @todo what to do then?
+            trek.kill.killk(Etc.klingon[i].x, Etc.klingon[i].y)
+            i = i - 1 -- @todo is this OK?
         end
     end
     -- if we didn't kill the last Klingon (detected by killk),
