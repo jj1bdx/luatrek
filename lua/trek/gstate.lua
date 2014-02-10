@@ -1,5 +1,5 @@
 #!/usr/bin/env lua
---- Luatrek global constants state tables
+--- Global constants state tables
 -- @module trek.gstate
 -- @alias M
 
