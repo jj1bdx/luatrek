@@ -334,7 +334,7 @@ function M.visual ()
     end
     printf("%s %d,%d\n", s, ix, iy)
     Move.time = 0.05
-    Move.free = 0
+    Move.free = false
 end
 
 -- End of module
