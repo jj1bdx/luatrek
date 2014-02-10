@@ -1,5 +1,5 @@
 #!/usr/bin/env lua
---- Luatrek game setup functions
+--- Setup function
 -- @module trek.setup
 -- @alias M
 
