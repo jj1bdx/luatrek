@@ -218,8 +218,6 @@ function M.win ()
                    Skitab[Game.skill], Skitab[Game.skill + 1])
         end
     end
-    -- @todo confirm signaling condition of ending a game
-    -- @todo ensure pcall() for function calling this
     error({code = "ENDOFGAME"})
 end
 
@@ -238,8 +236,6 @@ function M.lose (why)
     end
     Move.endgame = -1
     M.score()
-    -- @todo confirm signaling condition of ending a game
-    -- @todo ensure pcall() for function calling this
     error({code = "ENDOFGAME"})
 end
 
@@ -266,7 +262,6 @@ end
 -- and battle conditions.
 function M.checkcond()
     -- see if we are still alive and well
-    -- @todo ensure pcall() for calling M.lose()
     if Ship.reserves < 0.0 then
         M.lose(L_NOLIFE)
     end
