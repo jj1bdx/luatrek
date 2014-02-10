@@ -200,11 +200,15 @@ function M.main()
     return
 end
 
---- restart game
-function myreset ()
+--- local function to quit the game
+local function myreset ()
     error({code = "ENDOFGAME"})
 end
 
+--- local table of commands and the specified functions:
+-- the table will return anonymous function as a value
+-- @table Comtab
+-- @field command-names
 local Comtab =
 {
     -- @todo functions commented out are all temporary
@@ -246,7 +250,7 @@ local Comtab =
 };
 
 --- Instruction read and main play loop:
--- Well folks, this is it.  Here we have the guts of the game.
+-- well folks, this is it.  Here we have the guts of the game.
 -- This routine executes moves.  It sets up per-move variables,
 -- gets the command, and executes the command.  After the command,
 -- it calls events() to use up time, attack() to have Klingons
