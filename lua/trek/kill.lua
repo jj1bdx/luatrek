@@ -224,7 +224,7 @@ end
 -- @bool f true if user is to be informed
 function M.killd (x, y, f)
     local q = Quad[x][y]
-    for i = i, V.MAXEVENTS do
+    for i = 1, V.MAXEVENTS do
         local e = Event[i]
         if e.x == x and e.y == y then
             if e.evcode == "E_KDESB" then
