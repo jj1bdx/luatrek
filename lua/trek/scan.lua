@@ -278,6 +278,65 @@ function M.lrscan ()
     return
 end
 
+--- This table has the delta x, delta y for particular directions
+-- @table Visdelta
+local Visdelta = {
+    { x = -1, y = -1 },
+    { x = -1, y =  0 },
+    { x = -1, y =  1 },
+    { x =  0, y =  1 },
+    { x =  1, y =  1 },
+    { x =  1, y =  0 },
+    { x =  1, y = -1 },
+    { x =  0, y = -1 },
+    { x = -1, y = -1 },
+    { x = -1, y =  0 },
+    { x = -1, y =  1 },
+}
+
+--- Visual scan:
+-- A visual scan is made in a particular direction of three sectors
+-- in the general direction specified.  This takes time, and
+-- Klingons can attack you, so it should be done only when sensors
+-- are out.
+function M.visual ()
+    local co = trek.getpar.getnumpar("direction")
+    if co < 0 or co > 360 then
+        return
+    end
+    local dir = math.floor((co + 22.5) / 45) + 1
+    local v = Visdelta[dir]
+    local ix = Ship.sectx + v.x
+    local iy = Ship.secty + v.y
+    local s
+    if ix < 1 or ix > V.NSECTS or iy < 1 or iy > V.NSECTS then
+        s = "?"
+    else
+        s = V.Sectdisp[Sect[ix][iy]]
+    end
+    printf("%d,%d %s ", ix, iy, s)
+    v = Visdelta[dir + 1]
+    ix = Ship.sectx + v.x
+    iy = Ship.secty + v.y
+    if ix < 1 or ix > V.NSECTS or iy < 1 or iy > V.NSECTS then
+        s = "?"
+    else
+        s = V.Sectdisp[Sect[ix][iy]]
+    end
+    printf("%s ", s)
+    v = Visdelta[dir + 2]
+    ix = Ship.sectx + v.x
+    iy = Ship.secty + v.y
+    if ix < 1 or ix > V.NSECTS or iy < 1 or iy > V.NSECTS then
+        s = "?"
+    else
+        s = V.Sectdisp[Sect[ix][iy]]
+    end
+    printf("%s %d,%d\n", s, ix, iy)
+    Move.time = 0.05
+    Move.free = 0
+end
+
 -- End of module
 return M
 
