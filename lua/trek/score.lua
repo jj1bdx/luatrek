@@ -284,7 +284,7 @@ function M.checkcond()
     end
     -- nullify distress call if appropriate
     if Etc.nkling <= 0 then
-        -- @todo killd(Ship.quadx, Ship.quady, 1)
+        trek.kill.killd(Ship.quadx, Ship.quady, true)
     end
     -- set condition code
     if Ship.cond == "DOCKED" then
