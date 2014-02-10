@@ -1,5 +1,5 @@
 #!/usr/bin/env lua
---- Luatrek initialization module which loads all submodules
+--- Initialization at init.lua - loading all submodules
 -- @module trek
 -- @alias M
 
