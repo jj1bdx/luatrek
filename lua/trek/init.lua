@@ -90,13 +90,13 @@ M.gstate = require "trek.gstate"
 M.initquad = require "trek.initquad"
 M.kill = require "trek.kill"
 M.klingon = require "trek.klingon"
+M.move = require "trek.move"
 M.play = require "trek.play"
 M.scan = require "trek.scan"
 M.schedule = require "trek.schedule"
 M.score = require "trek.score"
 M.setup = require "trek.setup"
 M.shield = require "trek.shield"
-M.warp = require "trek.warp"
 
 -- End of module
 return M
