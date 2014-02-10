@@ -137,7 +137,7 @@ function M.shield (f)
         dev2 = "are"
         dev3 = "them"
         ind = "SHIELD"
-        stat = Ship.cloaked
+        stat = Ship.shldup
     end
     if damaged(ind) then
         if f <= 0 then
@@ -150,9 +150,9 @@ function M.shield (f)
         return
     end
     if stat then
-        s = string.format(s, "%s %s up.  Do you want %s down", device, dev2, dev3)
+        s = string.format("%s %s up.  Do you want %s down", device, dev2, dev3)
     else
-        s = string.format(s, "%s %s down.  Do you want %s up", device, dev2, dev3)
+        s = string.format("%s %s down.  Do you want %s up", device, dev2, dev3)
     end
     if not trek.getpar.getynpar(s) then
         -- no device transition
@@ -166,19 +166,24 @@ function M.shield (f)
         printf("up\n")
     else
         printf("down\n")
-        return
     end
     -- device transition from down to up
     if stat then
         if f >= 0 then
             Ship.energy = Ship.energy - Param.shupengy
         else
-            Ship.cloakgood = 0
+            Ship.cloakgood = false
         end
     end
-    Move.free = 0
+    Move.free = false
     if f >= 0 then
-        Move.shldchg = 1
+        Move.shldchg = true
+    end
+    -- save stat
+    if f >= 0 then
+        Ship.shldup = stat
+    else
+        Ship.cloaked = stat
     end
     return
 end
