@@ -361,7 +361,7 @@ function M.setup ()
     Move.free = false
     trek.initquad.initquad(false)
     trek.scan.srscan(1)
-    -- @todo attack(0);
+    trek.klingon.attack(0)
     
     -- @todo more to go
 end
