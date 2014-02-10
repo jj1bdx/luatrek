@@ -1,5 +1,5 @@
 #!/usr/bin/env lua
---- Initialize Quadrant data
+--- Quadrant and sector data initialization
 -- @module trek.initquad
 -- @alias M
 
@@ -98,8 +98,8 @@ local Move = V.Sect
 --- Global Etc table
 local Etc = V.Etc
 
---- Parameterize quadrant upon entering
--- A quadrant is initialized from the information held in the
+--- Parameterize quadrant upon entering:
+-- a quadrant is initialized from the information held in the
 -- Quad matrix.  Basically, everything is just initialized
 -- randomly, except for the starship, which goes into a fixed
 -- sector.
