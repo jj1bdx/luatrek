@@ -194,7 +194,7 @@ function M.killk (x, y, f)
     local q = Quad[Ship.quadx][Ship.quady]
     if f ~= 0 then
         Sect[x][y] = "EMPTY"
-        name = q.systemname
+        local name = q.systemname
         if name == 0 then
             return
         end
