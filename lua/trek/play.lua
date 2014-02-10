@@ -173,6 +173,8 @@ local printf = pl.utils.printf
 function M.main()
     -- @todo No command option needed?
     printf("\nLuatrek version %s\n\n", V.Luatrek_version)
+    -- Enable trace
+    V.Trace = true
     local again = true
     while again do
         -- exception caught inside the pcall
@@ -269,7 +271,7 @@ function M.play ()
         local func = trek.getpar.getcodpar("Command", Comtab);
         func()
         -- @todo events(0)
-        -- @todo attack(0)
+        trek.klingon.attack(0)
         trek.score.checkcond()
     end
 end
