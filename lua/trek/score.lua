@@ -1,5 +1,5 @@
 #!/usr/bin/env lua
---- Luatrek game scoring module
+--- Scoring and game win/lose termination decision
 -- @module trek.score
 -- @alias M
 
