@@ -1,6 +1,6 @@
 #!/usr/bin/env lua
---- Compute Klingon distances
--- @module trek.compkl
+--- Compute Klingon attacks, moves, and distance computation
+-- @module trek.klingon
 -- @alias M
 
 -- Luatrek license statement
