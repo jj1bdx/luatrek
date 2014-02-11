@@ -270,7 +270,7 @@ function M.play ()
         -- *before* the Comtab elements are assigned
         local func = trek.getpar.getcodpar("Command", Comtab);
         func()
-        -- @todo events(0)
+        trek.event.events(false)
         trek.klingon.attack(0)
         trek.score.checkcond()
     end
