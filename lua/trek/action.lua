@@ -354,232 +354,196 @@ function M.computer()
     end
 end
 
-/*
-**  Abandon Ship
-**
--- The ship is abandoned.  If your current ship is the Faire
+--- Abandon Ship:
+-- the ship is abandoned.  If your current ship is the Faire
 -- Queene, or if your shuttlecraft is dead, you're out of
 -- luck.  You need the shuttlecraft in order for the captain
 -- (that's you!!) to escape.
-**
+--
 -- Your crew can beam to an inhabited starsystem in the
 -- quadrant, if there is one and if the transporter is working.
 -- If there is no inhabited starsystem, or if the transporter
 -- is out, they are left to die in outer space.
-**
+--
 -- These currently just count as regular deaths, but they
 -- should count very heavily against you.
-**
+--
 -- If there are no starbases left, you are captured by the
 -- Klingons, who torture you mercilessly.  However, if there
 -- is at least one starbase, you are returned to the
 -- Federation in a prisoner of war exchange.  Of course, this
 -- can't happen unless you have taken some prisoners.
-**
--- Uses trace flag 40
-*/
-
-void
-abandon(__unused int unused)
-{
+function M.abandon ()
     struct quad    *q;
     int        i;
     int            j;
     struct event    *e;
 
-    if (Ship.ship == QUEENE) {
-        printf("You may not abandon ye Faire Queene\n");
-        return;
-    }
-    if (Ship.cond != DOCKED)
-    {
-        if (damaged(SHUTTLE)) {
-            out(SHUTTLE);
-            return;
-        }
-        printf("Officers escape in shuttlecraft\n");
-        /* decide on fate of crew */
-        q = &Quad[Ship.quadx][Ship.quady];
-        if (q->qsystemname == 0 || damaged(XPORTER))
-        {
+    if Ship.ship == "QUEENE" then
+        printf("You may not abandon ye Faire Queene\n")
+        return
+    end
+    if Ship.cond ~= "DOCKED" then
+        if damaged("SHUTTLE") then
+            trek.damage.out("SHUTTLE")
+            return
+        end
+        printf("Officers escape in shuttlecraft\n")
+        -- decide on fate of crew
+        local q = Quad[Ship.quadx][Ship.quady]
+        if q.systemname == 0 or damaged("XPORTER") then
             printf("Entire crew of %d left to die in outer space\n",
-                Ship.crew);
-            Game.deaths += Ship.crew;
-        }
+                Ship.crew)
+            Game.deaths = Game.deaths + Ship.crew
         else
-        {
-            printf("Crew beams down to planet %s\n", systemname(q));
-        }
-    }
-    /* see if you can be exchanged */
-    if (Now.bases == 0 || Game.captives < 20 * Game.skill)
-        lose(L_CAPTURED);
-    /* re-outfit new ship */
-    printf("You are hereby put in charge of an antiquated but still\n");
-    printf("  functional ship, the Fairie Queene.\n");
-    Ship.ship = QUEENE;
-    Ship.shipname = "Fairie Queene";
-    Param.energy = Ship.energy = 3000;
-    Param.torped = Ship.torped = 6;
-    Param.shield = Ship.shield = 1250;
-    Ship.shldup = 0;
-    Ship.cloaked = 0;
-    Ship.warp = 5.0;
-    Ship.warp2 = 25.0;
-    Ship.warp3 = 125.0;
-    Ship.cond = GREEN;
-    /* clear out damages on old ship */
-    for (i = 0; i < MAXEVENTS; i++)
-    {
-        e = &Event[i];
-        if (e->evcode != E_FIXDV)
-            continue;
-        unschedule(e);
-    }
-    /* get rid of some devices and redistribute probabilities */
-    i = Param.damprob[SHUTTLE] + Param.damprob[CLOAK];
-    Param.damprob[SHUTTLE] = Param.damprob[CLOAK] = 0;
-    while (i > 0)
-        for (j = 0; j < NDEV; j++)
-        {
-            if (Param.damprob[j] != 0)
-            {
-                Param.damprob[j] += 1;
-                i--;
-                if (i <= 0)
-                    break;
-            }
-        }
-    /* pick a starbase to restart at */
-    i = ranf(Now.bases);
-    Ship.quadx = Now.base[i].x;
-    Ship.quady = Now.base[i].y;
-    /* setup that quadrant */
-    while (1)
-    {
-        initquad(1);
-        Sect[Ship.sectx][Ship.secty] = EMPTY;
-        for (i = 0; i < 5; i++)
-        {
-            Ship.sectx = Etc.starbase.x + ranf(3) - 1;
-            if (Ship.sectx < 0 || Ship.sectx >= NSECTS)
-                continue;
-            Ship.secty = Etc.starbase.y + ranf(3) - 1;
-            if (Ship.secty < 0 || Ship.secty >= NSECTS)
-                continue;
-            if (Sect[Ship.sectx][Ship.secty] == EMPTY)
-            {
-                Sect[Ship.sectx][Ship.secty] = QUEENE;
-                dock(0);
-                compkldist(0);
-                return;
-            }
-        }
-    }
-}
+            printf("Crew beams down to planet %s\n", 
+                    V.Systemname(q.systemname))
+        end
+    end
+    -- see if you can be exchanged
+    if Now.bases == 0 or (Game.captives < 20 * Game.skill) then
+        trek.score.lose("L_CAPTURED")
+    end
+    -- re-outfit new ship
+    printf("You are hereby put in charge of an antiquated but still\n")
+    printf("  functional ship, the Fairie Queene.\n")
+    Ship.ship = "QUEENE"
+    Ship.shipname = "Fairie Queene"
+    Param.energy = 3000
+    Ship.energy = Param.energy
+    Param.torped = 6
+    Ship.torped = Param.torped
+    Param.shield = 1250
+    Ship.shield = Param.shield
+    Ship.shldup = false
+    Ship.cloaked = false
+    Ship.warp = 5.0
+    Ship.warp2 = 25.0
+    Ship.warp3 = 125.0
+    Ship.cond = "GREEN"
+    -- clear out damages on old ship
+    for i = 1, V.MAXEVENTS do
+        local e = Event[i]
+        if e.evcode == "E_FIXDV" then
+            trek.schedule.unschedule(e)
+        end
+    end
+    -- get rid of some devices and redistribute probabilities
+    local i = Param.damprob[SHUTTLE] + Param.damprob[CLOAK]
+    Param.damprob[SHUTTLE] = 0
+    Param.damprob[CLOAK] = 0
+    while i > 0 do
+        for k, v in pairs(Param.damprob) do
+            if v > 0 then
+                Param.damprob[k] = v + 1
+                i = i - 1
+                if i <= 0 then
+                    -- break from for loop
+                    break
+                end
+            end
+        end
+    end
+    -- pick a starbase to restart at
+    i = math.random(1, Now.bases)
+    Ship.quadx = Now.base[i].x
+    Ship.quady = Now.base[i].y
+    -- setup that quadrant
+    while true do
+        trek.initquad.initquad(true)
+        Sect[Ship.sectx][Ship.secty] = "EMPTY"
+        for i = 1, 5 do
+            Ship.sectx = Etc.starbase.x + math.random(-1, 1)
+            if Ship.sectx >= 1 and Ship.sectx <= NSECTS then
+                Ship.secty = Etc.starbase.y + math.random(-1, 1)
+                if Ship.secty >= 1 and Ship.secty <= NSECTS then
+                    if Sect[Ship.sectx][Ship.secty] == "EMPTY" then
+                        Sect[Ship.sectx][Ship.secty] = "QUEENE"
+                        trek.dock.dock()
+                        trek.klingon.compkldist(false)
+                        return
+                    end
+                end
+            end
+        end
+    end
+end
 
-/*
-**  Ask a Klingon To Surrender
-**
--- (Fat chance)
-**
--- The Subspace Radio is needed to ask a Klingon if he will kindly
+--- Ask a Klingon To Surrender
+-- (Fat chance) :
+-- the Subspace Radio is needed to ask a Klingon if he will kindly
 -- surrender.  A random Klingon from the ones in the quadrant is
 -- chosen.
-**
+--
 -- The Klingon is requested to surrender.  The probability of this
 -- is a function of that Klingon's remaining power, our power,
 -- etc.
-*/
-
-void
-capture(__unused int unused)
-{
-    int        i;
-    struct kling    *k;
-    double            x;
-
-    /* check for not cloaked */
-    if (Ship.cloaked)
-    {
-        printf("Ship-ship communications out when cloaked\n");
-        return;
-    }
-    if (damaged(SSRADIO))
-        return (out(SSRADIO));
-    /* find out if there are any at all */
-    if (Etc.nkling <= 0)
-    {
-        printf("Uhura: Getting no response, sir\n");
-        return;
-    }
-
-    /* if there is more than one Klingon, find out which one */
-    k = selectklingon();
-    Move.free = 0;
-    Move.time = 0.05;
-
-    /* check out that Klingon */
-    k->srndreq++;
-    x = Param.klingpwr;
-    x *= Ship.energy;
-    x /= k->power * Etc.nkling;
-    x *= Param.srndrprob;
-    i = x;
-#    ifdef xTRACE
-    if (Trace)
-        printf("Prob = %d (%.4f)\n", i, x);
-#    endif
-    if (i > ranf(100))
-    {
-        /* guess what, he surrendered!!! */
-        printf("Klingon at %d,%d surrenders\n", k->x, k->y);
-        i = ranf(Param.klingcrew);
-        if ( i > 0 )
-            printf("%d klingons commit suicide rather than be taken captive\n", Param.klingcrew - i);
-        if (i > Ship.brigfree)
-            i = Ship.brigfree;
-        Ship.brigfree -= i;
-        printf("%d captives taken\n", i);
-        killk(k->x, k->y);
-        return;
-    }
-
-    /* big surprise, he refuses to surrender */
-    printf("Fat chance, captain\n");
-    return;
-}
-
-
-/*
-**  SELECT A KLINGON
-**
--- Cruddy, just takes one at random.  Should ask the captain.
-*/
-
-static struct kling *
-selectklingon(void)
-{
-    int        i;
-
-    if (Etc.nkling < 2)
-        i = 0;
+function M.capture ()
+    -- check for not cloaked
+    if Ship.cloaked then
+        printf("Ship-ship communications out when cloaked\n")
+        return
+    end
+    if damaged("SSRADIO") then
+        trek.damage.out("SSRADIO")
+        return
+    end
+    -- find out if there are any at all
+    if Etc.nkling <= 0 then
+        printf("Uhura: Getting no response, sir\n")
+        return
+    end
+    -- if there is more than one Klingon, find out which one
+    -- The algorithm is cruddy, just takes one at random.i
+    -- Should ask the captain.
+    local i
+    if (Etc.nkling < 2) then
+        i = 1
     else
-        i = ranf(Etc.nkling);
-    return (&Etc.klingon[i]);
-}
+        i = math.random(1, Etc.nkling)
+    end
+    local k = Etc.klingon[i]
+    Move.free = 0
+    Move.time = 0.05
+    -- check out that Klingon
+    k.srndreq = true
+    local x = Param.klingpwr
+    x = x * Ship.energy
+    x = x / (k.power * Etc.nkling)
+    x = x * Param.srndrprob
+    i = math.floor(x)
+    if V.Trace then
+        printf("Prob = %d (%.4f)\n", i, x)
+    end
+    if i > math.random(0, 99) then
+        -- guess what, the Klingon surrendered!!!
+        printf("Klingon at %d,%d surrenders\n", k.x, k.y)
+        local j = math.random(0, Param.klingcrew - 1)
+        if j > 0 then
+            printf("%d klingons commit suicide rather than be taken captive\n", Param.klingcrew - j)
+        end
+        if j > Ship.brigfree then
+            j = Ship.brigfree
+        end
+        Ship.brigfree = Ship.brigfree - j
+        printf("%d captives taken\n", j)
+        trek.kill.killk(k.x, k.y)
+        return
+    end
+    -- big surprise, he refuses to surrender
+    printf("Fat chance, captain\n")
+    return
+end
 
-/*
-**  call starbase for help
-**
--- First, the closest starbase is selected.  If there is a
+--- Call starbase for help:
+-- first, the closest starbase is selected.  If there is a
 -- a starbase in your own quadrant, you are in good shape.
 -- This distance takes quadrant distances into account only.
-**
+-- 
 -- A magic number is computed based on the distance which acts
 -- as the probability that you will be rematerialized.  You
 -- get three tries.
-**
+--
 -- When it is determined that you should be able to be remater-
 -- ialized (i.e., when the probability thing mentioned above
 -- comes up positive), you are put into that quadrant (anywhere).
@@ -587,111 +551,94 @@ selectklingon(void)
 -- base.  If not, you can't be rematerialized!!!  Otherwise,
 -- it drops you there.  It only tries five times to find a spot
 -- to drop you.  After that, it's your problem.
-*/
+function M.help ()
+    local Cntvect = {"first", "second", "third"}
 
-const char    *Cntvect[3] =
-{"first", "second", "third"};
-
-void
-help(__unused int unused)
-{
     int        i;
     double            dist, x;
     int        dx, dy;
     int            j, l = 0;
 
-    /* check to see if calling for help is reasonable ... */
-    if (Ship.cond == DOCKED) {
-        printf("Uhura: But Captain, we're already docked\n");
-        return;
-    }
-    /* or possible */
-    if (damaged(SSRADIO)) {
-        out(SSRADIO);
-        return;
-    }
-    if (Now.bases <= 0) {
-        printf("Uhura: I'm not getting any response from starbase\n");
-        return;
-    }
-    /* tut tut, there goes the score */
-    Game.helps += 1;
-
-    /* find the closest base */
-    dist = 1e50;
-    if (Quad[Ship.quadx][Ship.quady].bases <= 0)
-    {
-        /* there isn't one in this quadrant */
-        for (i = 0; i < Now.bases; i++)
-        {
-            /* compute distance */
-            dx = Now.base[i].x - Ship.quadx;
-            dy = Now.base[i].y - Ship.quady;
-            x = dx * dx + dy * dy;
-            x = sqrt(x);
-
-            /* see if better than what we already have */
-            if (x < dist)
-            {
-                dist = x;
+    -- check to see if calling for help is reasonable ...
+    if Ship.cond == "DOCKED" then
+        printf("Uhura: But Captain, we're already docked\n")
+        return
+    end
+    -- or possible
+    if damaged("SSRADIO") then
+        trek.damage.out("SSRADIO")
+        return
+    end
+    if Now.bases <= 0 then
+        printf("Uhura: I'm not getting any response from starbase\n")
+        return
+    end
+    -- tut tut, there goes the score
+    Game.helps = Game.helps + 1
+    -- find the closest base
+    local dist = 1e50;
+    local l, x
+    if Quad[Ship.quadx][Ship.quady].bases <= 0 then
+        -- there isn't one in this quadrant
+        for i = 1, Now.bases do
+            -- compute distance
+            local dx = Now.base[i].x - Ship.quadx
+            local dy = Now.base[i].y - Ship.quady
+            x = math.sqrt(dx * dx + dy * dy)
+            -- see if better than what we already have
+            if x < dist then
+                dist = x
                 l = i;
-            }
-        }
-
-        /* go to that quadrant */
-        Ship.quadx = Now.base[l].x;
-        Ship.quady = Now.base[l].y;
-        initquad(1);
-    }
+            end
+        end
+        -- go to that quadrant
+        Ship.quadx = Now.base[l].x
+        Ship.quady = Now.base[l].y
+        trek.initquad.initquad(true)
     else
-    {
-        dist = 0.0;
-    }
-
-    /* dematerialize the Enterprise */
-    Sect[Ship.sectx][Ship.secty] = EMPTY;
-    printf("Starbase in %d,%d responds\n", Ship.quadx, Ship.quady);
-
-    /* this next thing acts as a probability that it will work */
-    x = pow(1.0 - pow(0.94, dist), 0.3333333);
-
-    /* attempt to rematerialize */
-    for (i = 0; i < 3; i++)
-    {
-        sleep(2);
-        printf("%s attempt to rematerialize ", Cntvect[i]);
-        if (franf() > x)
-        {
-            /* ok, that's good.  let's see if we can set her down */
-            for (j = 0; j < 5; j++)
-            {
-                dx = Etc.starbase.x + ranf(3) - 1;
-                if (dx < 0 || dx >= NSECTS)
-                    continue;
-                dy = Etc.starbase.y + ranf(3) - 1;
-                if (dy < 0 || dy >= NSECTS || Sect[dx][dy] != EMPTY)
-                    continue;
-                break;
-            }
-            if (j < 5)
-            {
-                /* found an empty spot */
-                printf("succeeds\n");
-                Ship.sectx = dx;
-                Ship.secty = dy;
-                Sect[dx][dy] = Ship.ship;
-                dock(0);
-                compkldist(0);
-                return;
-            }
-            /* the starbase must have been surrounded */
-        }
-        printf("fails\n");
-    }
-
-    /* one, two, three strikes, you're out */
-    lose(L_NOHELP);
-}
+        dist = 0.0
+    end
+    -- dematerialize the Enterprise
+    Sect[Ship.sectx][Ship.secty] = "EMPTY"
+    printf("Starbase in %d,%d responds\n", Ship.quadx, Ship.quady)
+    -- this next thing acts as a probability that it will work */
+    x = math.pow(1.0 - math.pow(0.94, dist), 0.3333333)
+    -- attempt to rematerialize
+    for i = 1, 3 do
+        printf("%s attempt to rematerialize ", Cntvect[i])
+        if math.random > x then
+            -- ok, that's good.  let's see if we can set the ship down
+            local found = false
+            local dx, dy
+            for j = 1, 5 do
+                dx = Etc.starbase.x + math.random(-1, 1)
+                if dx >= 1 and dx <= V.NSECTS then
+                    local dy = Etc.starbase.x + math.random(-1, 1)
+                    if dx >= 1 and dx <= V.NSECTS and
+                        Sect[dx][dy] == "EMPTY" then
+                        found = true
+                        -- break from for loop
+                        break
+                    end
+                end
+            end
+            if found then
+                -- found an empty spot
+                printf("succeeds\n")
+                Ship.sectx = dx
+                Ship.secty = dy
+                Sect[dx][dy] = Ship.ship
+                trek.dock.dock()
+                trek.klingon.compkldist(false)
+                return
+            end
+            -- the starbase must have been surrounded
+        end
+        printf("fails\n")
+    end
+    -- one, two, three strikes, you're out
+    trek.score.lose("L_NOHELP")
+end
 
 -- End of module
 return M
