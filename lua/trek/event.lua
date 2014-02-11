@@ -158,6 +158,7 @@ function M.events (t_warp)
         end
         -- if evnum < 0, no events occurred
         if evnum < 0 then
+            -- break the big while loop here
             break
         end
         -- otherwise one did.  Find out what it is
@@ -167,7 +168,6 @@ function M.events (t_warp)
             -- @todo snova(-1, 0);
             -- and schedule the next one
             trek.schedule.xresched(e, 1)
-            break
         elseif e.evcode == "E_LRTB" then
             -- long range tractor beam
             -- schedule the next one
@@ -191,70 +191,71 @@ function M.events (t_warp)
                     end
                 end
                 -- test for LRTB to same quadrant
-                if Ship.quadx == ix and Ship.quady == iy then
-                    break
+                if Ship.quadx ~= ix or Ship.quady ~= iy then
+                    -- nope, dump the ship in the new quadrant
+                    Ship.quadx = ix
+                    Ship.quady = iy
+                    printf("\n%s caught in long range tractor beam\n", Ship.shipname)
+                    printf("*** Pulled to quadrant %d,%d\n", Ship.quadx, Ship.quady)
+                    Ship.sectx = math.random(1, V.NSECTS)
+                    Ship.secty = math.random(1, V.NSECTS)
+                    trek.initquad.initquad(false)
+                    -- truncate the move time
+                    Move.time = xdate - idate
                 end
-                -- nope, dump the ship in the new quadrant
-                Ship.quadx = ix
-                Ship.quady = iy
-                printf("\n%s caught in long range tractor beam\n", Ship.shipname)
-                printf("*** Pulled to quadrant %d,%d\n", Ship.quadx, Ship.quady)
-                Ship.sectx = math.random(1, V.NSECTS)
-                Ship.secty = math.random(1, V.NSECTS)
-                trek.initquad.initquad(false)
-                -- truncate the move time
-                Move.time = xdate - idate
             end
         elseif e.evcode == "E_KATSB" then
             -- Klingon attacks starbase
             -- if out of bases, forget it
             if Now.bases <= 0 then
                 trek.schedule.unschedule(e)
-                break
-            end
-            -- check for starbase and Klingons in same quadrant
-            local same = false
-            for i = 1, Now.bases do
-                local ix = Now.base[i].x
-                local iy = Now.base[i].y
-                -- see if a Klingon exists in this quadrant
-                local q = Quad[ix][iy]
-                local distressed = false
-                if q.klings > 0 then
-                    -- see if already distressed
-                    for j = 1, V.MAXEVENTS do
-                        local e = Event[j]
-                        if e.evcode == E_KDESB and
-                           e.x == ix and e.y == iy then
-                            distressed = true
-                            break
+            else 
+                -- check for starbase and Klingons in same quadrant
+                local same = false
+                for i = 1, Now.bases do
+                    local ix = Now.base[i].x
+                    local iy = Now.base[i].y
+                    -- see if a Klingon exists in this quadrant
+                    local q = Quad[ix][iy]
+                    local distressed = false
+                    if q.klings > 0 then
+                        -- see if already distressed
+                        for j = 1, V.MAXEVENTS do
+                            local e = Event[j]
+                            if e.evcode == E_KDESB and
+                               e.x == ix and e.y == iy then
+                                distressed = true
+                                -- break the for j loop
+                                break
+                            end
                         end
                     end
+                    if not distressed then
+                        -- got a potential attack
+                        same = true
+                        -- break the for i loop
+                        break
+                    end
                 end
-                if not distressed then
-                    -- got a potential attack
-                    same = true
-                    break
+                -- put back the saved event
+                e = ev
+                if not same then
+                    -- not now; wait a while and see if some Klingons move in
+                    trek.schedule.reschedule(e, 0.5 + (3.0 * math.random()))
+                else
+                    -- schedule a new attack, and a destruction of the base
+                    trek.schedule.xresched(e, 1)
+                    e = trek.schedule.xsched("E_KDESB", 1, ix, iy, 0, false, false)
+                    if not trek.damage.damaged("SSRADIO") then
+                        printf("\nUhura:  Captain, we have received a distress signal\n")
+                        printf("  from the starbase in quadrant %d,%d.\n", ix, iy)
+                        restcancel = true
+                    else
+                        -- SSRADIO out, make it so we can't see the distress call
+                        -- but it's still there!!!
+                        e.hidden = true
+                    end
                 end
-            end
-            -- put back the saved event
-            e = ev
-            if not same then
-                -- not now; wait a while and see if some Klingons move in
-                trek.schedule.reschedule(e, 0.5 + (3.0 * math.random()))
-                break
-            end
-            -- schedule a new attack, and a destruction of the base
-            trek.schedule.xresched(e, 1)
-            e = trek.schedule.xsched("E_KDESB", 1, ix, iy, 0, false, false)
-            if not trek.damage.damaged("SSRADIO") then
-                printf("\nUhura:  Captain, we have received a distress signal\n")
-                printf("  from the starbase in quadrant %d,%d.\n", ix, iy)
-                restcancel = true
-            else
-                -- SSRADIO out, make it so we can't see the distress call
-                -- but it's still there!!!
-                e.hidden = true
             end
         elseif e.evcode == "E_KDESB" then
             -- Klingon destroys starbase
@@ -293,6 +294,7 @@ function M.events (t_warp)
                         q.stars >= 0 and q.distressed == false and
                         q.systemname ~= 0 and q.klings > 0 then
                         found = true
+                        -- break the for loop
                         break
                     end
                 end
@@ -304,8 +306,11 @@ function M.events (t_warp)
                     for i = 1, V.MAXEVENTS do
                         if e == Event[i] then
                             q.distressed = i
+                            -- break the for loop
+                            break
                         end
                     end
+                end
                 -- tell the captain about it if we can
                 if not trek.damage.damaged("SSRADIO") then
                     printf("\nUhura: Captain, starsystem %s in quadrant %d,%d is under attack\n",
