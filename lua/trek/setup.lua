@@ -141,7 +141,10 @@ function M.setup ()
     while r == 0 do
         r = trek.getpar.getcodpar("What length game", Lentab)
         if r < 0 then
-            -- @todo check if restartgame() return a value
+            if trek.dumpgame.restartgame() then
+                -- state loading successful, no more setup
+                return
+            end
         end
     end -- loop breaks when r > 0
     Game.length = r
