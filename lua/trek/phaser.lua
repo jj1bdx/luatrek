@@ -154,20 +154,6 @@ local Matab = {
 --
 -- Phasers spread slightly, even if you specify zero spread.
 function M.phaser ()
-    int        i;
-    int            j;
-    struct kling    *k;
-    double            dx, dy;
-    double            anglefactor, distfactor;
-    struct banks    *b;
-    int            manual, flag, extra = 0;
-    int            hit;
-    double            tot;
-    int            n;
-    int            hitreqd[NBANKS];
-    struct banks        bank[NBANKS];
-    struct cvntab        *ptr;
-
     local hitreqd = pl.tablex.new(NBANKS, 0)
     if Ship.cond == "DOCKED" then
         printf("Phasers cannot fire through starbase shields\n")
@@ -194,6 +180,7 @@ function M.phaser ()
     elseif damaged("SRSCAN") then
         printf("%s", Device["SRSCAN"].name)
         manual = true
+    end
     if manual then
         printf(" damaged, manual mode selected\n");
     else
