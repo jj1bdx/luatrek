@@ -404,9 +404,9 @@ function M.events (t_warp)
             trek.schedule.xresched(e, 1)
             -- save a snapshot as a table
             Etc.snapshot = {
-                quad = pl.tablex.deepcopy(Quad),
-                event = pl.tablex.deepcopy(Event),
-                now = pl.tablex.deepcopy(Now),
+                ["Quad"] = pl.tablex.deepcopy(Quad),
+                ["Event"] = pl.tablex.deepcopy(Event),
+                ["Now"] = pl.tablex.deepcopy(Now),
             }
             Game.snap = 1
         elseif e.evcode == "E_ATTACK" then
@@ -463,6 +463,31 @@ function M.events (t_warp)
         end
     end
     return
+end
+
+--- output hidden distress calls
+-- @treturn bool true if found any distressed or attacked starsystem
+function M.dumpssradio ()
+	local chkrest = false
+	for j = 1, V.MAXEVENTS do
+		local e = Event[j]
+		-- if it is not hidden, then just ignore it
+        -- if it's hidden and ghost, then unschedule it
+		if e.hidden and e.ghost then
+			trek.schedule.unschedule(e)
+			printf("Starsystem %s in quadrant %d,%d is no longer distressed\n",
+			        Quad[e.x][e.y].systemname, e.x, e.y)
+            -- @todo do I need to clear the distressed flag?
+        elseif e.evcode == "E_KDESB" then
+			printf("Starbase in quadrant %d,%d is under attack\n", e.x, e.y)
+			chkrest = true
+        elseif e.evcode == "E_ENSLV" or e.evcode == "E_REPRO" then
+			printf("Starsystem %s in quadrant %d,%d is distressed\n",
+			        Quad[e.x][e.y].systemname, e.x, e.y)
+			chkrest = true
+        end
+    end
+	return chkrest
 end
 
 -- End of module
