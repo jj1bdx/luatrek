@@ -201,6 +201,7 @@ end
 --- Get command and parameters
 -- which are splitted as space-separated words into a table 
 -- and set the first word as the command defined in the given table
+-- (Note: do not use nil or false for the table value)
 -- @string prompt string (if not string, converted to string)
 -- @string wordtab table of valid command words
 -- @return first matched table value if existed, nil if failed
@@ -211,7 +212,7 @@ function M.getcodpar (prompt, wordtab)
     repeat
         num, t = M.getwords(prompt)
         val = M.checkcmd(t[1], wordtab)
-    until val -- not nil
+    until val -- not nil or false
     return val, num, t
 end
 
