@@ -249,7 +249,7 @@ function M.events (t_warp)
                     -- schedule a new attack, and a destruction of the base
                     trek.schedule.xresched(e, 1)
                     e = trek.schedule.xsched("E_KDESB", 1, ix, iy, 0, false, false)
-                    if not trek.damage.damaged("SSRADIO") then
+                    if not damaged("SSRADIO") then
                         printf("\nUhura:  Captain, we have received a distress signal\n")
                         printf("  from the starbase in quadrant %d,%d.\n", ix, iy)
                         restcancel = true
@@ -315,7 +315,7 @@ function M.events (t_warp)
                     end
                 end
                 -- tell the captain about it if we can
-                if not trek.damage.damaged("SSRADIO") then
+                if not damaged("SSRADIO") then
                     printf("\nUhura: Captain, starsystem %s in quadrant %d,%d is under attack\n",
                         Systemname[e.systemname], ix, iy)
                     restcancel = true
@@ -341,7 +341,7 @@ function M.events (t_warp)
                     "E_REPRO", Param.eventdly["E_REPRO"] * math.random(), e.x, e.y, e.systemname,
                     e.distressed, e.ghost)
                 -- report the disaster if we can
-                if not trek.damage.damaged("SSRADIO") then
+                if not damaged("SSRADIO") then
                     printf("\nUhura:  We've lost contact with starsystem %s\n",
                         V.Systemname[e.systemname])
                     printf("  in quadrant %d,%d.\n", e.x, e.y)
@@ -461,7 +461,7 @@ function M.events (t_warp)
         Ship.shield = Ship.shield + ((Param.shield - Ship.shield) * rtime)
         Ship.energy = Ship.energy + ((Param.energy - Ship.energy) * rtime)
         -- decrement life support reserves
-        if trek.damage.damaged("LIFESUP") and Ship.cond ~= "DOCKED" then
+        if damaged("LIFESUP") and Ship.cond ~= "DOCKED" then
             Ship.reserves = Ship.reserves - Move.time
         end
     end
@@ -649,7 +649,7 @@ function M.snova (x, y)
         end
         q.scanned = 1000
     else
-        if not trek.damage.damaged("SSRADIO") then
+        if not damaged("SSRADIO") then
             q.scanned = 1000
             printf("\nUhura: Captain, Starfleet Command reports a supernova\n")
             printf("  in quadrant %d,%d.  Caution is advised\n", qx, qy)
