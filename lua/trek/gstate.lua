@@ -101,9 +101,6 @@ M.MAXBASES = 9
 --- maximum concurrent distress calls
 M.MAXDISTR = 5
 
---- number of phaser banks
-M.NBANKS = 6
-
 --- Names of the star systems (31 entries)
 M.Systemname = {
     "Talos IV",
