@@ -201,6 +201,9 @@ function M.klmove (fl)
                 dx = -dx
                 dy = -dy
             end
+            if V.Trace then
+                printf("klmove: dx = %.2f, dy = %.2f\n", dx, dy)
+            end
             local fudgex = 1
             local fudgey = 1
             -- try to move the klingon
@@ -251,6 +254,7 @@ function M.klmove (fl)
                     Quad[Ship.quadx][Ship.quady].klings =
                         Quad[Ship.quadx][Ship.quady].klings - 1
                     stayquad = false
+                    -- break from the for loop
                     break
                 end
                 if Sect[lookx][looky] ~= "EMPTY" then
@@ -263,6 +267,7 @@ function M.klmove (fl)
                         looky = nexty + fudgey
                         if looky < 1 or looky > V.NSECTS or Sect[lookx][looky] ~= "EMPTY" then
                             fudgey = -fudgey
+                            -- break from the for loop
                             break
                         end
                     end
