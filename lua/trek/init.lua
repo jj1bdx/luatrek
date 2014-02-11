@@ -86,6 +86,7 @@ pl = require "pl.import_into"()
 M.action = require "trek.action"
 M.damage = require "trek.damage"
 M.dock = require "trek.dock"
+M.dumpgame = require "trek.dumpgame"
 M.event = require "trek.event"
 M.getpar = require "trek.getpar"
 M.gstate = require "trek.gstate"
