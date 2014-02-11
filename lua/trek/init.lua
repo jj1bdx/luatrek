@@ -83,6 +83,7 @@ pl = require "pl.import_into"()
 
 -- load all submodules (list all submodules here)
 -- CAUTION: DO NOT LOAD "trek" in each of these submodules!
+M.action = require "trek.action"
 M.damage = require "trek.damage"
 M.dock = require "trek.dock"
 M.event = require "trek.event"
