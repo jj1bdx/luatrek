@@ -165,7 +165,7 @@ function M.events (t_warp)
         if e.evcode == "E_SNOVA" then
             -- supernova
             -- cause the supernova to happen
-            -- @todo snova(-1, 0);
+            M.snova(-1, 0)
             -- and schedule the next one
             trek.schedule.xresched(e, 1)
         elseif e.evcode == "E_LRTB" then
