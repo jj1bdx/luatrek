@@ -217,7 +217,7 @@ function M.move (ramflag, course, p_time, speed)
             end
             Ship.sectx = math.floor(x)
             Ship.secty = math.floor(y)
-            trek.klingon.compkldist(0)
+            trek.klingon.compkldist(false)
             Move.newquad = 2
             trek.klingon.attack(0)
             trek.score.checkcond()
@@ -271,7 +271,7 @@ function M.move (ramflag, course, p_time, speed)
         Ship.secty = iy
     end
     Sect[Ship.sectx][Ship.secty] = Ship.ship
-    trek.klingon.compkldist(0)
+    trek.klingon.compkldist(false)
     return p_time
 end
 
