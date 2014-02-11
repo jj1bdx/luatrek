@@ -112,20 +112,6 @@ CAUSE TIME TO ELAPSE
 -- and so on.
 -- @bool t_warp true if called in a time warp
 function M.events (t_warp)
-    int        i;
-    int            j = 0;
-    struct kling        *k;
-    double            rtime;
-    double            xdate;
-    double            idate;
-    struct event        *ev = NULL;
-    char            *s;
-    int            ix, iy;
-    struct quad    *q;
-    struct event    *e;
-    int            evnum;
-    int            restcancel;
-
     -- if nothing happened, just allow for any Klingons killed
     if Move.time <= 0.0 then
         Now.time = Now.resource / Now.klings
@@ -239,275 +225,243 @@ function M.events (t_warp)
                 local q = Quad[ix][iy]
                 local distressed = false
                 if q.klings > 0 then
-                    /* see if already distressed */
+                    -- see if already distressed
                     for j = 1, V.MAXEVENTS do
                         local e = Event[j]
-                        if e.evcode == E_KDESB then
-                            if e.x == ix and e.y == iy then
-                                distressed = true
-                                break
-                            end
+                        if e.evcode == E_KDESB and
+                           e.x == ix and e.y == iy then
+                            distressed = true
+                            break
                         end
                     end
+                end
                 if not distressed then
                     -- got a potential attack
                     same = true
                     break
                 end
             end
-            e = ev;
+            -- put back the saved event
+            e = ev
             if not same then
                 -- not now; wait a while and see if some Klingons move in
-                -- @todo more to go
-                reschedule(e, 0.5 + 3.0 * franf());
-                break;
-            }
-            /* schedule a new attack, and a destruction of the base */
-            xresched(e, E_KATSB, 1);
-            e = xsched(E_KDESB, 1, ix, iy, 0);
-
-            /* report it if we can */
-            if (!damaged(SSRADIO))
-            {
-                printf("\nUhura:  Captain, we have received a distress signal\n");
-                printf("  from the starbase in quadrant %d,%d.\n",
-                    ix, iy);
-                restcancel++;
-            }
+                trek.schedule.reschedule(e, 0.5 + (3.0 * math.random()))
+                break
+            end
+            -- schedule a new attack, and a destruction of the base
+            trek.schedule.xresched(e, 1)
+            e = trek.schedule.xsched("E_KDESB", 1, ix, iy, 0, false, false)
+            if not trek.damage.damaged("SSRADIO") then
+                printf("\nUhura:  Captain, we have received a distress signal\n")
+                printf("  from the starbase in quadrant %d,%d.\n", ix, iy)
+                restcancel = true
             else
-                /* SSRADIO out, make it so we can't see the distress call */
-                /* but it's still there!!! */
-                e->evcode |= E_HIDDEN;
-            break;
-
-          case E_KDESB:            /* Klingon destroys starbase */
-            unschedule(e);
-            q = &Quad[e->x][e->y];
-            /* if the base has mysteriously gone away, or if the Klingon
-               got tired and went home, ignore this event */
-            if (q->bases <=0 || q->klings <= 0)
-                break;
-            /* are we in the same quadrant? */
-            if (e->x == Ship.quadx && e->y == Ship.quady)
-            {
-                /* yep, kill one in this quadrant */
-                printf("\nSpock: ");
-                killb(Ship.quadx, Ship.quady);
-            }
+                -- SSRADIO out, make it so we can't see the distress call
+                -- but it's still there!!!
+                e.hidden = true
+            end
+        elseif e.evcode = "E_KDESB" then
+            -- Klingon destroys starbase
+            trek.schedule.unschedule(e)
+            local q = Quad[e.x][e.y]
+            -- if the base has mysteriously gone away, or if the Klingon
+            -- got tired and went home, ignore this event
+            if q->bases > 0 and q->klings > 0 then
+                -- are we in the same quadrant?
+                if e.x == Ship.quadx and e.y == Ship.quady then
+                    -- yep, kill one in this quadrant */
+                    printf("\nSpock: ")
+                    trek.kill.killb(Ship.quadx, Ship.quady)
+                else
+                    -- kill one in some other quadrant
+                    trek.kill.killb(e.x, e.y)
+                end
+            end
+        elseif e.evcode = "E_ISSUE" then
+            -- issue a distress call
+            trek.schedule.xresched(e, 1)
+            -- if we already have too many, throw this one away
+            if Ship.distressed < V.MAXDISTR then
+                -- try a whole bunch of times to find something suitable
+                local ix, iy, q
+                local found = false
+                for i = 1, 100 do
+                    ix = math.random(1, V.NQUADS)
+                    iy = math.random(1, V.NQUADS)
+                    q = Quad[ix][iy]
+                    -- need a quadrant which is not the current one,
+                    -- which has some stars which are inhabited and
+                    -- not already under attack, which is not
+                    -- supernova'ed, and which has some Klingons in it
+                    if (ix ~= Ship.quadx or iy ~= Ship.quady) and
+                        q.stars >= 0 and q.distressed = false and
+                        q.systemname ~= 0 and q.klings > 0 then
+                        found = true
+                        break
+                    end
+                end
+                if found then
+                -- can't seem to find one; ignore this call
+                -- got one!!  Schedule its enslavement
+                    Ship.distressed = Ship.distressed + 1
+                    e = xsched("E_ENSLV", 1, ix, iy, q.systemname, false, false)
+                    for i = 1, V.MAXEVENTS do
+                        if e == Event[i] then
+                            q.distressed = i
+                        end
+                    end
+                -- tell the captain about it if we can
+                if not trek.damage.damaged("SSRADIO") then
+                    printf("\nUhura: Captain, starsystem %s in quadrant %d,%d is under attack\n",
+                        Systemname[e.systemname], ix, iy)
+                    restcancel = true
+                else
+                    -- if we can't tell him, make it invisible
+                    e.hidden = true
+                end
+            end
+        elseif e.evcode = "E_ENSLV" then
+            -- starsystem is enslaved
+            trek.schedule.unschedule(e)
+            -- see if current distress call still active
+            local q = Quad[e.x][e.y]
+            if q.klings <= 0 then
+                -- no Klingons, clean up
+                -- restore the system name
+                q.systemname = e.systemname
+                q.distressed = 0
             else
-                /* kill one in some other quadrant */
-                killb(e->x, e->y);
-            break;
-
-          case E_ISSUE:        /* issue a distress call */
-            xresched(e, E_ISSUE, 1);
-            /* if we already have too many, throw this one away */
-            if (Ship.distressed >= MAXDISTR)
-                break;
-            /* try a whole bunch of times to find something suitable */
-            for (i = 0; i < 100; i++)
-            {
-                ix = ranf(NQUADS);
-                iy = ranf(NQUADS);
-                q = &Quad[ix][iy];
-                /* need a quadrant which is not the current one,
-                   which has some stars which are inhabited and
-                   not already under attack, which is not
-                   supernova'ed, and which has some Klingons in it */
-                if (!((ix == Ship.quadx && iy == Ship.quady) || q->stars < 0 ||
-                    (q->qsystemname & Q_DISTRESSED) ||
-                    (q->qsystemname & Q_SYSTEM) == 0 || q->klings <= 0))
-                    break;
-            }
-            if (i >= 100)
-                /* can't seem to find one; ignore this call */
-                break;
-
-            /* got one!!  Schedule its enslavement */
-            Ship.distressed++;
-            e = xsched(E_ENSLV, 1, ix, iy, q->qsystemname);
-            q->qsystemname = (e - Event) | Q_DISTRESSED;
-
-            /* tell the captain about it if we can */
-            if (!damaged(SSRADIO))
-            {
-                printf("\nUhura: Captain, starsystem %s in quadrant %d,%d is under attack\n",
-                    Systemname[e->systemname], ix, iy);
-                restcancel++;
-            }
+                -- if klingon is there
+                -- play stork and schedule the first baby
+                e = trek.schedule.schedule(
+                    "E_REPRO", Param.eventdly["E_REPRO"] * math.random(), e.x, e.y, e.systemname,
+                    e.distressed, e.ghost)
+                -- report the disaster if we can
+                if not trek.damage.damaged("SSRADIO") then
+                    printf("\nUhura:  We've lost contact with starsystem %s\n",
+                        V.Systemname[e.systemname])
+                    printf("  in quadrant %d,%d.\n", e.x, e.y)
+                else
+                    e.hidden = true
+                end
+            end
+        elseif e.evcode = "E_REPRO" then
+            --  Klingon reproduces
+            -- see if distress call is still active
+            local q = Quad[e.x][e.y]
+            if q.klings <= 0 then
+                trek.schedule.unschedule(e)
+                q.systemname = e.systemname
+                q.distressed = 0
             else
-                /* if we can't tell him, make it invisible */
-                e->evcode |= E_HIDDEN;
-            break;
-
-          case E_ENSLV:        /* starsystem is enslaved */
-            unschedule(e);
-            /* see if current distress call still active */
-            q = &Quad[e->x][e->y];
-            if (q->klings <= 0)
-            {
-                /* no Klingons, clean up */
-                /* restore the system name */
-                q->qsystemname = e->systemname;
-                break;
+                trek.schedule.xresched(e, 1)
+                -- reproduce one Klingon
+                local ix = e.x
+                local iy = e.y
+                local ok = false
+                if (q.klings >= V.MAXKLQUAD)
+                    -- this quadrant is full and not ok, pick an adjacent one
+                    for i = ix - 1, ix + 1 do
+                        if i >= 1 and i <= V.NQUADS then
+                            for j = iy - 1, iy + 1 do
+                                if i >= 1 and i <= V.NQUADS then
+                                    local q = Quad[i][j]
+                                    -- check for this quad ok (not full & no snova)
+                                    if q->klings < MAXKLQUAD and q->stars >= 0 then
+                                        ok = true
+                                        ix = i
+                                        iy = j
+                                        break
+                                    end
+                                end
+                            end
+                        end
+                    end
+                if ok
+                    -- deliver the child
+                    q.klings = q.klings + 1
+                    Now.klings = Now.klings + 1
+                    if ix == Ship.quadx and iy == Ship.quady then
+                        -- we must position Klingon
+                        local six, siy = trek.initquad.sector()
+                        Sect[six][siy] = "KLINGON"
+                        local k = Etc.klingon[Etc.nkling]
+                        k.x = six
+                        k.y = siy
+                        k.power = Param.klingpwr
+                        k->srndreq = false
+                        Etc.nkling = Etc.nkling + 1
+                        trek.klingon.compkldist(Etc.klingon[0].dist == Etc.klingon[0].avgdist)
+                    end
+                    -- recompute time left
+                    Now.time = Now.resource / Now.klings
+                end
+            end
+        elseif e.evcode = "E_SNAP" then
+            -- take a snapshot of the galaxy
+            trek.schedule.xresched(e, 1)
+            -- save a snapshot as a table
+            Etc.snapshot = {
+                quad = pl.tablex.deepcopy(Quad)
+                event = pl.tablex.deepcopy(Event)
+                now = pl.tablex.deepcopy(Now)
             }
-
-            /* play stork and schedule the first baby */
-            e = schedule(E_REPRO, Param.eventdly[E_REPRO] * franf(), e->x, e->y, e->systemname);
-
-            /* report the disaster if we can */
-            if (!damaged(SSRADIO))
-            {
-                printf("\nUhura:  We've lost contact with starsystem %s\n",
-                    Systemname[e->systemname]);
-                printf("  in quadrant %d,%d.\n",
-                    e->x, e->y);
-            }
-            else
-                e->evcode |= E_HIDDEN;
-            break;
-
-          case E_REPRO:        /* Klingon reproduces */
-            /* see if distress call is still active */
-            q = &Quad[e->x][e->y];
-            if (q->klings <= 0)
-            {
-                unschedule(e);
-                q->qsystemname = e->systemname;
-                break;
-            }
-            xresched(e, E_REPRO, 1);
-            /* reproduce one Klingon */
-            ix = e->x;
-            iy = e->y;
-            if (Now.klings == 127)
-                break;        /* full right now */
-            if (q->klings >= MAXKLQUAD)
-            {
-                /* this quadrant not ok, pick an adjacent one */
-                for (i = ix - 1; i <= ix + 1; i++)
-                {
-                    if (i < 0 || i >= NQUADS)
-                        continue;
-                    for (j = iy - 1; j <= iy + 1; j++)
-                    {
-                        if (j < 0 || j >= NQUADS)
-                            continue;
-                        q = &Quad[i][j];
-                        /* check for this quad ok (not full & no snova) */
-                        if (q->klings >= MAXKLQUAD || q->stars < 0)
-                            continue;
-                        break;
-                    }
-                    if (j <= iy + 1)
-                        break;
-                }
-                if (j > iy + 1)
-                    /* cannot create another yet */
-                    break;
-                ix = i;
-                iy = j;
-            }
-            /* deliver the child */
-            q->klings++;
-            Now.klings++;
-            if (ix == Ship.quadx && iy == Ship.quady)
-            {
-                /* we must position Klingon */
-                sector(&ix, &iy);
-                Sect[ix][iy] = KLINGON;
-                k = &Etc.klingon[Etc.nkling++];
-                k->x = ix;
-                k->y = iy;
-                k->power = Param.klingpwr;
-                k->srndreq = 0;
-                compkldist(Etc.klingon[0].dist == Etc.klingon[0].avgdist ? 0 : 1);
-            }
-
-            /* recompute time left */
-            Now.time = Now.resource / Now.klings;
-            break;
-
-          case E_SNAP:        /* take a snapshot of the galaxy */
-            xresched(e, E_SNAP, 1);
-            s = Etc.snapshot;
-            s = bmove(Quad, s, sizeof (Quad));
-            s = bmove(Event, s, sizeof (Event));
-            s = bmove(&Now, s, sizeof (Now));
-            Game.snap = 1;
-            break;
-
-          case E_ATTACK:    /* Klingons attack during rest period */
-            if (!Move.resting)
-            {
-                unschedule(e);
-                break;
-            }
-            attack(1);
-            reschedule(e, 0.5);
-            break;
-
-          case E_FIXDV:
-            i = e->systemname;
-            unschedule(e);
-
-            /* de-damage the device */
+            Game.snap = 1
+        elseif e.evcode = "E_ATTACK" then
+            -- Klingons attack during rest period
+            if not Move.resting then
+                trek.schedule.unschedule(e)
+            else 
+                trek.klingon.attack(true)
+                trek.schedule.reschedule(e, 0.5)
+        elseif e.evcode = "E_FIXDV" then
+            -- fix a device
+            local dev = e.systemname
+            trek.schedule.unschedule(e)
+            -- de-damage the device
             printf("%s reports repair work on the %s finished.\n",
-                Device[i].person, Device[i].name);
-
-            /* handle special processing upon fix */
-            switch (i)
-            {
-
-              case LIFESUP:
-                Ship.reserves = Param.reserves;
-                break;
-
-              case SINS:
-                if (Ship.cond == DOCKED)
-                    break;
-                printf("Spock has tried to recalibrate your Space Internal Navigation System,\n");
-                printf("  but he has no standard base to calibrate to.  Suggest you get\n");
-                printf("  to a starbase immediately so that you can properly recalibrate.\n");
-                Ship.sinsbad = 1;
-                break;
-
-              case SSRADIO:
-                restcancel = dumpssradio();
-                break;
-            }
-            break;
-
-          default:
-            break;
-        }
-
-        if (restcancel && Move.resting && getynpar("Spock: Shall we cancel our rest period"))
-            Move.time = xdate - idate;
-
-    }
-
-    /* unschedule an attack during a rest period */
-    if ((e = Now.eventptr[E_ATTACK]))
-        unschedule(e);
-
-    if (!t_warp)
-    {
-        /* eat up energy if cloaked */
-        if (Ship.cloaked)
-            Ship.energy -= Param.cloakenergy * Move.time;
-
-        /* regenerate resources */
-        rtime = 1.0 - exp(-Param.regenfac * Move.time);
-        Ship.shield += (Param.shield - Ship.shield) * rtime;
-        Ship.energy += (Param.energy - Ship.energy) * rtime;
-
-        /* decrement life support reserves */
-        if (damaged(LIFESUP) && Ship.cond != DOCKED)
-            Ship.reserves -= Move.time;
-    }
-    return;
-}
+                Device[dev].person, Device[dev].name)
+            -- handle special processing upon fix
+            if dev == "LIFESUP" then
+                Ship.reserves = Param.reserves
+            elseif dev == "SINS" then
+                if Ship.cond ~= "DOCKED" then
+                    printf("Spock has tried to recalibrate your Space Internal Navigation System,\n")
+                    printf("  but he has no standard base to calibrate to.  Suggest you get\n")
+                    printf("  to a starbase immediately so that you can properly recalibrate.\n")
+                    Ship.sinsbad = 1
+                end
+            elseif dev == "SSRADIO" then
+                -- restcancel = dumpssradio()
+            end
+        end
+        -- ask canceling the rest period
+        if restcancel and Move.resting and 
+            trek.getpar.getynpar("Spock: Shall we cancel our rest period") then
+            Move.time = xdate - idate
+        end
+    end
+    -- unschedule an attack during a rest period
+    local e = Now.eventptr["E_ATTACK"]
+    if e ~= "" | e ~= "NOEVENT" then
+        trek.schedule.unschedule(e)
+    end
+    if not t_warp then
+        -- eat up energy if cloaked
+        if Ship.cloaked then
+            Ship.energy = Ship.energy - (Param.cloakenergy * Move.time)
+        end
+        -- regenerate resources
+        local rtime = 1.0 - math.exp(-Param.regenfac * Move.time)
+        Ship.shield = Ship.shield + ((Param.shield - Ship.shield) * rtime)
+        Ship.energy = Ship.energy + ((Param.energy - Ship.energy) * rtime)
+        -- decrement life support reserves
+        if trek.damage.damaged("LIFESUP") and Ship.cond ~= "DOCKED" then
+            Ship.reserves = Ship.reserves - Move.time
+        end
+    end
+    return
+end
 
 -- End of module
 return M
