@@ -263,7 +263,7 @@ M.Sectdisp = {
     ["QUEENE"] = "Q",
     ["KLINGON"] = "K",
     ["INHABIT"] = "@",
-    ["HOLE"] = " ", -- @todo Isn't this hard to recognize?
+    ["HOLE"] = " ", -- @fixme Isn't this hard to recognize?
 }
 
 --- Two dimensional table of the Sectors 
@@ -547,7 +547,7 @@ M.Now = {
 -- @field klingon Table of sorted Klingon list
 -- @field nkling Number of Klingons in this sector (<0 means automatic override mode)
 -- @field starbase Table of starbase coordinates in current quadrant (in {x, y})
--- @field snapshot Snapshot for time warp
+-- @field snapshot Snapshot for time warp (see trek.event.events())
 -- @field statreport boolean - true to get a status report on a short range scan
 M.Etc = {
     klingon = pl.tablex.new(M.MAXKLQUAD,
@@ -575,7 +575,7 @@ M.Etc = {
         x = 0,
         y = 0,
     },
-    snapshot = {}, -- @todo what should be in this variable?
+    snapshot = {},
     statreport = false,
 }
 
