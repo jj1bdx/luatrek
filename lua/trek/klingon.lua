@@ -418,7 +418,7 @@ function M.attack (resting)
     end
     -- see what our casualities are like
     if maxhit >= 200 or tothit >= 500 then
-        cas = math.floor(tothit * 0.015 * math.random)
+        cas = math.floor(tothit * 0.015 * math.random())
         if cas >= 2 then
             printf("McCoy: we suffered %d casualties in that attack.\n", cas)
             Game.deaths = Game.deaths + cas
