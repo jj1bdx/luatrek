@@ -145,7 +145,7 @@ function M.initquad (f)
         Etc.klingon[i].x = rx
         Etc.klingon[i].y = ry
         Etc.klingon[i].power = Param.klingpwr
-        Etc.klingon[i].srndreq = 0
+        Etc.klingon[i].srndreq = false
     end
     trek.klingon.compkldist(true)
     -- initialize star base
