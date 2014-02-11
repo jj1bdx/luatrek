@@ -373,10 +373,10 @@ function M.warp (fl, c, d)
         end
         -- they got lucky: a negative time portal
         p_time = Now.date
-        -- @todo s = Etc.snapshot
-        -- @todo bmove(s, Quad, sizeof Quad);
-        -- @todo bmove(s += sizeof Quad, Event, sizeof Event);
-        -- @todo bmove(s += sizeof Event, &Now, sizeof Now);
+        -- load back from the snapshot
+        Quad = pl.tablex.deepcopy(Etc.snapshot["Quad"])
+        Event = pl.tablex.deepcopy(Etc.snapshot["Event"])
+        Now = pl.tablex.deepcopy(Etc.snapshot["Now"])
         printf("Negative time portal entered -- it is now Stardate %.2f\n",
             Now.date)
         for i = 1, V.MAXEVENTS do
