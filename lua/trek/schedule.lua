@@ -121,7 +121,7 @@ function M.schedule (type, offset, x, y, systemname, hidden, ghost)
         local e = Event[i]
         if e.evcode == "" then
             -- got a slot
-            if V.Trace then -- @todo V.Trace Global Trace flag
+            if V.Trace then
                 printf("schedule: type %s @ %.2f slot %d parm %d %d %s %s %s\n",
                     type, date, i, x, y, systemname, hidden, ghost)
             end
@@ -193,7 +193,6 @@ end
 -- @param e Event itself 
 -- @number factor division factor
 function M.xresched (e, factor)
-    -- @todo confirm original argument semantics of xresched() in BSDtrek
     return M.reschedule(e,
             Param.eventdly[e.evcode] * Param.time * (-1 * math.log(math.random() + 0.001)) / factor)
 end
