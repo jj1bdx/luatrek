@@ -227,7 +227,7 @@ function M.move (ramflag, course, p_time, speed)
             Ship.secty = iy % V.NSECTS
             if ix < 1 or Ship.quadx > V.NQUADS or iy < 1 or Ship.quady > V.NQUADS then
                 if not damaged("COMPUTER") then
-                    -- @todo dumpme(0);
+                    M.dumpme(false)
                 else
                     trek.score.lose("L_NEGENB")
                 end
@@ -249,7 +249,7 @@ function M.move (ramflag, course, p_time, speed)
             -- test for a black hole
             if Sect[ix][iy] == "HOLE" then
                 -- get dumped elsewhere in the galaxy
-                -- @todo dumpme(1);
+                M.dumpme(true)
                 trek.initquad.initquad()
                 n = 0
                 break
@@ -517,6 +517,41 @@ function M.ram (ix, iy)
     end
     -- no chance that your shields remained up in all that
     Ship.shldup = false
+end
+
+--- Dump the starship somewhere in the galaxy:
+-- note that the quadrant is NOT initialized here.  This must
+-- be done from the calling routine.
+--
+-- Repair of devices must be deferred.
+-- @bool flag false if bounce off of negative energy barrier,
+-- true if through a black hole
+function M.dumpme (flag)
+    local x = 0
+    local f = flag
+    Ship.quadx = math.random(1, V.NQUADS)
+    Ship.quady = math.random(1, V.NQUADS)
+    Ship.sectx = math.random(1, V.NSECTS)
+    Ship.secty = math.random(1, V.NSECTS)
+    x = x + 1.5 * math.random()
+    Move.time = Move.time + x
+    if f then
+        printf("%s falls into a black hole.\n", Ship.shipname)
+    else
+        printf("Computer applies full reverse power to avoid hitting the\n")
+        printf("   negative energy barrier.  A space warp was entered.\n")
+    end
+    -- bump repair dates forward
+    for i = 1, V.MAXEVENTS do
+        local e = Event[i]
+        if e.evcode == "E_FIXDV" then
+            trek.schedule.reschedule(e, (e.date - Now.date) + x)
+        end
+    end
+    trek.event.events(true)
+    printf("You are now in quadrant %d,%d.  It is stardate %.2f\n",
+        Ship.quadx, Ship.quady, Now.date)
+    Move.time = 0
 end
 
 -- End of module
