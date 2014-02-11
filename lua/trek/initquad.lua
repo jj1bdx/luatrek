@@ -181,8 +181,8 @@ end
 function M.sector ()
     local i, j
     repeat
-        i = math.random(V.NSECTS)
-        j = math.random(V.NSECTS)
+        i = math.random(1, V.NSECTS)
+        j = math.random(1, V.NSECTS)
     until Sect[i][j] == "EMPTY"
     return i, j
 end
