@@ -490,6 +490,227 @@ function M.dumpssradio ()
 	return chkrest
 end
 
+--- Cause a nova to occur:
+-- a nova occurs.  It is the result of having a star hit with
+-- a photon torpedo.  There are several things which may happen.
+-- The star may not be affected.  It may go nova.  It may turn
+-- into a black hole.  Any (yummy) it may go supernova.
+--
+-- Stars that go nova cause stars which surround them to undergo
+-- the same probabilistic process.  Klingons next to them are
+-- destroyed.  And if the starship is next to it, it gets zapped.
+-- If the zap is too much, it gets destroyed.
+-- @int x Sector coordinate X
+-- @int y Sector coordinate Y
+function M.nova (x, y)
+    if Sect[x][y] ~= "STAR" or Quad[Ship.quadx][Ship.quady].stars < 0 then
+        return
+    end
+    if math.random(0, 99) < 15 then
+        printf("Spock: Star at %d,%d failed to nova.\n", x, y)
+        return
+    end
+    if math.random(0, 99) < 5 then
+        -- The star goes supernova
+        return M.snova(x, y)
+    end
+    printf("Spock: Star at %d,%d gone nova\n", x, y)
+    if math.random(0, 4) > 0 then
+        -- 3 out of 4 it becomes just empty
+        Sect[x][y] = "EMPTY"
+    else
+        -- 1 out of 4 it becomes a blackhole
+        Sect[x][y] = "HOLE"
+        Quad[Ship.quadx][Ship.quady].holes = 
+            Quad[Ship.quadx][Ship.quady].holes + 1
+    end
+    Quad[Ship.quadx][Ship.quady].stars = Quad[Ship.quadx][Ship.quady].stars - 1
+    Game.kills = Game.kills + 1
+    for i = x - 1, x + 1 do
+        if i >= 1 and i <= V.NSECTS then
+            for j = y - 1,  y + 1 do
+                if j >= 1 and j <= V.NSECTS then
+                    local se = Sect[i][j]
+                    if se == "EMPTY" or se == "HOLE" then
+                        -- do nothing
+                    elseif se == "KLINGON" then
+                        trek.kill.killk(i, j)
+                    elseif se == "STAR" then
+                        M.nova(i, j)
+                    elseif se == "INHABIT" then
+                        trek.kill.kills(i, j, -1)
+                    elseif se == "BASE" then
+                        trek.kill.killb(i, j)
+                        Game.killb = Game.killb + 1
+                    elseif se == "ENTERPRISE" or
+                           se == "QUEENE" then
+                        local sv = 2000
+                        if Ship.shldup then
+                            if Ship.shield >= sv then
+                                Ship.shield = Ship.shield - sv
+                                sv = 0
+                            else
+                                sv = sv - Ship.shield
+                                Ship.shield = 0
+                            end
+                        end
+                        Ship.energy = Ship.energy - sv
+                        if Ship.energy <= 0 then
+                            trek.score.lose("L_SUICID")
+                        end
+                    else
+                        printf("Unknown object %s at %d,%d destroyed\n", se, i, j)
+                        Sect[i][j] = "EMPTY"
+                    end
+                end
+            end
+        end
+    end
+    return
+end
+
+--- Cause supernova to occur:
+-- a supernova occurs.  If ix < 0, a random quadrant is chosen;
+-- otherwise, the current quadrant is taken, and (ix, iy) give
+-- the sector quadrants of the star which is blowing up.
+--
+-- If the supernova turns out to be in the quadrant you are in,
+-- you go into "emergency override mode", which tries to get you
+-- out of the quadrant as fast as possible.  However, if you
+-- don't have enough fuel, or if you by chance run into something,
+-- or some such thing, you blow up anyway.  Oh yeh, if you are
+-- within two sectors of the star, there is nothing that can
+-- be done for you.
+--
+-- When a star has gone supernova, the quadrant becomes uninhab-
+-- itable for the rest of eternity, i.e., the game.  If you ever
+-- try stopping in such a quadrant, you will go into emergency
+-- override mode.
+-- @int x Sector coordinate X, if < 0 then randomly choose a quadrant
+-- @int y Sector coordinate Y
+function M.snova (x, y)
+    local f = false
+    local ix = x
+    local iy = y
+    local qx, qy, q
+    if ix < 0 then
+        -- choose a quadrant
+        while true do
+            qx = math.random(1, V.NQUADS)
+            qy = math.random(1, V.NQUADS)
+            q = Quad[qx][qy]
+            if q.stars > 0 then
+                -- break the while loop
+                break
+            end
+        end
+        -- if Ship locates on the same quadrant
+        if Ship.quadx == qx and Ship.quady == qy then
+            -- select a particular star
+            local n = math.random(1, q.stars)
+            for jx = 1, V.NSECTS do
+                for jy = 1, V.NSECTS do
+                    if Sect[jx][jy] == "STAR" or Sect[ix][iy] == "INHABIT" then
+                        n = n - 1
+                        if n <= 0 then
+                            ix = jx
+                            iy = jy
+                            -- break the for jy loop
+                            break
+                        end
+                    end
+                end
+                if n <= 0 then
+                    -- break the for jx loop
+                    break
+                end
+            end
+            f = true
+        end
+    else
+        -- current quadrant
+        qx = Ship.quadx
+        qy = Ship.quady
+        q = Quad[qx][qy]
+        f = true
+    end
+    if f then
+        -- supernova is in same quadrant as Enterprise
+        printf("\n*** RED ALERT: supernova occurring at %d,%d ***\n", ix, iy)
+        local dx = ix - Ship.sectx
+        local dy = iy - Ship.secty
+        if (dx * dx + dy * dy) <= 2 then
+            -- if the distance <= sqrt(2), then the ship is killed
+            printf("*** Emergency override attempt --- failed\n")
+            trek.score.lose("L_SNOVA")
+        end
+        q.scanned = 1000
+    else
+        if not trek.damage.damaged("SSRADIO") then
+            q.scanned = 1000
+            printf("\nUhura: Captain, Starfleet Command reports a supernova\n")
+            printf("  in quadrant %d,%d.  Caution is advised\n", qx, qy)
+        end
+    end
+    -- clear out the supernova'ed quadrant
+    Now.klings = Now.klings - q.klings
+    if x >= 0 then
+        -- Enterprise caused supernova
+        Game.killk = Game.killk + q.klings
+        Game.kills = Game.kills + q.stars
+    end
+    if q.bases then
+        trek.kill.killb(qx, qy)
+    end
+    trek.kill.killd(qx, qy, (x >= 0))
+    q.stars = -1
+    q.klings = 0
+    if Now.klings <= 0 then
+        printf("Lucky devil, that supernova destroyed the last klingon\n")
+        trek.score.win()
+    end
+    return
+end
+
+--- Automatic Override:
+-- if we should be so unlucky as to be caught in a quadrant
+-- with a supernova in it, this routine is called.  It is
+-- called from checkcond().
+--
+-- It sets you to a random warp (guaranteed to be over 6.0)
+-- and starts sending you off "somewhere" (whereever that is).
+--
+-- Please note that it is VERY important that you reset your
+-- warp speed after the automatic override is called.  The new
+-- warp factor does not stay in effect for just this routine.
+--
+-- This routine will never try to send you more than sqrt(2)
+-- quadrants, since that is all that is needed.
+function M.autover ()
+    printf("*** ALERT:  The %s is in a supernova quadrant *** \n", Ship.shipname)
+    printf("*** Emergency override attempts to hurl %s to safety\n", Ship.shipname)
+    -- let's get out of here really now
+    Ship.warp = 6.0 + (2.0 * math.random())
+    Ship.warp2 = Ship.warp * Ship.warp
+    Ship.warp3 = Ship.warp2 * Ship.warp
+    local shldfactor
+    if Ship.shldup then
+        shldfactor = 2
+    else
+        shldfactor = 1
+    end
+    local dist = 0.75 * Ship.energy / (Ship.warp3 * shldfactor)
+    local sqrt2 = math.sqrt(2)
+    if dist > sqrt2 then
+        dist = sqrt2
+    end
+    course = math.random(0, 359)
+    Etc.nkling = -1
+    Ship.cond = "RED"
+    trek.move.warp(-1, course, dist)
+    trek.klingon.attack(false)
+end
+
 -- End of module
 return M
 
