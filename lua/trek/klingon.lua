@@ -228,8 +228,11 @@ function M.klmove (fl)
                         qy = qy + 1
                     end
                     if qx < 1 or qx > V.NQUADS or
-                       qy < 1 or qy > V.NQUADS or
-                       Quad[qx][qy].stars < 0 or
+                       qy < 1 or qy > V.NQUADS then
+                       -- break from the for loop
+                       break
+                    end
+                    if Quad[qx][qy].stars < 0 or
                        Quad[qx][qy].klings >= V.MAXKLQUAD then
                        -- break from the for loop
                        break
