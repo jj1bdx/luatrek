@@ -135,7 +135,7 @@ local Cputab = {
 -- @int tsy target Sector coordinate Y
 -- @treturn num Course
 -- @treturn num Distance
-function kalc (tqx, tqy, tsx, tsy)
+local function kalc (tqx, tqy, tsx, tsy)
     -- normalize to quadrant distances
     local quadsize = V.NSECTS
     -- note: quadrant range = 1 - 8, sector range = 1 - 10
@@ -155,11 +155,12 @@ function kalc (tqx, tqy, tsx, tsy)
     return course, dist
 end
 
-static void
-prkalc(int course, double dist)
-{
-    printf(": course %d  dist %.3f\n", course, dist);
-}
+--- Print course and distance
+-- @num course
+-- @num distance
+local function prkalc (course, dist)
+    printf(": course %d  dist %.3f\n", course, dist)
+end
 
 --- On-Board Computer:
 --
@@ -255,8 +256,8 @@ function M.computer()
                     -- for each Klingon, give the course & distance
                     for i = 1, Etc.nkling do
                         printf("Klingon at %d,%d", Etc.klingon[i].x, Etc.klingon[i].y)
-                        course = kalc(Ship.quadx, Ship.quady, 
-                                        Etc.klingon[i].x, Etc.klingon[i].y, &dist)
+                        local course, dist = kalc(Ship.quadx, Ship.quady, 
+                                        Etc.klingon[i].x, Etc.klingon[i].y)
                         prkalc(course, dist)
                     end
                 end
@@ -330,7 +331,7 @@ function M.computer()
             -- distresslist
             local distress = false
             printf("\n");
-            /* scan the event list */
+            -- scan the event list
             for i = 1, V.MAXEVENTS do
                 local e = Event[i]
                 -- ignore hidden entries
@@ -374,11 +375,6 @@ end
 -- Federation in a prisoner of war exchange.  Of course, this
 -- can't happen unless you have taken some prisoners.
 function M.abandon ()
-    struct quad    *q;
-    int        i;
-    int            j;
-    struct event    *e;
-
     if Ship.ship == "QUEENE" then
         printf("You may not abandon ye Faire Queene\n")
         return
@@ -553,12 +549,6 @@ end
 -- to drop you.  After that, it's your problem.
 function M.help ()
     local Cntvect = {"first", "second", "third"}
-
-    int        i;
-    double            dist, x;
-    int        dx, dy;
-    int            j, l = 0;
-
     -- check to see if calling for help is reasonable ...
     if Ship.cond == "DOCKED" then
         printf("Uhura: But Captain, we're already docked\n")
@@ -606,14 +596,14 @@ function M.help ()
     -- attempt to rematerialize
     for i = 1, 3 do
         printf("%s attempt to rematerialize ", Cntvect[i])
-        if math.random > x then
+        if math.random() > x then
             -- ok, that's good.  let's see if we can set the ship down
             local found = false
             local dx, dy
             for j = 1, 5 do
                 dx = Etc.starbase.x + math.random(-1, 1)
                 if dx >= 1 and dx <= V.NSECTS then
-                    local dy = Etc.starbase.x + math.random(-1, 1)
+                    dy = Etc.starbase.x + math.random(-1, 1)
                     if dx >= 1 and dx <= V.NSECTS and
                         Sect[dx][dy] == "EMPTY" then
                         found = true
