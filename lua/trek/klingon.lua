@@ -175,12 +175,18 @@ function M.klmove (fl)
     end
     for n = 1, Etc.nkling do
         local k = Etc.klingon[n]
-        local i  = 100
+        local i = 100
         if fl > 0 then
             i = math.floor(100.0 * k.power / Param.klingpwr)
         end
         local nextx, nexty, lookx, looky, stayquad
-        if math.random(0, i - 1) < Param.moveprob[2 * Move.newquad + fl] then
+        local ii
+        if i <= 1 then
+            ii = 0
+        else
+            ii = math.random(0, i - 1)
+        end
+        if ii < Param.moveprob[2 * Move.newquad + fl] then
             -- compute distance to move
             local motion = math.random(-25, 49)
             motion = math.floor(motion * k.avgdist * Param.movefac[2 * Move.newquad + fl])
