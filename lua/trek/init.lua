@@ -85,6 +85,7 @@ pl = require "pl.import_into"()
 -- CAUTION: DO NOT LOAD "trek" in each of these submodules!
 M.damage = require "trek.damage"
 M.dock = require "trek.dock"
+M.event = require "trek.event"
 M.getpar = require "trek.getpar"
 M.gstate = require "trek.gstate"
 M.initquad = require "trek.initquad"
