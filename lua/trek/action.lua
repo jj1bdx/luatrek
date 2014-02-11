@@ -106,9 +106,9 @@ local Cputab = {
 --- local table of commands and the specified functions
 -- @table Cputab
 -- @field command-names
-    ["ch"] = 1, 
+    ["ch"] = 1,
     ["chart"] = 1,
-    ["t"] = 2, 
+    ["t"] = 2,
     ["trajectory"] = 2,
     ["c"] = {3, 0},
     ["course"] = {3, 0},
@@ -124,6 +124,8 @@ local Cputab = {
     ["impcost"] = 7,
     ["d"] = 8,
     ["distresslist"] = 8,
+    ["q"] = 9,
+    ["quit"] = 9,
 }
 
 --- Course Calculation:
@@ -201,6 +203,8 @@ end
 -- distresslist -- Gives a list of the currently known starsystems
 --     or starbases which are distressed, together with their
 --     quadrant coordinates.
+--
+-- quit -- exiting the computer
 function M.computer()
     if trek.damage.check_out("COMPUTER") then
         return
@@ -256,7 +260,7 @@ function M.computer()
                     -- for each Klingon, give the course & distance
                     for i = 1, Etc.nkling do
                         printf("Klingon at %d,%d", Etc.klingon[i].x, Etc.klingon[i].y)
-                        local course, dist = kalc(Ship.quadx, Ship.quady, 
+                        local course, dist = kalc(Ship.quadx, Ship.quady,
                                         Etc.klingon[i].x, Etc.klingon[i].y)
                         prkalc(course, dist)
                     end
@@ -273,7 +277,7 @@ function M.computer()
                 local tqy = tonumber(tab[2])
                 local ix = tonumber(tab[3])
                 local iy = tonumber(tab[4])
-                if tqx == nil or tqy == nil or 
+                if tqx == nil or tqy == nil or
                    ix == nil or iy == nil then
                     printf("Invalid coordinate number entered\n")
                 elseif tqx < 1 or tqx > V.NQUADS or
@@ -340,7 +344,7 @@ function M.computer()
                         printf("Klingon is attacking starbase in quadrant %d,%d\n",
                             e.x, e.y)
                         distress = true
-                    elseif e.evcode == "E_ENSLV" or 
+                    elseif e.evcode == "E_ENSLV" or
                         e.evcode == "E_REPRO" then
                         printf("Starsystem %s in quadrant %d,%d is distressed\n",
                             V.Systemname[e.systemname], e.x, e.y)
@@ -351,6 +355,10 @@ function M.computer()
             if not distress then
                 printf("No known distress calls are active\n")
             end
+        elseif r == 9 then
+            -- quit the computer and go back to the command loop
+            printf("Exiting the computer\n")
+            return
         end
     end
 end
@@ -392,7 +400,7 @@ function M.abandon ()
                 Ship.crew)
             Game.deaths = Game.deaths + Ship.crew
         else
-            printf("Crew beams down to planet %s\n", 
+            printf("Crew beams down to planet %s\n",
                     V.Systemname(q.systemname))
         end
     end
@@ -535,7 +543,7 @@ end
 -- first, the closest starbase is selected.  If there is a
 -- a starbase in your own quadrant, you are in good shape.
 -- This distance takes quadrant distances into account only.
--- 
+--
 -- A magic number is computed based on the distance which acts
 -- as the probability that you will be rematerialized.  You
 -- get three tries.
