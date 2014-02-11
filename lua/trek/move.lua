@@ -254,7 +254,7 @@ function M.move (ramflag, course, p_time, speed)
                 n = 0
                 break
             end
-            -- @todo ram(ix, iy);
+            M.ram(ix, iy)
             break
         end
     end
@@ -471,6 +471,52 @@ function M.impulse ()
     end
 	Move.time = M.move(0, course, p_time, 0.095)
 	Ship.energy = Ship.energy - (20 + 100 * Move.time * 0.095)
+end
+
+--- Ram some object:
+-- You have run into some sort of object.  It may be a Klingon,
+-- a star, or a starbase.  If you run into a star, you are really
+-- stupid, because there is no hope for you.
+--
+-- If you run into something else, you destroy that object.  You
+-- also rack up incredible damages.
+-- @int x Sector coordinate X
+-- @int y Sector coordinate Y
+function M.ram (ix, iy)
+    printf("*** RED ALERT ***: collision imminent\n")
+    local se = Sect[ix][iy]
+    if se == "KLINGON" then
+        printf("%s rams Klingon at %d,%d\n", Ship.shipname, ix, iy)
+        trek.kill.killk(ix, iy)
+    elseif se == "STAR" or se == "INHABIT" then
+        printf("Yeoman Rand: Captain, isn't it getting hot in here?\n")
+        printf("Spock: Hull temperature approaching 550 Degrees Kelvin.\n")
+        trek.score.lose("L_STAR")
+    elseif se == "BASE" then
+        printf("You ran into the starbase at %d,%d\n", ix, iy)
+        killb(Ship.quadx, Ship.quady)
+        -- don't penalize the captain if it wasn't his fault
+        if not damaged("SINS") then
+            Game.killb = Game.killb + 1
+        end
+    else
+        printf("You ran into an unknown object %s at %d,%d\n", se, ix, iy)
+        -- @todo any penalty?
+    end
+    printf("%s heavily damaged\n", Ship.shipname)
+    -- select the number of deaths to occur
+    local dead = 10 + math.random(0, (20 * Game.skill) - 1)
+    Game.deaths = Game.deaths + dead
+    Ship.crew = Ship.crew - dead
+    printf("McCoy: Take it easy captain; we had %d casualties.\n", dead)
+    -- damage devices with an 80% probability
+    for k, v in pairs(Param.damfac) do
+        if math.random(0, 99) < 80 then
+            trek.damage.damage(k, (2.5 * (math.random() + math.random()) + 1.0) * v)
+        end
+    end
+    -- no chance that your shields remained up in all that
+    Ship.shldup = false
 end
 
 -- End of module
