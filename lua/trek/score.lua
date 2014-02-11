@@ -277,7 +277,7 @@ function M.checkcond()
     end
     -- call in automatic override if appropriate
     if Quad[Ship.quadx][Ship.quady].stars < 0 then
-        -- @todo autover();
+        trek.event.autover()
     end
     if Quad[Ship.quadx][Ship.quady].stars < 0 then
         M.lose("L_SNOVA")
