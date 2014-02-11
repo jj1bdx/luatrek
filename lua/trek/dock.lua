@@ -150,7 +150,7 @@ function M.dock ()
     -- recalibrate space inertial navigation system
     Ship.sinsbad = false
     -- output any saved radio messages
-    -- @todo dumpssradio()
+    trek.event.dumpssradio()
     -- reschedule any device repairs
     for i = 1, V.MAXEVENTS do
         local e = Event[i]
