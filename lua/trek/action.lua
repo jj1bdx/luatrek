@@ -499,7 +499,7 @@ function M.capture ()
         i = math.random(1, Etc.nkling)
     end
     local k = Etc.klingon[i]
-    Move.free = 0
+    Move.free = false
     Move.time = 0.05
     -- check out that Klingon
     k.srndreq = true
