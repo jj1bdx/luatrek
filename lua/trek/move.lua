@@ -448,8 +448,8 @@ function M.impulse ()
     if not status then
         return
     end
-	power = math.floor(20 + 100 * dist)
-	percent = math.floor(100 * power / Ship.energy + 0.5)
+	local power = math.floor(20 + 100 * dist)
+	local percent = math.floor(100 * power / Ship.energy + 0.5)
 	if percent >= 85 then
 		printf("Scotty: That would consume %d%% of our remaining energy.\n",
 			percent)
@@ -459,7 +459,7 @@ function M.impulse ()
 		    printf("Aye aye, sir\n")
         end
     end
-	p_time = dist / 0.095
+	local p_time = dist / 0.095
 	percent = math.floor(100 * p_time / Now.time + 0.5)
 	if percent >= 85 then
 		printf("Spock: That would take %d%% of our remaining time.\n",
@@ -469,7 +469,7 @@ function M.impulse ()
         end
 		printf("(The captain is finally gone mad)\n")
     end
-	Move.time = move(0, course, p_time, 0.095)
+	Move.time = M.move(0, course, p_time, 0.095)
 	Ship.energy = Ship.energy - (20 + 100 * Move.time * 0.095)
 end
 
