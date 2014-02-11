@@ -214,17 +214,17 @@ end
 local Comtab =
 {
     -- @todo functions commented out are all temporary
-    -- ["abandon"] = function () trek.abandon.abandon end,
-    -- ["capture"] = function () trek.capture.capture end,
+    ["abandon"] = function () trek.action.abandon() end,
+    ["capture"] = function () trek.action.capture() end,
     ["cloak"] = function () trek.shield.shield(-1) end,
-    -- ["c"] = function () trek.computer.computer end,
-    -- ["computer"] = function () trek.computer.computer end,
+    ["c"] = function () trek.action.computer() end,
+    ["computer"] = function () trek.action.computer() end,
     ["da"] = function () trek.damage.dcrept() end,
     ["damages"] = function () trek.damage.dcrept() end,
     ["destruct"] = function () trek.score.destruct() end,
     ["dock"] = function () trek.dock.dock() end,
     -- ["dump"] = function () trek.dump.dumpgame end,
-    -- ["help"] = function () trek.help.help end,
+    ["help"] = function () trek.action.help() end,
     ["i"] = function () trek.move.impulse() end,
     ["impulse"] = function () trek.move.impulse() end,
     ["l"] = function () trek.scan.lrscan() end,
