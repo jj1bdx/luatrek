@@ -176,12 +176,15 @@ function M.events (t_warp)
             if Ship.cond ~= "DOCKED" then
                 -- pick a new quadrant
                 local i = math.random(1, Now.klings)
-                for ix = 1, V.NQUADS do
-                    for iy = 1, V.NQUADS do
-                        local q = Quad[ix][iy]
+                local ix, iy
+                for jx = 1, V.NQUADS do
+                    for jy = 1, V.NQUADS do
+                        local q = Quad[jx][jy]
                         if q.stars >= 0 then
                             i = i - q.klings
                             if i <= 0 then
+                                ix = jx
+                                iy = jy
                                 break
                             end
                         end
