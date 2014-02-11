@@ -147,7 +147,7 @@ function M.move (ramflag, course, p_time, speed)
     local sectsize = V.NSECTS
     -- initialize delta factors for move
     -- converted from degrees to radian (* pi / 180)
-    local angle = course * 0.0174532925
+    local angle = course * math.pi / 180
     if not damaged("SINS") then
         angle = angle + Param.navigcrud[1] * (math.random() - 0.5)
     else
