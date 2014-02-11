@@ -200,31 +200,38 @@ function M.move (ramflag, course, p_time, speed)
         end
         if x < 1.0 or y < 1.0 or x > sectsize or y > sectsize then
             -- enter new quadrant
-            dx = Ship.quadx * V.NSECTS + Ship.sectx + dx * xn
-            dy = Ship.quady * V.NSECTS + Ship.secty + dy * xn
-            if dx < 1 then
-                ix = 0
+            -- note: newdx and newdy are shifted values
+            -- note: newix and newiy are shifted values
+            -- note: shifted value quadrant: [0, V.NQUADS - 1]
+            -- note: shifted value sector: [0, V.SECTS - 1]
+            local newdx = (Ship.quadx - 1) * V.NSECTS + (Ship.sectx - 1) + dx * xn
+            local newdy = (Ship.quady - 1) * V.NSECTS + (Ship.secty - 1) + dy * xn
+            local newix, newiy
+            if newdx < 0 then
+                newix = 0
             else
-                ix = math.floor(dx + 0.5)
+                newix = math.floor(newdx + 0.5)
             end
-            if dy < 1 then
-                iy = 0
+            if newdy < 0 then
+                newiy = 0
             else
-                iy = math.floor(dy + 0.5)
+                newiy = math.floor(newdy + 0.5) + 1
             end
             if V.Trace then
-                printf("New quad: ix = %d, iy = %d\n", ix, iy)
+                printf("New quad: newix = %d, newiy = %d\n", newix, newiy)
             end
+            -- use out-of-bound sector coordinates to calculate Klingon distance
             Ship.sectx = math.floor(x)
             Ship.secty = math.floor(y)
             trek.klingon.compkldist(false)
             Move.newquad = 2
             trek.klingon.attack(0)
             trek.score.checkcond()
-            Ship.quadx = math.floor(ix / V.NSECTS)
-            Ship.quady = math.floor(iy / V.NSECTS)
-            Ship.sectx = ix % V.NSECTS
-            Ship.secty = iy % V.NSECTS
+            -- convert back shifted coordinates to the original coordinates
+            Ship.quadx = math.floor(newix / V.NSECTS) + 1
+            Ship.quady = math.floor(newiy / V.NSECTS) + 1
+            Ship.sectx = (newix % V.NSECTS) + 1
+            Ship.secty = (newiy % V.NSECTS) + 1
             if ix < 1 or Ship.quadx > V.NQUADS or iy < 1 or Ship.quady > V.NQUADS then
                 if not damaged("COMPUTER") then
                     M.dumpme(false)
