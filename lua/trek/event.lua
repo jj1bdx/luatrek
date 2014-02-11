@@ -102,10 +102,6 @@ local printf = pl.utils.printf
 --- shorthand for trek.damage.damaged
 local damaged = function (ev) trek.damage.damaged(ev) end
 
--- @todo working on this code
-
-CAUSE TIME TO ELAPSE
-
 --- Cause time to elapse:
 -- this routine does a hell of a lot.  It elapses time, eats up
 -- energy, regenerates energy, processes any events that occur,
@@ -172,7 +168,7 @@ function M.events (t_warp)
             -- and schedule the next one
             trek.schedule.xresched(e, 1)
             break
-        elseif e.evcode = "E_LRTB" then
+        elseif e.evcode == "E_LRTB" then
             -- long range tractor beam
             -- schedule the next one
             trek.schedule.xresched(e, Now.klings)
@@ -209,7 +205,7 @@ function M.events (t_warp)
                 -- truncate the move time
                 Move.time = xdate - idate
             end
-        elseif e.evcode = "E_KATSB" then
+        elseif e.evcode == "E_KATSB" then
             -- Klingon attacks starbase
             -- if out of bases, forget it
             if Now.bases <= 0 then
@@ -260,13 +256,13 @@ function M.events (t_warp)
                 -- but it's still there!!!
                 e.hidden = true
             end
-        elseif e.evcode = "E_KDESB" then
+        elseif e.evcode == "E_KDESB" then
             -- Klingon destroys starbase
             trek.schedule.unschedule(e)
             local q = Quad[e.x][e.y]
             -- if the base has mysteriously gone away, or if the Klingon
             -- got tired and went home, ignore this event
-            if q->bases > 0 and q->klings > 0 then
+            if q.bases > 0 and q.klings > 0 then
                 -- are we in the same quadrant?
                 if e.x == Ship.quadx and e.y == Ship.quady then
                     -- yep, kill one in this quadrant */
@@ -277,7 +273,7 @@ function M.events (t_warp)
                     trek.kill.killb(e.x, e.y)
                 end
             end
-        elseif e.evcode = "E_ISSUE" then
+        elseif e.evcode == "E_ISSUE" then
             -- issue a distress call
             trek.schedule.xresched(e, 1)
             -- if we already have too many, throw this one away
@@ -294,7 +290,7 @@ function M.events (t_warp)
                     -- not already under attack, which is not
                     -- supernova'ed, and which has some Klingons in it
                     if (ix ~= Ship.quadx or iy ~= Ship.quady) and
-                        q.stars >= 0 and q.distressed = false and
+                        q.stars >= 0 and q.distressed == false and
                         q.systemname ~= 0 and q.klings > 0 then
                         found = true
                         break
@@ -320,7 +316,7 @@ function M.events (t_warp)
                     e.hidden = true
                 end
             end
-        elseif e.evcode = "E_ENSLV" then
+        elseif e.evcode == "E_ENSLV" then
             -- starsystem is enslaved
             trek.schedule.unschedule(e)
             -- see if current distress call still active
@@ -345,7 +341,7 @@ function M.events (t_warp)
                     e.hidden = true
                 end
             end
-        elseif e.evcode = "E_REPRO" then
+        elseif e.evcode == "E_REPRO" then
             --  Klingon reproduces
             -- see if distress call is still active
             local q = Quad[e.x][e.y]
@@ -359,7 +355,7 @@ function M.events (t_warp)
                 local ix = e.x
                 local iy = e.y
                 local ok = false
-                if (q.klings >= V.MAXKLQUAD)
+                if (q.klings >= V.MAXKLQUAD) then
                     -- this quadrant is full and not ok, pick an adjacent one
                     for i = ix - 1, ix + 1 do
                         if i >= 1 and i <= V.NQUADS then
@@ -367,7 +363,7 @@ function M.events (t_warp)
                                 if i >= 1 and i <= V.NQUADS then
                                     local q = Quad[i][j]
                                     -- check for this quad ok (not full & no snova)
-                                    if q->klings < MAXKLQUAD and q->stars >= 0 then
+                                    if q.klings < V.MAXKLQUAD and q.stars >= 0 then
                                         ok = true
                                         ix = i
                                         iy = j
@@ -377,7 +373,8 @@ function M.events (t_warp)
                             end
                         end
                     end
-                if ok
+                end
+                if ok then
                     -- deliver the child
                     q.klings = q.klings + 1
                     Now.klings = Now.klings + 1
@@ -389,7 +386,7 @@ function M.events (t_warp)
                         k.x = six
                         k.y = siy
                         k.power = Param.klingpwr
-                        k->srndreq = false
+                        k.srndreq = false
                         Etc.nkling = Etc.nkling + 1
                         trek.klingon.compkldist(Etc.klingon[0].dist == Etc.klingon[0].avgdist)
                     end
@@ -397,28 +394,28 @@ function M.events (t_warp)
                     Now.time = Now.resource / Now.klings
                 end
             end
-        elseif e.evcode = "E_SNAP" then
+        elseif e.evcode == "E_SNAP" then
             -- take a snapshot of the galaxy
             trek.schedule.xresched(e, 1)
             -- save a snapshot as a table
             Etc.snapshot = {
-                quad = pl.tablex.deepcopy(Quad)
-                event = pl.tablex.deepcopy(Event)
-                now = pl.tablex.deepcopy(Now)
+                quad = pl.tablex.deepcopy(Quad),
+                event = pl.tablex.deepcopy(Event),
+                now = pl.tablex.deepcopy(Now),
             }
             Game.snap = 1
-        elseif e.evcode = "E_ATTACK" then
+        elseif e.evcode == "E_ATTACK" then
             -- Klingons attack during rest period
             if not Move.resting then
                 trek.schedule.unschedule(e)
             else 
                 trek.klingon.attack(true)
                 trek.schedule.reschedule(e, 0.5)
-        elseif e.evcode = "E_FIXDV" then
-            -- fix a device
+            end
+        elseif e.evcode == "E_FIXDV" then
+            -- de-damage the device
             local dev = e.systemname
             trek.schedule.unschedule(e)
-            -- de-damage the device
             printf("%s reports repair work on the %s finished.\n",
                 Device[dev].person, Device[dev].name)
             -- handle special processing upon fix
@@ -443,7 +440,7 @@ function M.events (t_warp)
     end
     -- unschedule an attack during a rest period
     local e = Now.eventptr["E_ATTACK"]
-    if e ~= "" | e ~= "NOEVENT" then
+    if e ~= "" and e ~= "NOEVENT" then
         trek.schedule.unschedule(e)
     end
     if not t_warp then
