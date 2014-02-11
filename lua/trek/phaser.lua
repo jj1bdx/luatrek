@@ -131,9 +131,9 @@ local bank = pl.tablex.new(NBANKS,
 -- @field manual
 -- @field automatic
 local Matab = {
-    ["auto"] = false,
-    ["automatic"] = false,
-    ["manual"] = true
+    ["auto"] = "AUTO",
+    ["automatic"] = "AUTO",
+    ["manual"] = "MANUAL",
 }
 
 --- Phaser Control:
@@ -173,15 +173,15 @@ function M.phaser ()
         return
     end
     -- decide if we want manual or automatic mode
-    local manual = false
+    local manual = "AUTO"
     if damaged("COMPUTER") then
         printf("%s", Device["COMPUTER"].name)
-        manual = true
+        manual = "MANUAL"
     elseif damaged("SRSCAN") then
         printf("%s", Device["SRSCAN"].name)
-        manual = true
+        manual = "MANUAL"
     end
-    if manual then
+    if manual == "MANUAL" then
         printf(" damaged, manual mode selected\n");
     else
         -- choose auto or manual
@@ -194,7 +194,7 @@ function M.phaser ()
         bank[i].units = 0
     end
     local extra
-    if manual then
+    if manual == "MANUAL" then
         -- collect manual mode statistics
         while flag do
             printf("%d units available\n", Ship.energy)
@@ -219,12 +219,12 @@ function M.phaser ()
                     break
                 end
                 b.units = hit
-                local course = trek.getpar.getintpar("course")
+                local course = trek.getpar.getnumpar("course")
                 if hit < 0 or hit >= 360 then
                     return
                 end
                 b.angle = course * math.pi / 180
-                b.spread = trek.getpar.getintpar("spread")
+                b.spread = trek.getpar.getnumpar("spread")
                 if b.spread < 0 or b.spread > 1 then
                     return
                 end
@@ -232,13 +232,14 @@ function M.phaser ()
             Ship.energy = Ship.energy - extra
         end
         extra = 0
-    else
+    elseif manual == "AUTO" then
         -- automatic distribution of power
         if Etc.nkling <= 0 then
             printf("Sulu: But there are no Klingons in this quadrant\n")
             return
         end
         printf("Phasers locked on target.  ")
+        local n
         while flag do
             printf("%d units available\n", Ship.energy)
             local hit = trek.getpar.getnumpar("Units to fire")
@@ -252,7 +253,7 @@ function M.phaser ()
                 flag = false
                 Ship.energy = Ship.energy - hit
                 extra = hit
-                local n = Etc.nkling
+                n = Etc.nkling
                 if n > NBANKS then
                     n = NBANKS
                 end
@@ -365,7 +366,7 @@ function M.phaser ()
                 anglefactor = math.atan2(dy, dx) - b.angle
                 anglefactor = math.cos((anglefactor * b.spread) + GAMMA)
                 if anglefactor >= 0.0 then
-                    hit = math.floor(anglefactor * distfactor + 0.5)
+                    local hit = math.floor(anglefactor * distfactor + 0.5)
                     k.power = k.power - hit
                     printf("%d unit hit on Klingon", hit)
                     if not damaged("SRSCAN") then
