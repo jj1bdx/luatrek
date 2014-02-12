@@ -263,8 +263,8 @@ function M.setup ()
     Param.eventdly["E_SNAP"] = 0.5;
     Param.eventdly["E_ENSLV"] = 0.5;
     Param.eventdly["E_REPRO"] = 2.0;
-    Param.navigcrud[0] = 1.50;
-    Param.navigcrud[1] = 0.75;
+    Param.navigcrud["SINSBAD"] = 1.50;
+    Param.navigcrud["SINSDAMAGED"] = 0.75;
     Param.cloakenergy = 1000;
     Param.energylow = 1000;
     for k, v in ipairs(Event) do
