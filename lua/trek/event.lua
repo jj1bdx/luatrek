@@ -318,7 +318,7 @@ function M.events (t_warp)
                 -- tell the captain about it if we can
                 if not damaged("SSRADIO") then
                     printf("\nUhura: Captain, starsystem %s in quadrant %d,%d is under attack\n",
-                        Systemname[e.systemname], ix, iy)
+                        V.Systemname[e.systemname], ix, iy)
                     restcancel = true
                 else
                     -- if we can't tell him, make it invisible
