@@ -405,7 +405,7 @@ M.Move = {
 -- @field moveprob Table of Probability that a Klingon moves (in Klingon Move Indices)
 -- @field movefac Table of Klingon move distance multiplier (in Klingon Move Indices)
 -- @field eventdly Table of event time multipliers
--- @field navigcrud Table of navigation crudup factor (of 2 elements)
+-- @field navigcrud Table of navigation crudup factor ("SINSDAMAGED" and "SINSBAD")
 -- @field cloakenergy Cloaking device energy per stardate
 -- @field damprob Table of damage probability (in device names) (sum of damage probabilities must add to 1000)
 -- @field hitfac Klingon attack factor
@@ -507,7 +507,10 @@ M.Param = {
         ["E_SNAP"] = 0,
         ["E_SNOVA"] = 0,
     },
-    navigcrud = pl.tablex.new(2, 0),
+    navigcrud = {
+        ["SINSBAD"] = 0,
+        ["SINSDAMAGED"] = 0,
+    },
     cloakenergy = 0,
     damprob = {
         ["WARP"] = 0,
