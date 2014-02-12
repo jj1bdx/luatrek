@@ -276,10 +276,11 @@ function M.checkcond()
         return
     end
     -- call in automatic override if appropriate
-    if Quad[Ship.quadx][Ship.quady].stars < 0 then
+    if Quad[Ship.quadx + 1][Ship.quady + 1].stars < 0 then
         trek.event.autover()
     end
-    if Quad[Ship.quadx][Ship.quady].stars < 0 then
+    -- if hitting supernova again then the ship is killed
+    if Quad[Ship.quadx + 1][Ship.quady + 1].stars < 0 then
         M.lose("L_SNOVA")
     end
     -- nullify distress call if appropriate
