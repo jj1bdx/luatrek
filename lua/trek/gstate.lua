@@ -607,7 +607,7 @@ M.Etc = {
 M.Trace = false
 
 --- Luatrek version string
-M.Luatrek_version = "0.002 alpha"
+M.Luatrek_version = "0.003 alpha"
 
 -- End of module
 return M
