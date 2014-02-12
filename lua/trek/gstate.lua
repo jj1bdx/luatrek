@@ -202,16 +202,6 @@ M.Losemsg = {
     ["L_NOCREW"] = "Your last crew member died",
 }
 
---- Klingon move indices
--- @todo this should be symbolic
-M.KM_NUMBER = 6
-M.KM_OB = 0 -- Old quadrant, Before attack
-M.KM_OA = 1 -- Old quadrant, After attack
-M.KM_EB = 2 -- Enter quadrant, Before attack
-M.KM_EA = 3 -- Enter quadrant, After attack
-M.KM_LB = 4 -- Leave quadrant, Before attack
-M.KM_LA = 5 -- Leave quadrant, After attack
-
 --- Two dimensional table of the Quadrants
 -- (Note: Quadrant [1, 2] mapped to Quad[2][3] (offset +1))
 -- @table Quad
@@ -379,14 +369,14 @@ M.Game = {
 -- @field free boolean - true if a move is free (without inducing attacks)
 -- @field endgame Game status: 1 if won, 0 if ongoing, -1 if lost
 -- @field shldchg boolean - true if shields changed this move
--- @field newquad 2 if just entered this quadrant, 1 after the initquad, 0 if staying in the quadrant for more than a turn
+-- @field newquad "LEAVE" if just entered this quadrant, "ENTER" after the initquad, "OLD" if staying in the quadrant for more than a turn
 -- @field resting boolean - true if this move is a rest
 -- @field time Time used in this move
 M.Move = {
     free = false,
     endgame = 0,
     shldchg = false,
-    newquad = 0,
+    newquad = "",
     resting = false,
     time = 0,
 }
@@ -456,8 +446,43 @@ M.Param = {
     klingpwr = 0,
     warptime = 0,
     phasfac = 0,
-    moveprob = pl.tablex.new(M.KM_NUMBER, 0),
-    movefac = pl.tablex.new(M.KM_NUMBER, 0),
+--- Klingon move indices, represented by two-dimensional strings
+-- @table firstlevel
+-- @field OLD Old quadrant
+-- @field ENTER Enter quadrant
+--- Klingon move indices, represented by two-dimensional strings
+-- @table secondlevel
+-- @field LEAVE Leave quadrant
+-- @field BEFORE Before attack
+-- @field AFTER After attack
+    moveprob = {
+        ["OLD"] = {
+            ["BEFORE"] = 0,
+            ["AFTER"] = 0,
+        },
+        ["ENTER"] = {
+            ["BEFORE"] = 0,
+            ["AFTER"] = 0,
+        },
+        ["LEAVE"] = {
+            ["BEFORE"] = 0,
+            ["AFTER"] = 0,
+        },
+    },
+    movefac = {
+        ["OLD"] = {
+            ["BEFORE"] = 0,
+            ["AFTER"] = 0,
+        },
+        ["ENTER"] = {
+            ["BEFORE"] = 0,
+            ["AFTER"] = 0,
+        },
+        ["LEAVE"] = {
+            ["BEFORE"] = 0,
+            ["AFTER"] = 0,
+        },
+    },
     eventdly = {
 --- Event codes (represented in string)
 -- @table Event_codes
