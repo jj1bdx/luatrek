@@ -110,10 +110,10 @@ local Cputab = {
     ["chart"] = 1,
     ["t"] = 2,
     ["trajectory"] = 2,
-    ["c"] = {3, 0},
-    ["course"] = {3, 0},
-    ["m"] = {3, 1},
-    ["move"] = {3, 1},
+    ["c"] = 3.0,
+    ["course"] = 3.0,
+    ["m"] = 3.1,
+    ["move"] = 3.1,
     ["s"] = 4,
     ["score"] = 4,
     ["p"] = 5,
@@ -145,13 +145,13 @@ local function kalc (tqx, tqy, tsx, tsy)
     local dy = (Ship.quady + (Ship.secty / quadsize)) -
                 (tqy + (tsy / quadsize))
     -- get the angle
-    angle = math.atan2(dy, dx)
+    local angle = math.atan2(dy, dx)
     -- make it 0 to 2 * pi
     if angle < 0.0 then
         angle = angle + (math.pi * 2)
     end
     -- convert from radians to degrees
-    local course = math.floor(angle * (180 / pi) + 0.5)
+    local course = math.floor(angle * (180 / math.pi) + 0.5)
     local dist = math.sqrt(dx * dx + dy * dy)
     return course, dist
 end
@@ -252,7 +252,7 @@ function M.computer()
             printf("\n");
         elseif r == 2 then
             -- trajectory
-            if not trek.damage.check_out(SRSCAN) then
+            if not trek.damage.check_out("SRSCAN") then
                 if Etc.nkling <= 0 then
                     printf("No Klingons in this quadrant\n")
                 else
@@ -265,17 +265,18 @@ function M.computer()
                     end
                 end
             end
-        elseif r == {3, 0} or r == {3, 1} then
+        elseif r == 3.0 or r == 3.1 then
             -- course calculation
             local valid = false
             local num, tab = trek.getpar.getwords("Quadrant X, Y, Sector X, Y");
+            local tqx, tqy, ix, iy
             if num ~= 4 then
                 printf("Split four numbers by space\n")
             else
-                local tqx = tonumber(tab[1])
-                local tqy = tonumber(tab[2])
-                local ix = tonumber(tab[3])
-                local iy = tonumber(tab[4])
+                tqx = tonumber(tab[1])
+                tqy = tonumber(tab[2])
+                ix = tonumber(tab[3])
+                iy = tonumber(tab[4])
                 if tqx == nil or tqy == nil or
                    ix == nil or iy == nil then
                     printf("Invalid coordinate number entered\n")
@@ -289,7 +290,7 @@ function M.computer()
             end
             if valid then
                 local course, dist = kalc(tqx, tqy, ix, iy)
-                if r[2] == 1 then
+                if r == 3.1 then
                     trek.move.warp(-1, course, dist)
                 else
                     printf("%d,%d/%d,%d to %d,%d/%d,%d",
