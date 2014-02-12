@@ -143,10 +143,8 @@ local Cputab = {
 local function kalc (tqx, tqy, tsx, tsy)
     -- normalize to quadrant distances
     local quadsize = V.NSECTS
-    local dx = (Ship.quadx + (Ship.sectx / quadsize)) -
-                (tqx + (tsx / quadsize))
-    local dy = (Ship.quady + (Ship.secty / quadsize)) -
-                (tqy + (tsy / quadsize))
+    local dx = (Ship.quadx + (Ship.sectx / quadsize)) - (tqx + (tsx / quadsize))
+    local dy = (tqy + (tsy / quadsize)) - (Ship.quady + (Ship.secty / quadsize))
     -- get the angle
     local angle = math.atan2(dy, dx)
     -- make it 0 to 2 * pi
