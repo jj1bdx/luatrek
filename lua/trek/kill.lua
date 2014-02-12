@@ -189,7 +189,7 @@ end
 -- @int x when f == 0, Quadrant X coordinate: else Sector X coordinate
 -- @int y when f == 0, Quadrant Y coordinate: else Sector Y coordinate
 -- @int f f ~= 0: this quadrant, f < 0: Entreprise's fault
-function M.killk (x, y, f)
+function M.kills (x, y, f)
     -- current quadrant
     local q = Quad[Ship.quadx + 1][Ship.quady + 1]
     if f ~= 0 then
