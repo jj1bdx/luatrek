@@ -263,7 +263,7 @@ function M.play ()
         Move.free = true
         Move.time = 0.0
         Move.shldchg = false
-        Move.newquad = 0
+        Move.newquad = "OLD"
         Move.resting = false
         -- the command table is defined in trek (init.lua)
         -- because all function calls must be defined
