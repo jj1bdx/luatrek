@@ -535,7 +535,7 @@ function M.nova (x, y)
     for i = x - 1, x + 1 do
         if i >= 0 and i <= V.NSECTS - 1 then
             for j = y - 1,  y + 1 do
-                if j >= 0 and j <= V.NSECTS - 1then
+                if j >= 0 and j <= V.NSECTS - 1 then
                     local se = Sect[i + 1][j + 1]
                     if se == "EMPTY" or se == "HOLE" then
                         -- do nothing
