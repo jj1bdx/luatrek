@@ -172,7 +172,7 @@ function M.initquad (f)
         local rx, ry = M.sector()
         Sect[rx + 1][ry + 1] = "STAR"
     end
-    Move.newquad = 1
+    Move.newquad = "ENTER"
 end
 
 --- Choose first empty sector point and return the coordinates
