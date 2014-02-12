@@ -144,6 +144,9 @@ function M.setup ()
             if trek.dumpgame.restartgame() then
                 -- state loading successful, no more setup
                 return
+            else
+                -- state loading failed, back to the loop
+                r = 0
             end
         end
     end -- loop breaks when r > 0
