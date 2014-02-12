@@ -177,9 +177,9 @@ function M.events (t_warp)
                 -- pick a new quadrant
                 local i = math.random(1, Now.klings)
                 local ix, iy
-                for jx = 1, V.NQUADS do
-                    for jy = 1, V.NQUADS do
-                        local q = Quad[jx][jy]
+                for jx = 0, V.NQUADS - 1 do
+                    for jy = 0, V.NQUADS - 1do
+                        local q = Quad[jx + 1][jy + 1]
                         if q.stars >= 0 then
                             i = i - q.klings
                             if i <= 0 then
@@ -219,7 +219,7 @@ function M.events (t_warp)
                     local ix = Now.base[i].x
                     local iy = Now.base[i].y
                     -- see if a Klingon exists in this quadrant
-                    local q = Quad[ix][iy]
+                    local q = Quad[ix + 1][iy + 1]
                     local distressed = false
                     if q.klings > 0 then
                         -- see if already distressed
@@ -263,7 +263,7 @@ function M.events (t_warp)
         elseif e.evcode == "E_KDESB" then
             -- Klingon destroys starbase
             trek.schedule.unschedule(e)
-            local q = Quad[e.x][e.y]
+            local q = Quad[e.x + 1][e.y + 1]
             -- if the base has mysteriously gone away, or if the Klingon
             -- got tired and went home, ignore this event
             if q.bases > 0 and q.klings > 0 then
@@ -286,9 +286,9 @@ function M.events (t_warp)
                 local ix, iy, q
                 local found = false
                 for i = 1, 100 do
-                    ix = math.random(1, V.NQUADS)
-                    iy = math.random(1, V.NQUADS)
-                    q = Quad[ix][iy]
+                    ix = math.random(0, V.NQUADS - 1)
+                    iy = math.random(0, V.NQUADS - 1)
+                    q = Quad[ix + 1][iy + 1]
                     -- need a quadrant which is not the current one,
                     -- which has some stars which are inhabited and
                     -- not already under attack, which is not
@@ -328,7 +328,7 @@ function M.events (t_warp)
             -- starsystem is enslaved
             trek.schedule.unschedule(e)
             -- see if current distress call still active
-            local q = Quad[e.x][e.y]
+            local q = Quad[e.x + 1][e.y + 1]
             if q.klings <= 0 then
                 -- no Klingons, clean up
                 -- restore the system name
@@ -352,7 +352,7 @@ function M.events (t_warp)
         elseif e.evcode == "E_REPRO" then
             --  Klingon reproduces
             -- see if distress call is still active
-            local q = Quad[e.x][e.y]
+            local q = Quad[e.x + 1][e.y + 1]
             if q.klings <= 0 then
                 trek.schedule.unschedule(e)
                 q.systemname = e.systemname
@@ -366,10 +366,10 @@ function M.events (t_warp)
                 if (q.klings >= V.MAXKLQUAD) then
                     -- this quadrant is full and not ok, pick an adjacent one
                     for i = ix - 1, ix + 1 do
-                        if i >= 1 and i <= V.NQUADS then
+                        if i >= 0 and i <= V.NQUADS - 1 then
                             for j = iy - 1, iy + 1 do
-                                if i >= 1 and i <= V.NQUADS then
-                                    local q = Quad[i][j]
+                                if i >= 0 and i <= V.NQUADS - 1 then
+                                    local q = Quad[i + 1][j + 1]
                                     -- check for this quad ok (not full & no snova)
                                     if q.klings < V.MAXKLQUAD and q.stars >= 0 then
                                         ok = true
@@ -389,7 +389,7 @@ function M.events (t_warp)
                     if ix == Ship.quadx and iy == Ship.quady then
                         -- we must position Klingon
                         local six, siy = trek.initquad.sector()
-                        Sect[six][siy] = "KLINGON"
+                        Sect[six + 1][siy + 1] = "KLINGON"
                         local k = Etc.klingon[Etc.nkling]
                         k.x = six
                         k.y = siy
@@ -479,14 +479,14 @@ function M.dumpssradio ()
 		if e.hidden and e.ghost then
 			trek.schedule.unschedule(e)
 			printf("Starsystem %s in quadrant %d,%d is no longer distressed\n",
-			        Quad[e.x][e.y].systemname, e.x, e.y)
+			        Quad[e.x + 1][e.y + 1].systemname, e.x, e.y)
             -- @todo do I need to clear the distressed flag?
         elseif e.evcode == "E_KDESB" then
 			printf("Starbase in quadrant %d,%d is under attack\n", e.x, e.y)
 			chkrest = true
         elseif e.evcode == "E_ENSLV" or e.evcode == "E_REPRO" then
 			printf("Starsystem %s in quadrant %d,%d is distressed\n",
-			        Quad[e.x][e.y].systemname, e.x, e.y)
+			        Quad[e.x + 1][e.y + 1].systemname, e.x, e.y)
 			chkrest = true
         end
     end
@@ -506,7 +506,8 @@ end
 -- @int x Sector coordinate X
 -- @int y Sector coordinate Y
 function M.nova (x, y)
-    if Sect[x][y] ~= "STAR" or Quad[Ship.quadx][Ship.quady].stars < 0 then
+    if Sect[x + 1][y + 1] ~= "STAR" or
+        Quad[Ship.quadx + 1][Ship.quady + 1].stars < 0 then
         return
     end
     if math.random(0, 99) < 15 then
@@ -520,20 +521,21 @@ function M.nova (x, y)
     printf("Spock: Star at %d,%d gone nova\n", x, y)
     if math.random(0, 4) > 0 then
         -- 3 out of 4 it becomes just empty
-        Sect[x][y] = "EMPTY"
+        Sect[x + 1][y + 1] = "EMPTY"
     else
         -- 1 out of 4 it becomes a blackhole
-        Sect[x][y] = "HOLE"
-        Quad[Ship.quadx][Ship.quady].holes = 
-            Quad[Ship.quadx][Ship.quady].holes + 1
+        Sect[x + 1][y + 1] = "HOLE"
+        Quad[Ship.quadx + 1][Ship.quady + 1].holes = 
+            Quad[Ship.quadx + 1][Ship.quady + 1].holes + 1
     end
-    Quad[Ship.quadx][Ship.quady].stars = Quad[Ship.quadx][Ship.quady].stars - 1
+    Quad[Ship.quadx + 1][Ship.quady + 1].stars = 
+        Quad[Ship.quadx + 1][Ship.quady + 1].stars - 1
     Game.kills = Game.kills + 1
     for i = x - 1, x + 1 do
-        if i >= 1 and i <= V.NSECTS then
+        if i >= 0 and i <= V.NSECTS - 1 then
             for j = y - 1,  y + 1 do
-                if j >= 1 and j <= V.NSECTS then
-                    local se = Sect[i][j]
+                if j >= 0 and j <= V.NSECTS - 1then
+                    local se = Sect[i + 1][j + 1]
                     if se == "EMPTY" or se == "HOLE" then
                         -- do nothing
                     elseif se == "KLINGON" then
@@ -563,7 +565,7 @@ function M.nova (x, y)
                         end
                     else
                         printf("Unknown object %s at %d,%d destroyed\n", se, i, j)
-                        Sect[i][j] = "EMPTY"
+                        Sect[i + 1][j + 1] = "EMPTY"
                     end
                 end
             end
@@ -599,9 +601,9 @@ function M.snova (x, y)
     if ix < 0 then
         -- choose a quadrant
         while true do
-            qx = math.random(1, V.NQUADS)
-            qy = math.random(1, V.NQUADS)
-            q = Quad[qx][qy]
+            qx = math.random(0, V.NQUADS - 1)
+            qy = math.random(0, V.NQUADS - 1)
+            q = Quad[qx + 1][qy + 1]
             if q.stars > 0 then
                 -- break the while loop
                 break
@@ -611,9 +613,10 @@ function M.snova (x, y)
         if Ship.quadx == qx and Ship.quady == qy then
             -- select a particular star
             local n = math.random(1, q.stars)
-            for jx = 1, V.NSECTS do
-                for jy = 1, V.NSECTS do
-                    if Sect[jx][jy] == "STAR" or Sect[ix][iy] == "INHABIT" then
+            for jx = 0, V.NSECTS - 1 do
+                for jy = 0, V.NSECTS - 1 do
+                    if Sect[jx + 1][jy + 1] == "STAR" or
+                        Sect[ix + 1][iy + 1] == "INHABIT" then
                         n = n - 1
                         if n <= 0 then
                             ix = jx
@@ -634,7 +637,7 @@ function M.snova (x, y)
         -- current quadrant
         qx = Ship.quadx
         qy = Ship.quady
-        q = Quad[qx][qy]
+        q = Quad[qx + 1][qy + 1]
         f = true
     end
     if f then
