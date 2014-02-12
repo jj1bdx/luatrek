@@ -175,9 +175,9 @@ function M.klmove (fl)
     for n = 1, Etc.nkling do
         local k = Etc.klingon[n]
         local stayquad = true
-        if V.Trace then
-            printf("klmove: processing klingon number %d\n", n)
-        end
+        -- if V.Trace then
+        --    printf("klmove: processing klingon number %d\n", n)
+        -- end
         local i = 100
         if fl == "AFTER" then
             i = math.floor(100.0 * k.power / Param.klingpwr)
@@ -224,15 +224,15 @@ function M.klmove (fl)
         local nextx = k.x
         local nexty = k.y
         stayquad = true
-        if V.Trace then
-            printf("klmove: nextx = %d, nexty = %d\n", nextx, nexty)
-        end
+        -- if V.Trace then
+        --    printf("klmove: nextx = %d, nexty = %d\n", nextx, nexty)
+        -- end
         for d = 1, motion do
             local lookx = math.floor(nextx + dx)
             local looky = math.floor(nexty + dy)
-            if V.Trace then
-                printf("klmove: d = %d, lookx = %d, looky = %d\n", d, lookx, looky)
-            end
+            -- if V.Trace then
+            --    printf("klmove: d = %d, lookx = %d, looky = %d\n", d, lookx, looky)
+            -- end
             if lookx < 0 or lookx >= V.NSECTS or
                     looky < 0 or looky >= V.NSECTS then
                 -- new quadrant
@@ -303,13 +303,14 @@ function M.klmove (fl)
             end
             nextx = lookx
             nexty = looky
-            if V.Trace then
-                printf("klmove: nextx = %d, nexty = %d\n", nextx, nexty)
-            end
+            -- if V.Trace then
+            --    printf("klmove: nextx = %d, nexty = %d\n", nextx, nexty)
+            -- end
         end
         if stayquad and (k.x ~= nextx or k.y ~= nexty) then
             if not trek.damage.damaged("SRSCAN") then
                 -- printf("Klingon at %d,%d moves to %d,%d\n", k.x, k.y, nextx, nexty)
+                -- detect non-number
                 printf("Klingon at %s,%s moves to %s,%s\n", k.x, k.y, nextx, nexty)
             end
             Sect[k.x + 1][k.y + 1] = "EMPTY"
