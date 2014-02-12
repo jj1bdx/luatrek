@@ -158,8 +158,8 @@ local function kalc (tqx, tqy, tsx, tsy)
 end
 
 --- Print course and distance
--- @num course
--- @num distance
+-- @int course Course
+-- @number dist Distance
 local function prkalc (course, dist)
     printf(": course %d  dist %.3f\n", course, dist)
 end
