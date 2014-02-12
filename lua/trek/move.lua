@@ -200,21 +200,20 @@ function M.move (ramflag, course, p_time, speed)
         end
         if x < 0.0 or y < 0.0 or x >= sectsize or y >= sectsize then
             -- enter new quadrant
-            local newdx = Ship.quadx * V.NSECTS + Ship.sectx + dx * xn
-            local newdy = Ship.quady * V.NSECTS + Ship.secty + dy * xn
-            local newix, newiy
-            if newdx < 0 then
-                newix = 0
+            dx = Ship.quadx * V.NSECTS + Ship.sectx + dx * xn
+            dy = Ship.quady * V.NSECTS + Ship.secty + dy * xn
+            if dx < 0 then
+                ix = 0
             else
-                newix = math.floor(newdx + 0.5)
+                ix = math.floor(dx + 0.5)
             end
-            if newdy < 0 then
-                newiy = 0
+            if dy < 0 then
+                iy = 0
             else
-                newiy = math.floor(newdy + 0.5) + 1
+                iy = math.floor(dy + 0.5) + 1
             end
             if V.Trace then
-                printf("New quad: newix = %d, newiy = %d\n", newix, newiy)
+                printf("New quad: ix = %d, iy = %d\n", ix, iy)
             end
             Ship.sectx = math.floor(x)
             Ship.secty = math.floor(y)
@@ -222,10 +221,10 @@ function M.move (ramflag, course, p_time, speed)
             Move.newquad = 2
             trek.klingon.attack(0)
             trek.score.checkcond()
-            Ship.quadx = math.floor(newix / V.NSECTS)
-            Ship.quady = math.floor(newiy / V.NSECTS)
-            Ship.sectx = newix % V.NSECTS
-            Ship.secty = newiy % V.NSECTS
+            Ship.quadx = math.floor(ix / V.NSECTS)
+            Ship.quady = math.floor(iy / V.NSECTS)
+            Ship.sectx = ix % V.NSECTS
+            Ship.secty = iy % V.NSECTS
             if ix < 0 or Ship.quadx > V.NQUADS - 1 or
                 iy < 0 or Ship.quady > V.NQUADS - 1 then
                 if not damaged("COMPUTER") then
