@@ -220,7 +220,7 @@ function M.move (ramflag, course, p_time, speed)
             Ship.sectx = math.floor(x)
             Ship.secty = math.floor(y)
             trek.klingon.compkldist(false)
-            Move.newquad = 2
+            Move.newquad = "LEAVE"
             trek.klingon.attack(0)
             trek.score.checkcond()
             Ship.quadx = math.floor(ix / V.NSECTS)
