@@ -131,22 +131,22 @@ function M.srscan (f)
     if f >= 0 then
         printf("\nShort range sensor scan\n")
         q.scanned = (q.klings * 100) + (q.bases * 10) + q.stars
-        -- Sector coordinate value: 0 - 9, three letters needed
-        printf("   ")
+        -- Sector coordinate value: 0 - 9
+        printf("  ")
         for i = 0, V.NSECTS - 1 do
-            printf("%-2d ", i)
+            printf("%d ", i)
         end
         printf("\n")
     end
     for i = 0, V.NSECTS - 1 do
         if f >= 0 then
-            printf("%2d ", i)
+            printf("%d ", i)
             for j = 0, V.NSECTS - 1 do
-                printf("%s  ", V.Sectdisp[Sect[i + 1][j + 1]])
+                printf("%s ", V.Sectdisp[Sect[i + 1][j + 1]])
             end
-            printf("%2d", i)
+            printf("%d ", i)
             if statinfo then
-                printf("   ")
+                printf(" ")
             end
         end
         if statinfo then
@@ -209,9 +209,10 @@ function M.srscan (f)
         printf("Length, Skill %s, %s\n", Lentab[Game.length], Skitab[Game.skill])
         return
     end    
-    printf("   ")
+    -- Sector coordinate value: 0 - 9
+    printf("  ")
     for i = 0, V.NSECTS - 1 do
-        printf("%-2d ", i)
+        printf("%d ", i)
     end
     printf("\n")
 
@@ -219,7 +220,6 @@ function M.srscan (f)
         printf("Distressed ")
     end
     if q.systemname > 0 then
-        -- @todo fix to printf("Starsystem %s\n", systemname(q));
         printf("Starsystem %s\n", V.Systemname[q.systemname]);
     end
 end
