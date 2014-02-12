@@ -257,13 +257,21 @@ function M.torped ()
                         break
                     end
                 end
+                -- break the while loop
+                break
             elseif se == "STAR" then
                 trek.event.nova(ix, iy)
+                -- break the while loop
+                break
             elseif se == "INHABIT" then
                 trek.kill.kills(ix, iy, -1)
+                -- break the while loop
+                break
             elseif se == "BASE" then
                 trek.kill.killb(Ship.quadx, Ship.quady)
                 Game.killb = Game.killb + 1
+                -- break the while loop
+                break
             else
                 printf("Unknown object %s at %d,%d destroyed\n",
                     Sect[ix + 1][iy + 1], ix, iy)
