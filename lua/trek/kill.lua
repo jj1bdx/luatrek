@@ -126,10 +126,10 @@ function M.killk (ix, iy)
             for j = i, Etc.nkling do
                 Etc.klingon[j] = Etc.klingon[j + 1]
             end
-            goto killkpurged
+            -- break the for i loop
+            break
         end
     end
-    ::killkpurged::
     -- find out if that was the last one
     if Now.klings <= 0 then
         trek.score.win()
@@ -165,10 +165,10 @@ function M.killb (qx, qy)
             for j = i, Now.bases do
                 Now.bases[j] = Now.bases[j + 1]
             end
-            goto killbpurged
+            -- break the for loop
+            break
         end
     end
-    ::killbpurged::
     if qx == Ship.quadx and qy == Ship.quady then
         Sect[Etc.starbase.x + 1][Etc.starbase.y + 1] = "EMPTY"
         if Ship.cond == "DOCKED" then
