@@ -274,8 +274,8 @@ function M.setup ()
     xsched("E_KATSB", 1, 0, 0, 0, false, false)
     xsched("E_ISSUE", 1, 0, 0, 0, false, false)
     xsched("E_SNAP", 1, 0, 0, 0, false, false)
-    Ship.sectx = math.random(V.NSECTS)
-    Ship.secty = math.random(V.NSECTS)
+    Ship.sectx = math.random(0, V.NSECTS - 1)
+    Ship.secty = math.random(0, V.NSECTS - 1)
     Game.killk = 0
     Game.kills = 0
     Game.killb = 0
