@@ -483,8 +483,8 @@ end
 --
 -- If you run into something else, you destroy that object.  You
 -- also rack up incredible damages.
--- @int x Sector coordinate X
--- @int y Sector coordinate Y
+-- @int ix Sector coordinate X
+-- @int iy Sector coordinate Y
 function M.ram (ix, iy)
     printf("*** RED ALERT ***: collision imminent\n")
     local se = Sect[ix + 1][iy + 1]
