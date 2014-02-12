@@ -140,11 +140,10 @@ local Cputab = {
 local function kalc (tqx, tqy, tsx, tsy)
     -- normalize to quadrant distances
     local quadsize = V.NSECTS
-    -- note: quadrant range = 1 - 8, sector range = 1 - 10
-    local dx = (Ship.quadx + ((Ship.sectx - 1) / quadsize)) -
-                (tqx + ((tsx - 1) / quadsize))
-    local dy = (Ship.quady + ((Ship.secty - 1) / quadsize)) -
-                (tqy + ((tsy - 1) / quadsize))
+    local dx = (Ship.quadx + (Ship.sectx / quadsize)) -
+                (tqx + (tsx / quadsize))
+    local dy = (Ship.quady + (Ship.secty / quadsize)) -
+                (tqy + (tsy / quadsize))
     -- get the angle
     angle = math.atan2(dy, dx)
     -- make it 0 to 2 * pi
@@ -216,17 +215,17 @@ function M.computer()
             printf("Computer record of galaxy for all long range sensor scans\n\n")
             printf("   ")
             -- print top header
-            for i = 1, V.NQUADS do
+            for i = 0, V.NQUADS - 1 do
                 printf("-%2d- ", i)
             end
             printf("\n")
-            for i = 1, V.NQUADS do
+            for i = 0, V.NQUADS - 1 do
                 printf("%2d ", i)
-                for j = 1, V.NQUADS do
+                for j = 0, V.NQUADS - 1 do
                     if i == Ship.quadx and j == Ship.quady then
                         printf("$$$  ")
                     else
-                        local q = Quad[i][j]
+                        local q = Quad[i + 1][j + 1]
                         -- 1000 or 1001 is special case
                         if q.scanned >= 1000 then
                             if q.scanned > 1000 then
@@ -247,7 +246,7 @@ function M.computer()
             end
             printf("   ")
             -- print bottom footer
-            for i = 1, V.NQUADS do
+            for i = 0, V.NQUADS - 1 do
                 printf("-%2d- ", i)
             end
             printf("\n");
@@ -280,10 +279,10 @@ function M.computer()
                 if tqx == nil or tqy == nil or
                    ix == nil or iy == nil then
                     printf("Invalid coordinate number entered\n")
-                elseif tqx < 1 or tqx > V.NQUADS or
-                   tqy < 1 or tqy > V.NQUADS or
-                   ix < 1 or ix > V.NSECTS or
-                   iy < 1 or iy > V.NSECTS then
+                elseif tqx < 0 or tqx > V.NQUADS - 1or
+                   tqy < 0 or tqy > V.NQUADS - 1 or
+                   ix < 0 or ix > V.NSECTS - 1 or
+                   iy < 0 or iy > V.NSECTS - 1 then
                     printf("Coordinate out of range\n")
                 end
                 valid = true
@@ -394,7 +393,7 @@ function M.abandon ()
         end
         printf("Officers escape in shuttlecraft\n")
         -- decide on fate of crew
-        local q = Quad[Ship.quadx][Ship.quady]
+        local q = Quad[Ship.quadx + 1][Ship.quady + 1]
         if q.systemname == 0 or damaged("XPORTER") then
             printf("Entire crew of %d left to die in outer space\n",
                 Ship.crew)
@@ -455,14 +454,14 @@ function M.abandon ()
     -- setup that quadrant
     while true do
         trek.initquad.initquad(true)
-        Sect[Ship.sectx][Ship.secty] = "EMPTY"
+        Sect[Ship.sectx + 1][Ship.secty + 1] = "EMPTY"
         for i = 1, 5 do
             Ship.sectx = Etc.starbase.x + math.random(-1, 1)
-            if Ship.sectx >= 1 and Ship.sectx <= NSECTS then
+            if Ship.sectx >= 0 and Ship.sectx <= NSECTS - 1 then
                 Ship.secty = Etc.starbase.y + math.random(-1, 1)
-                if Ship.secty >= 1 and Ship.secty <= NSECTS then
-                    if Sect[Ship.sectx][Ship.secty] == "EMPTY" then
-                        Sect[Ship.sectx][Ship.secty] = "QUEENE"
+                if Ship.secty >= 0 and Ship.secty <= NSECTS - 1 then
+                    if Sect[Ship.sectx + 1][Ship.secty + 1] == "EMPTY" then
+                        Sect[Ship.sectx + 1][Ship.secty + 1] = "QUEENE"
                         trek.dock.dock()
                         trek.klingon.compkldist(false)
                         return
@@ -576,7 +575,7 @@ function M.help ()
     -- find the closest base
     local dist = 1e50;
     local l, x
-    if Quad[Ship.quadx][Ship.quady].bases <= 0 then
+    if Quad[Ship.quadx + 1][Ship.quady + 1].bases <= 0 then
         -- there isn't one in this quadrant
         for i = 1, Now.bases do
             -- compute distance
@@ -597,7 +596,7 @@ function M.help ()
         dist = 0.0
     end
     -- dematerialize the Enterprise
-    Sect[Ship.sectx][Ship.secty] = "EMPTY"
+    Sect[Ship.sectx + 1][Ship.secty + 1] = "EMPTY"
     printf("Starbase in %d,%d responds\n", Ship.quadx, Ship.quady)
     -- this next thing acts as a probability that it will work */
     x = math.pow(1.0 - math.pow(0.94, dist), 0.3333333)
@@ -610,10 +609,10 @@ function M.help ()
             local dx, dy
             for j = 1, 5 do
                 dx = Etc.starbase.x + math.random(-1, 1)
-                if dx >= 1 and dx <= V.NSECTS then
+                if dx >= 0 and dx <= V.NSECTS - 1 then
                     dy = Etc.starbase.x + math.random(-1, 1)
-                    if dx >= 1 and dx <= V.NSECTS and
-                        Sect[dx][dy] == "EMPTY" then
+                    if dx >= 0 and dx <= V.NSECTS - 1 and
+                        Sect[dx + 1][dy + 1] == "EMPTY" then
                         found = true
                         -- break from for loop
                         break
@@ -625,7 +624,7 @@ function M.help ()
                 printf("succeeds\n")
                 Ship.sectx = dx
                 Ship.secty = dy
-                Sect[dx][dy] = Ship.ship
+                Sect[dx + 1][dy + 1] = Ship.ship
                 trek.dock.dock()
                 trek.klingon.compkldist(false)
                 return
