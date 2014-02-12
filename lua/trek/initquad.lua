@@ -131,17 +131,17 @@ function M.initquad (f)
         end
     end
     -- clear out the quadrant
-    for i = 1, V.NSECTS do
-        for j = 1, V.NSECTS do
-            Sect[i][j] = "EMPTY"
+    for i = 0, V.NSECTS - 1 do
+        for j = 0, V.NSECTS - 1 do
+            Sect[i + 1][j + 1] = "EMPTY"
         end
     end
     -- initialize Enterprise
-    Sect[Ship.sectx][Ship.secty] = Ship.ship
+    Sect[Ship.sectx + 1][Ship.secty + 1] = Ship.ship
     -- initialize Klingons
     for i = 1, Etc.nkling do
         local rx, ry = M.sector()
-        Sect[rx][ry] = "KLINGON"
+        Sect[rx + 1][ry + 1] = "KLINGON"
         Etc.klingon[i].x = rx
         Etc.klingon[i].y = ry
         Etc.klingon[i].power = Param.klingpwr
@@ -151,39 +151,41 @@ function M.initquad (f)
     -- initialize star base
     if nbases > 0 then
         local rx, ry = M.sector()
-        Sect[rx][ry] = "BASE"
+        Sect[rx + 1][ry + 1] = "BASE"
         Etc.starbase.x = rx
         Etc.starbase.y = ry
     end
     -- initialize inhabited starsystem
     if q.systemname ~= 0 then
         local rx, ry = M.sector()
-        Sect[rx][ry] = "INHABIT"
+        Sect[rx + 1][ry + 1] = "INHABIT"
         -- Inhabited star is a star anyway
         nstars = nstars - 1
     end
     -- initialize black holes
     for i = 1, nholes do
         local rx, ry = M.sector()
-        Sect[rx][ry] = "HOLE"
+        Sect[rx + 1][ry + 1] = "HOLE"
     end
     -- initialize stars
     for i = 1, nstars do
         local rx, ry = M.sector()
-        Sect[rx][ry] = "STAR"
+        Sect[rx + 1][ry + 1] = "STAR"
     end
     Move.newquad = 1
 end
 
 --- Choose first empty sector point and return the coordinates
+-- (Note: Sector coordinates have one offset to Sect table index,
+-- i.e., Sector 7, 5 -> Sect[8][6]
 -- @treturn int Sector coordinate X
 -- @treturn int Sector coordinate Y
 function M.sector ()
     local i, j
     repeat
-        i = math.random(1, V.NSECTS)
-        j = math.random(1, V.NSECTS)
-    until Sect[i][j] == "EMPTY"
+        i = math.random(0, V.NSECTS - 1)
+        j = math.random(0, V.NSECTS - 1)
+    until Sect[i + 1][j + 1] == "EMPTY"
     return i, j
 end
 
