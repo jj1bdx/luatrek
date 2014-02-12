@@ -120,7 +120,8 @@ function M.srscan (f)
     if f ~= 0 then
         statinfo = true
     else
-        statinfo = trek.getpar.getynpar("status report")
+        -- @todo statinfo = trek.getpar.getynpar("status report")
+        statinfo = true -- @todo always do statreport
         Etc.statreport = statinfo
     end
     if f > 0 then
