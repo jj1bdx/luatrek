@@ -288,9 +288,9 @@ function M.setup ()
     Game.snap = false
     Move.endgame = 0
     -- setup stars
-    for i = 1, V.NQUADS do
-        for j = 1, V.NQUADS do
-            local q = Quad[i][j]
+    for i = 0, V.NQUADS - 1 do
+        for j = 0, V.NQUADS - 1 do
+            local q = Quad[i + 1][j + 1]
             local stars = math.random(1, 9)
             local holes = math.floor(math.random(0, 2) - (stars / 5))
             if holes < 0 then
@@ -308,9 +308,9 @@ function M.setup ()
     for d = 1, #V.Systemname do
         local i, j, q
         repeat
-            i = math.random(V.NQUADS)
-            j = math.random(V.NQUADS)
-            q = Quad[i][j]
+            i = math.random(0, V.NQUADS - 1)
+            j = math.random(0, V.NQUADS - 1)
+            q = Quad[i + 1][j + 1]
         until q.systemname == 0
         q.systemname = d
         q.distressed = 0
@@ -319,9 +319,9 @@ function M.setup ()
     for i = 1, Param.bases do
         local ix, iy, q
         repeat
-            ix = math.random(V.NQUADS)
-            iy = math.random(V.NQUADS)
-            q = Quad[ix][iy]
+            ix = math.random(0, V.NQUADS - 1)
+            iy = math.random(0, V.NQUADS - 1)
+            q = Quad[ix + 1][iy + 1]
         until q.bases == 0
         q.bases = 1
         Now.base[i].x = ix
@@ -342,9 +342,9 @@ function M.setup ()
         end
         local ix, iy, q
         repeat
-            ix = math.random(V.NQUADS)
-            iy = math.random(V.NQUADS)
-            q = Quad[ix][iy]
+            ix = math.random(0, V.NQUADS - 1)
+            iy = math.random(0, V.NQUADS - 1)
+            q = Quad[ix + 1][iy + 1]
         until (q.klings + klump) <= V.MAXKLQUAD
         q.klings = q.klings + klump
         kleft = kleft - klump
