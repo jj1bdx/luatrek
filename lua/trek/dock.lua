@@ -119,10 +119,10 @@ function M.dock ()
     -- check for ok to dock, i.e., adjacent to a starbase
     local ok = false
     for i = Ship.sectx - 1, Ship.sectx + 1 do
-        if i >= 1 and i <= V.NSECTS then
+        if i >= 0 and i <= V.NSECTS - 1 then
             for j = Ship.secty - 1, Ship.secty + 1 do
-                if j >= 1 and j <= V.NSECTS and
-                   Sect[i][j] == "BASE" then
+                if j >= 0 and j <= V.NSECTS - 1 and
+                   Sect[i + 1][j + 1] == "BASE" then
                     ok = true
                     goto found
                 end
