@@ -178,7 +178,7 @@ function M.events (t_warp)
                 local i = math.random(1, Now.klings)
                 local ix, iy
                 for jx = 0, V.NQUADS - 1 do
-                    for jy = 0, V.NQUADS - 1do
+                    for jy = 0, V.NQUADS - 1 do
                         local q = Quad[jx + 1][jy + 1]
                         if q.stars >= 0 then
                             i = i - q.klings
@@ -200,8 +200,8 @@ function M.events (t_warp)
                     Ship.quady = iy
                     printf("\n%s caught in long range tractor beam\n", Ship.shipname)
                     printf("*** Pulled to quadrant %d,%d\n", Ship.quadx, Ship.quady)
-                    Ship.sectx = math.random(1, V.NSECTS)
-                    Ship.secty = math.random(1, V.NSECTS)
+                    Ship.sectx = math.random(0, V.NSECTS - 1)
+                    Ship.secty = math.random(0, V.NSECTS - 1)
                     trek.initquad.initquad(false)
                     -- truncate the move time
                     Move.time = xdate - idate
