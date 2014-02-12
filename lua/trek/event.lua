@@ -215,9 +215,10 @@ function M.events (t_warp)
             else 
                 -- check for starbase and Klingons in same quadrant
                 local same = false
+                local ix, iy
                 for i = 1, Now.bases do
-                    local ix = Now.base[i].x
-                    local iy = Now.base[i].y
+                    ix = Now.base[i].x
+                    iy = Now.base[i].y
                     -- see if a Klingon exists in this quadrant
                     local q = Quad[ix + 1][iy + 1]
                     local distressed = false
