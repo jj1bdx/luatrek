@@ -149,10 +149,10 @@ function M.move (ramflag, course, p_time, speed)
     -- converted from degrees to radian (* pi / 180)
     local angle = course * math.pi / 180
     if damaged("SINS") then
-        angle = angle + Param.navigcrud[1] * (math.random() - 0.5)
+        angle = angle + Param.navigcrud["SINSDAMAGED"] * (math.random() - 0.5)
     else
         if Ship.sinsbad then
-            angle = angle + Param.navigcrud[0] * (math.random() - 0.5)
+            angle = angle + Param.navigcrud["SINSBAD"] * (math.random() - 0.5)
         end
     end
     local dx = -math.cos(angle)
