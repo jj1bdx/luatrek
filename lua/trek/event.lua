@@ -711,7 +711,7 @@ function M.autover ()
     if dist > sqrt2 then
         dist = sqrt2
     end
-    course = math.random(0, 359)
+    local course = math.random(0, 359)
     Etc.nkling = -1
     Ship.cond = "RED"
     trek.move.warp(-1, course, dist)
