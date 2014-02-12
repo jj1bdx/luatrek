@@ -213,6 +213,7 @@ M.KM_LB = 4 -- Leave quadrant, Before attack
 M.KM_LA = 5 -- Leave quadrant, After attack
 
 --- Two dimensional table of the Quadrants
+-- (Note: Quadrant [1, 2] mapped to Quad[2][3] (offset +1))
 -- @table Quad
 -- @field bases Number of bases in this quadrant
 -- @field klings Number of Klingons in this quadrant
@@ -265,6 +266,7 @@ M.Sectdisp = {
 
 --- Two dimensional table of the Sectors 
 -- initially filled with string "EMPTY"
+-- (Note: Sector [1, 2] mapped to Sect[2][3] (offset +1))
 -- @table Sect
 M.Sect = pl.array2d.new(M.NSECTS, M.NSECTS, "EMPTY")
 
@@ -306,10 +308,10 @@ M.Event = pl.tablex.new(M.MAXEVENTS,
 -- @field brigfree space left in brig
 -- @field torped Number of photon torpedoes
 -- @field cloakgood boolean - true if we have moved
--- @field quadx Quadrant X coordinate
--- @field quady Quadrant Y coordinate
--- @field sectx Sector X coordinate
--- @field secty Sector y coordinate
+-- @field quadx Quadrant X coordinate [0, (NQUADS - 1)]
+-- @field quady Quadrant Y coordinate [0, (NQUADS - 1)]
+-- @field sectx Sector X coordinate [0, (NSECTS - 1)]
+-- @field secty Sector y coordinate [0, (NSECTS - 1)]
 -- @field cond Condition code (in string)
 -- @field sinsbad boolean - true if Space Inertial Navigation System is working but not calibrated
 -- @field shipname Name of current starship (in string)
