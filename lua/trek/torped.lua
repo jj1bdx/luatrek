@@ -150,16 +150,6 @@ end
 -- course is randomized even more.  You also have the chance that
 -- the misfire damages your torpedo tubes.
 function M.torped ()
-    int        ix, iy;
-    double            x, y, dx, dy;
-    double            angle;
-    int            course, course2;
-    int        k;
-    double            bigger;
-    double            sectsize;
-    int            burst;
-    int            n;
-
     if Ship.cloaked then
         printf("Federation regulations do not permit attack while cloaked.\n")
         return
