@@ -219,62 +219,65 @@ function M.klmove (fl)
             for d = 1, motion do
                 lookx = math.floor(nextx + dx)
                 looky = math.floor(nexty + dy)
-                if lookx < 1 or lookx > V.NSECTS or looky < 1 or looky > V.NSECTS then
+                if lookx < 0 or lookx > V.NSECTS - 1 or
+                    looky < 0 or looky > V.NSECTS - 1 then
                     -- new quadrant
                     local qx = Ship.quadx
                     local qy = Ship.quady
-                    if lookx < 1 then
+                    if lookx < 0 then
                         qx = qx - 1
-                    elseif (lookx > V.NSECTS) then
+                    elseif lookx > V.NSECTS - 1 then
                         qx = qx + 1
                     end
-                    if looky < 1 then
+                    if looky < 0 then
                         qy = qy - 1
-                    elseif (looky > V.NSECTS) then
+                    elseif looky > V.NSECTS - 1 then
                         qy = qy + 1
                     end
-                    if qx < 1 or qx > V.NQUADS or
-                       qy < 1 or qy > V.NQUADS then
+                    if qx < 0 or qx > V.NQUADS - 1 or
+                       qy < 0 or qy > V.NQUADS - 1 then
                        -- break from the for loop
                        break
                     end
-                    if Quad[qx][qy].stars < 0 or
-                       Quad[qx][qy].klings >= V.MAXKLQUAD then
+                    if Quad[qx + 1][qy + 1].stars < 0 or
+                       Quad[qx + 1][qy + 1].klings >= V.MAXKLQUAD then
                        -- break from the for loop
                        break
                     end
                     if not trek.damage.damaged("SRSCAN") then
                         printf("Klingon at %d,%d escapes to quadrant %d,%d\n",
                                 k.x, k.y, qx, qy)
-                        local code = Quad[qx][qy].scanned
+                        local code = Quad[qx + 1][qy + 1].scanned
                         if code >= 0 and code < 1000 then
-                            Quad[qx][qy].scanned = Quad[qx][qy].scanned + 100
+                            Quad[qx + 1][qy + 1].scanned = 
+                                Quad[qx + 1][qy + 1].scanned + 100
                         end
-                        local codeq = Quad[Ship.quadx][Ship.quady].scanned
+                        local codeq = Quad[Ship.quadx + 1][Ship.quady + 1].scanned
                         if codeq >= 0 and codeq < 1000 then
-                            Quad[Ship.quadx][Ship.quady].scanned =
-                                Quad[Ship.quadx][Ship.quady].scanned - 100
+                            Quad[Ship.quadx + 1][Ship.quady + 1].scanned =
+                                Quad[Ship.quadx + 1][Ship.quady + 1].scanned - 100
                         end
                     end
-                    Sect[k.x][k.y] = "EMPTY"
-                    Quad[qx][qy].klings = Quad[qx][qy].klings + 1
+                    Sect[k.x + 1][k.y + 1] = "EMPTY"
+                    Quad[qx + 1][qy + 1].klings = Quad[qx + 1][qy + 1].klings + 1
                     Etc.nkling = Etc.nkling - 1
                     Etc.klingon[n] = Etc.klingon[Etc.nkling]
-                    Quad[Ship.quadx][Ship.quady].klings =
-                        Quad[Ship.quadx][Ship.quady].klings - 1
+                    Quad[Ship.quadx + 1][Ship.quady + 1].klings =
+                        Quad[Ship.quadx + 1][Ship.quady + 1].klings - 1
                     stayquad = false
                     -- break from the for loop
                     break
                 end
-                if Sect[lookx][looky] ~= "EMPTY" then
+                if Sect[lookx + 1][looky + 1] ~= "EMPTY" then
                     lookx = nextx + fudgex
-                    if lookx < 1 or lookx > V.NSECTS then
+                    if lookx < 0 or lookx > V.NSECTS - 1 then
                         lookx = math.floor(nextx + dx)
                     end
-                    if Sect[lookx][looky] ~= "EMPTY" then
+                    if Sect[lookx + 1][looky + 1] ~= "EMPTY" then
                         fudgex = -fudgex
                         looky = nexty + fudgey
-                        if looky < 1 or looky > V.NSECTS or Sect[lookx][looky] ~= "EMPTY" then
+                        if looky < 0 or looky > V.NSECTS - 1 or
+                            Sect[lookx + 1][looky + 1] ~= "EMPTY" then
                             fudgey = -fudgey
                             -- break from the for loop
                             break
@@ -289,10 +292,10 @@ function M.klmove (fl)
             if not trek.damage.damaged("SRSCAN") then
                 printf("Klingon at %d,%d moves to %d,%d\n", k.x, k.y, nextx, nexty)
             end
-            Sect[k.x][k.y] = "EMPTY"
+            Sect[k.x + 1][k.y + 1] = "EMPTY"
             k.x = nextx
             k.y = nexty
-            Sect[k.x][k.y] = "KLINGON"
+            Sect[k.x + 1][k.y + 1] = "KLINGON"
         end
     end
     M.compkldist(0)
@@ -329,7 +332,8 @@ function M.attack (resting)
     if Move.free then
         return
     end
-    if Etc.nkling <= 0 or Quad[Ship.quadx][Ship.quady].stars < 0 then
+    if Etc.nkling <= 0 or
+       Quad[Ship.quadx + 1][Ship.quady + 1].stars < 0 then
         return
     end
     if Ship.cloaked and Ship.cloakgood then
