@@ -148,7 +148,7 @@ function M.move (ramflag, course, p_time, speed)
     -- initialize delta factors for move
     -- converted from degrees to radian (* pi / 180)
     local angle = course * math.pi / 180
-    if not damaged("SINS") then
+    if damaged("SINS") then
         angle = angle + Param.navigcrud[1] * (math.random() - 0.5)
     else
         if Ship.sinsbad then
@@ -213,7 +213,9 @@ function M.move (ramflag, course, p_time, speed)
                 iy = math.floor(dy + 0.5) + 1
             end
             if V.Trace then
-                printf("New quad: ix = %d, iy = %d\n", ix, iy)
+                printf("New quadrant / sector: %d, %d, %d, %d\n",
+                        math.floor(ix / V.NSECTS), math.floor(iy / V.NSECTS),
+                        ix % V.NSECTS, iy % V.NSECTS)
             end
             Ship.sectx = math.floor(x)
             Ship.secty = math.floor(y)
