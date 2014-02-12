@@ -82,7 +82,7 @@ local V = require "trek.gstate"
 --- shorthand for pl.utils.printf
 local printf = pl.utils.printf
 --- dumpgame version constant
-local Dump_version = 1
+local Dump_version = 2
 --- dumpgame filename
 local Dump_filename = "./luatrek.dump.txt"
 
