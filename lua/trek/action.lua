@@ -114,7 +114,7 @@ local Cputab = {
     ["course"] = 3.0,
     ["m"] = 3.1,
     ["move"] = 3.1,
-    ["s"] = 4,
+    ["sc"] = 4,
     ["score"] = 4,
     ["p"] = 5,
     ["pheff"] = 5,
@@ -126,6 +126,9 @@ local Cputab = {
     ["distresslist"] = 8,
     ["q"] = 9,
     ["quit"] = 9,
+    ["s"] = 10,
+    ["sr"] = 10,
+    ["srscan"] = 10,
 }
 
 --- Course Calculation:
@@ -359,6 +362,9 @@ function M.computer()
             -- quit the computer and go back to the command loop
             printf("Exiting the computer\n")
             return
+        elseif r == 10 then
+            -- short range scanner
+            trek.scan.srscan(1)
         end
     end
 end
