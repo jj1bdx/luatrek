@@ -109,6 +109,9 @@ local damaged = function (ev) trek.damage.damaged(ev) end
 -- @int n number of torpedo
 local function randcourse (n)
     local d = math.floor(((math.random() + math.random()) - 1.0) * 20)
+    if V.Trace then
+        printf("randcourse: d = %d\n", d)
+    end
     if math.abs(d) > 12 then
         printf("Photon tubes misfire")
         if n < 0 then
@@ -162,7 +165,7 @@ function M.torped ()
         return
     end
     -- get the course
-    local course = getnumpar("Torpedo course")
+    local course = trek.getpar.getnumpar("Torpedo course")
     if course < 0 or course > 360 then
         return
     end
@@ -173,11 +176,11 @@ function M.torped ()
         burstmode = false
     end
     if burstmode == true then
-        burstmode = getynpar("Do you want a burst")
+        burstmode = trek.getpar.getynpar("Do you want a burst")
     end
-    local burst
+    local burst = 0
     if burstmode then
-        burst = getnumpar("burst angle")
+        burst = trek.getpar.getnumpar("burst angle")
         if burst <= 0 then
             return
         end
@@ -186,7 +189,7 @@ function M.torped ()
             return
         end
     end
-    local sectsize = NSECTS
+    local sectsize = V.NSECTS
     local max = 1
     if burstmode then
         max = 3
@@ -206,7 +209,7 @@ function M.torped ()
         dx = dx / bigger
         dy = dy / bigger
         x = Ship.sectx + 0.5
-        y = Ship.secty + 0.5
+        local y = Ship.secty + 0.5
         if Ship.cond ~= "DOCKED" then
             Ship.torped = Ship.torped - 1
         end
@@ -214,7 +217,7 @@ function M.torped ()
         if n > 0 then
             printf(", torpedo number %d", n)
         end
-        printf(":\n%6.1f %4.1f\n", x, y)
+        printf(":\nx = %6.1f, y = %4.1f\n", x, y)
         while true do
             x = x + dx
             local ix = math.floor(x)
@@ -226,8 +229,11 @@ function M.torped ()
                 -- break the while loop
                 break
             end
-            printf("%6.1f %4.1f\n", x, y)
+            printf("x = %6.1f, y = %4.1f\n", x, y)
             local se = Sect[ix + 1][iy + 1]
+            if V.Trace then
+                printf("ix = %d, iy = %d, sect = %s\n", ix, iy, se)
+            end
             if se == "EMPTY" then
                 -- do nothing
             elseif se == "HOLE" then
@@ -262,9 +268,9 @@ function M.torped ()
                 printf("Unknown object %s at %d,%d destroyed\n",
                     Sect[ix + 1][iy + 1], ix, iy)
                 Sect[ix + 1][iy + 1] = "EMPTY"
+                -- break the while loop
+                break
             end
-            -- break the while loop
-            break
         end
         if damaged("TORPED") or Quad[Ship.quadx + 1][Ship.quady + 1].stars < 0 then
             -- break the for loop
