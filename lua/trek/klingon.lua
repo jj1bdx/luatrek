@@ -196,7 +196,6 @@ function M.klmove (fl)
             end
             goto endofloop
         end
-        local nextx, nexty, lookx, looky
         -- compute distance to move
         local motion = math.random(-25, 49)
         motion = math.floor(motion * k.avgdist * Param.movefac[2 * Move.newquad + fl])
@@ -223,15 +222,15 @@ function M.klmove (fl)
         local fudgex = 1
         local fudgey = 1
         -- try to move the klingon
-        nextx = k.x
-        nexty = k.y
+        local nextx = k.x
+        local nexty = k.y
         stayquad = true
         if V.Trace then
             printf("klmove: nextx = %d, nexty = %d\n", nextx, nexty)
         end
         for d = 1, motion do
-            lookx = math.floor(nextx + dx)
-            looky = math.floor(nexty + dy)
+            local lookx = math.floor(nextx + dx)
+            local looky = math.floor(nexty + dy)
             if V.Trace then
                 printf("klmove: d = %d, lookx = %d, looky = %d\n", d, lookx, looky)
             end
