@@ -219,6 +219,10 @@ function M.klmove (fl)
             for d = 1, motion do
                 lookx = math.floor(nextx + dx)
                 looky = math.floor(nexty + dy)
+                if V.Trace then
+                    printf("klmove: d = %d, lookx = %d, looky = %d\n",
+                            d, lookx, looky)
+                end
                 if lookx < 0 or lookx > V.NSECTS - 1 or
                     looky < 0 or looky > V.NSECTS - 1 then
                     -- new quadrant
