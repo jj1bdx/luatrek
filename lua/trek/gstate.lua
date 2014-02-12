@@ -381,6 +381,14 @@ M.Move = {
     time = 0,
 }
 
+--- Klingon move indices, represented by two-dimensional strings
+-- @table klingon_move_keywords
+-- @field OLD Old quadrant
+-- @field ENTER Enter quadrant
+-- @field LEAVE Leave quadrant
+-- @field BEFORE Before attack
+-- @field AFTER After attack
+
 --- Parametric information
 -- @table Param
 -- @field bases Number of starbases
@@ -446,15 +454,6 @@ M.Param = {
     klingpwr = 0,
     warptime = 0,
     phasfac = 0,
---- Klingon move indices, represented by two-dimensional strings
--- @table firstlevel
--- @field OLD Old quadrant
--- @field ENTER Enter quadrant
---- Klingon move indices, represented by two-dimensional strings
--- @table secondlevel
--- @field LEAVE Leave quadrant
--- @field BEFORE Before attack
--- @field AFTER After attack
     moveprob = {
         ["OLD"] = {
             ["BEFORE"] = 0,
