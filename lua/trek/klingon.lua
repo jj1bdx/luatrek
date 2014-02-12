@@ -155,9 +155,8 @@ end
 -- "program as you go" fashion, and is a prime candidate for
 -- rewriting.
 --
--- The flag `fl' is zero before an attack, one after an attack,
--- and two if you are leaving a quadrant.  This serves to
--- change the probability and distance that it moves.
+-- The flag fl shows "before" or "after" an attack.
+-- This serves to change the probability and distance that it moves.
 --
 -- Basically, what it will try to do is to move a certain number
 -- of steps either toward you or away from you.  It will avoid
@@ -168,10 +167,10 @@ end
 -- if you can move their.  Dx and dy are the increment.  Fudgex
 -- and fudgey are the things you change around to change your
 -- course around stars.
--- @int fl 0: before an attack, 1: after an attack, 2: leaving a quadrant
+-- @string fl "BEFORE" an attack or "AFTER" an attack
 function M.klmove (fl)
     if V.Trace then
-        printf("klmove: fl = %d, Etc.nkling = %d\n", fl, Etc.nkling)
+        printf("klmove: fl = %s, Etc.nkling = %d\n", fl, Etc.nkling)
     end
     for n = 1, Etc.nkling do
         local k = Etc.klingon[n]
@@ -180,7 +179,7 @@ function M.klmove (fl)
             printf("klmove: processing klingon number %d\n", n)
         end
         local i = 100
-        if fl > 0 then
+        if fl == "AFTER" then
             i = math.floor(100.0 * k.power / Param.klingpwr)
         end
         local ii
@@ -189,7 +188,7 @@ function M.klmove (fl)
         else
             ii = math.random(0, i - 1)
         end
-        if ii < Param.moveprob[2 * Move.newquad + fl] then
+        if ii < Param.moveprob[Move.newquad][fl] then
             -- continue the for loop
             if V.Trace then
                 printf("klmove: klingon number %d did not move\n", n)
@@ -198,7 +197,7 @@ function M.klmove (fl)
         end
         -- compute distance to move
         local motion = math.random(-25, 49)
-        motion = math.floor(motion * k.avgdist * Param.movefac[2 * Move.newquad + fl])
+        motion = math.floor(motion * k.avgdist * Param.movefac[Move.newquad][fl])
         -- compute direction
         local dx = Ship.sectx - k.x + math.random(-1, 1)
         local dy = Ship.secty - k.y + math.random(-1, 1)
@@ -362,7 +361,7 @@ function M.attack (resting)
         return
     end
     -- move before attack
-    M.klmove(0)
+    M.klmove("BEFORE")
     if Ship.cond == "DOCKED" then
         if not resting then
             printf("Starbase shields protect the %s\n", Ship.shipname)
@@ -461,7 +460,7 @@ function M.attack (resting)
         end
     end
     -- allow Klingons to move after attacking
-    M.klmove(1)
+    M.klmove("AFTER")
     return
 end
 
