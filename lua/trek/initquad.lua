@@ -112,7 +112,7 @@ local Etc = V.Etc
 -- This mode is used in situations where you know you are going
 -- to be docked, i.e., abandon() and help().
 function M.initquad (f)
-    local q = Quad[Ship.quadx][Ship.quady]
+    local q = Quad[Ship.quadx + 1][Ship.quady + 1]
     -- ignored supernova'ed quadrants (this is checked again later anyway)
     if q.stars < 0 then
         return
