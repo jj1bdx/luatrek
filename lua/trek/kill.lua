@@ -112,11 +112,11 @@ function M.killk (ix, iy)
     printf("   *** Klingon at %d,%d destroyed ***\n", ix, iy)
     -- remove the scoundrel
     Now.klings = Now.klings - 1
-    Sect[ix][iy] = EMPTY
-    Quad[Ship.quadx][Ship.quady].klings = 
-        Quad[Ship.quadx][Ship.quady].klings - 1
-    Quad[Ship.quadx][Ship.quady].scanned = 
-        Quad[Ship.quadx][Ship.quady].scanned - 100
+    Sect[ix + 1][iy + 1] = "EMPTY"
+    Quad[Ship.quadx + 1][Ship.quady + 1].klings = 
+        Quad[Ship.quadx + 1][Ship.quady + 1].klings - 1
+    Quad[Ship.quadx + 1][Ship.quady + 1].scanned = 
+        Quad[Ship.quadx + 1][Ship.quady + 1].scanned - 100
     Game.killk = Game.killk + 1
     -- find the Klingon in the Klingon list
     for i = 1, Etc.nkling do
@@ -143,7 +143,7 @@ end
 -- @int qx Klingon's Quadrant X coordinate
 -- @int qy Klingon's Quadrant Y coordinate
 function M.killb (qx, qy)
-    local q = Quad[qx][qy]
+    local q = Quad[qx + 1][qy + 1]
     if q.bases <= 0 then
         return
     end
@@ -170,7 +170,7 @@ function M.killb (qx, qy)
     end
     ::killbpurged::
     if qx == Ship.quadx and qy == Ship.quady then
-        Sect[Etc.starbase.x][Etc.starbase.y] = "EMPTY"
+        Sect[Etc.starbase.x + 1][Etc.starbase.y + 1] = "EMPTY"
         if Ship.cond == "DOCKED" then
             trek.dock.undock()
         end
@@ -191,9 +191,9 @@ end
 -- @int f f ~= 0: this quadrant, f < 0: Entreprise's fault
 function M.killk (x, y, f)
     -- current quadrant
-    local q = Quad[Ship.quadx][Ship.quady]
+    local q = Quad[Ship.quadx + 1][Ship.quady + 1]
     if f ~= 0 then
-        Sect[x][y] = "EMPTY"
+        Sect[x + 1][y + 1] = "EMPTY"
         local name = q.systemname
         if name == 0 then
             return
@@ -205,7 +205,7 @@ function M.killk (x, y, f)
         end
     else 
         -- f == 0: different quadrant
-        q = Quad[x][y]
+        q = Quad[x + 1][y + 1]
     end
     if q.distressed then
         -- distressed starsystem
@@ -223,7 +223,7 @@ end
 -- @int y when f == 0, Quadrant Y coordinate
 -- @bool f true if user is to be informed
 function M.killd (x, y, f)
-    local q = Quad[x][y]
+    local q = Quad[x + 1][y + 1]
     for i = 1, V.MAXEVENTS do
         local e = Event[i]
         if e.x == x and e.y == y then
