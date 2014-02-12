@@ -264,8 +264,14 @@ function M.klmove (fl)
                     end
                     Sect[k.x + 1][k.y + 1] = "EMPTY"
                     Quad[qx + 1][qy + 1].klings = Quad[qx + 1][qy + 1].klings + 1
+                    -- Old index range: 1 to Etc.nkling
+                    -- Etc.klingon[n] is no longer valid
+                    -- So copy Etc.klingon[Etc.nkling] contents to Etc.klingon[n]
+                    -- then decrement Etc.nkling by one
+                    -- New index range: 1 to (old Etc.nkling - 1)
+                    pl.tablex.update(Etc.klingon[n], Etc.klingon[Etc.nkling])
                     Etc.nkling = Etc.nkling - 1
-                    Etc.klingon[n] = Etc.klingon[Etc.nkling]
+                    -- do not erase but overwrite the table elements
                     Quad[Ship.quadx + 1][Ship.quady + 1].klings =
                         Quad[Ship.quadx + 1][Ship.quady + 1].klings - 1
                     stayquad = false
@@ -294,7 +300,8 @@ function M.klmove (fl)
         end
         if stayquad and (k.x ~= nextx or k.y ~= nexty) then
             if not trek.damage.damaged("SRSCAN") then
-                printf("Klingon at %d,%d moves to %d,%d\n", k.x, k.y, nextx, nexty)
+                -- printf("Klingon at %d,%d moves to %d,%d\n", k.x, k.y, nextx, nexty)
+                printf("Klingon at %s,%s moves to %s,%s\n", k.x, k.y, nextx, nexty)
             end
             Sect[k.x + 1][k.y + 1] = "EMPTY"
             k.x = nextx
