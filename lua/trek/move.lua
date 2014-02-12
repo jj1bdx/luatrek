@@ -181,7 +181,7 @@ function M.move (ramflag, course, p_time, speed)
     end
     dist = p_time * speed
     -- move within quadrant
-    Sect[Ship.sectx][Ship.secty] = "EMPTY"
+    Sect[Ship.sectx + 1][Ship.secty + 1] = "EMPTY"
     local x = Ship.sectx + 0.5
     local y = Ship.secty + 0.5
     local xn = V.NSECTS * dist * bigger
@@ -198,14 +198,10 @@ function M.move (ramflag, course, p_time, speed)
         if V.Trace then
             printf("ix = %d, x = %.2f, iy = %d, y = %.2f\n", ix, x, iy, y)
         end
-        if x < 1.0 or y < 1.0 or x > sectsize or y > sectsize then
+        if x < 0.0 or y < 0.0 or x >= sectsize or y >= sectsize then
             -- enter new quadrant
-            -- note: newdx and newdy are shifted values
-            -- note: newix and newiy are shifted values
-            -- note: shifted value quadrant: [0, V.NQUADS - 1]
-            -- note: shifted value sector: [0, V.SECTS - 1]
-            local newdx = (Ship.quadx - 1) * V.NSECTS + (Ship.sectx - 1) + dx * xn
-            local newdy = (Ship.quady - 1) * V.NSECTS + (Ship.secty - 1) + dy * xn
+            local newdx = Ship.quadx * V.NSECTS + Ship.sectx + dx * xn
+            local newdy = Ship.quady * V.NSECTS + Ship.secty + dy * xn
             local newix, newiy
             if newdx < 0 then
                 newix = 0
@@ -220,19 +216,18 @@ function M.move (ramflag, course, p_time, speed)
             if V.Trace then
                 printf("New quad: newix = %d, newiy = %d\n", newix, newiy)
             end
-            -- use out-of-bound sector coordinates to calculate Klingon distance
             Ship.sectx = math.floor(x)
             Ship.secty = math.floor(y)
             trek.klingon.compkldist(false)
             Move.newquad = 2
             trek.klingon.attack(0)
             trek.score.checkcond()
-            -- convert back shifted coordinates to the original coordinates
-            Ship.quadx = math.floor(newix / V.NSECTS) + 1
-            Ship.quady = math.floor(newiy / V.NSECTS) + 1
-            Ship.sectx = (newix % V.NSECTS) + 1
-            Ship.secty = (newiy % V.NSECTS) + 1
-            if ix < 1 or Ship.quadx > V.NQUADS or iy < 1 or Ship.quady > V.NQUADS then
+            Ship.quadx = math.floor(newix / V.NSECTS)
+            Ship.quady = math.floor(newiy / V.NSECTS)
+            Ship.sectx = newix % V.NSECTS
+            Ship.secty = newiy % V.NSECTS
+            if ix < 0 or Ship.quadx > V.NQUADS - 1 or
+                iy < 0 or Ship.quady > V.NQUADS - 1 then
                 if not damaged("COMPUTER") then
                     M.dumpme(false)
                 else
@@ -243,7 +238,7 @@ function M.move (ramflag, course, p_time, speed)
             n = 0
             break
         end
-        if Sect[ix][iy] ~= "EMPTY" then
+        if Sect[ix + 1][iy + 1] ~= "EMPTY" then
             -- we just hit something
             if not damaged("COMPUTER") and ramflag <= 0 then
                 ix = math.floor(x - dx)
@@ -254,7 +249,7 @@ function M.move (ramflag, course, p_time, speed)
                 break
             end
             -- test for a black hole
-            if Sect[ix][iy] == "HOLE" then
+            if Sect[ix + 1][iy + 1] == "HOLE" then
                 -- get dumped elsewhere in the galaxy
                 M.dumpme(true)
                 trek.initquad.initquad()
@@ -277,7 +272,7 @@ function M.move (ramflag, course, p_time, speed)
         Ship.sectx = ix
         Ship.secty = iy
     end
-    Sect[Ship.sectx][Ship.secty] = Ship.ship
+    Sect[Ship.sectx + 1][Ship.secty + 1] = Ship.ship
     trek.klingon.compkldist(false)
     return p_time
 end
@@ -356,12 +351,12 @@ function M.warp (fl, c, d)
     printf("\n\n  ___ Speed exceeding warp nine ___\n\n")
     printf("Ship's safety systems malfunction\n")
     printf("Crew experiencing extreme sensory distortion\n")
-    if math.random(0,99) >= (100 * dist) then
+    if math.random(0, 99) >= (100 * dist) then
         printf("Equilibrium restored -- all systems normal\n")
         return
     end
     -- select a bizzare thing to happen to us
-    percent = math.random(0,99)
+    percent = math.random(0, 99)
     if percent < 70 then
         -- time warp
         if percent < 35 or not Game.snap then
@@ -491,7 +486,7 @@ end
 -- @int y Sector coordinate Y
 function M.ram (ix, iy)
     printf("*** RED ALERT ***: collision imminent\n")
-    local se = Sect[ix][iy]
+    local se = Sect[ix + 1][iy + 1]
     if se == "KLINGON" then
         printf("%s rams Klingon at %d,%d\n", Ship.shipname, ix, iy)
         trek.kill.killk(ix, iy)
@@ -536,10 +531,10 @@ end
 function M.dumpme (flag)
     local x = 0
     local f = flag
-    Ship.quadx = math.random(1, V.NQUADS)
-    Ship.quady = math.random(1, V.NQUADS)
-    Ship.sectx = math.random(1, V.NSECTS)
-    Ship.secty = math.random(1, V.NSECTS)
+    Ship.quadx = math.random(0, V.NQUADS - 1)
+    Ship.quady = math.random(0, V.NQUADS - 1)
+    Ship.sectx = math.random(0, V.NSECTS - 1)
+    Ship.secty = math.random(0, V.NSECTS - 1)
     x = x + 1.5 * math.random()
     Move.time = Move.time + x
     if f then
