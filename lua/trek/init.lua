@@ -101,6 +101,7 @@ M.schedule = require "trek.schedule"
 M.score = require "trek.score"
 M.setup = require "trek.setup"
 M.shield = require "trek.shield"
+M.torped = require "trek.torped"
 
 -- End of module
 return M
