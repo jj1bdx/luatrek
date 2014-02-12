@@ -126,22 +126,22 @@ function M.srscan (f)
     if f > 0 then
         Etc.statreport = true
     end
-    local q = Quad[Ship.quadx][Ship.quady]
+    local q = Quad[Ship.quadx + 1][Ship.quady + 1]
     if f >= 0 then
         printf("\nShort range sensor scan\n")
         q.scanned = (q.klings * 100) + (q.bases * 10) + q.stars
-        -- Sector coordinate value: 1 - 10, three letters needed
+        -- Sector coordinate value: 0 - 9, three letters needed
         printf("   ")
-        for i = 1, V.NSECTS do
+        for i = 0, V.NSECTS - 1 do
             printf("%-2d ", i)
         end
         printf("\n")
     end
-    for i = 1, V.NSECTS do
+    for i = 0, V.NSECTS - 1 do
         if f >= 0 then
             printf("%2d ", i)
-            for j = 1, V.NSECTS do
-                printf("%s  ", V.Sectdisp[Sect[i][j]])
+            for j = 0, V.NSECTS - 1 do
+                printf("%s  ", V.Sectdisp[Sect[i + 1][j + 1]])
             end
             printf("%2d", i)
             if statinfo then
@@ -149,22 +149,22 @@ function M.srscan (f)
             end
         end
         if statinfo then
-            if i == 1 then
+            if i == 0 then
                 printf("stardate      %.2f", Now.date)
-            elseif i == 2 then
+            elseif i == 1 then
                 printf("condition     %s", Ship.cond)
                 if Ship.cloaked then
                     printf(", CLOAKED")
                 end
-            elseif i == 3 then
+            elseif i == 2 then
                 printf("position      %d,%d/%d,%d",Ship.quadx, Ship.quady, Ship.sectx, Ship.secty)
-            elseif i == 4 then
+            elseif i == 3 then
                 printf("warp factor   %.1f", Ship.warp)
-            elseif i == 5 then
+            elseif i == 4 then
                 printf("total energy  %d", Ship.energy)
-            elseif i == 6 then
+            elseif i == 5 then
                 printf("torpedoes     %d", Ship.torped)
-            elseif i == 7 then
+            elseif i == 6 then
                 local s = "down"
                 if Ship.shldup then
                     s = "up"
@@ -173,11 +173,11 @@ function M.srscan (f)
                     s = "damaged"
                 end
                 printf("shields       %s, %d%%", s, 100.0 * Ship.shield / Param.shield)
-            elseif i == 8 then
+            elseif i == 7 then
                 printf("Klingons left %d", Now.klings)
-            elseif i == 9 then
+            elseif i == 8 then
                 printf("time left     %.2f", Now.time)
-            elseif i == 10 then
+            elseif i == 9 then
                 printf("life support  ")
                 if trek.damage.damaged("LIFESUP") then
                     printf("damaged, reserves = %.2f", Ship.reserves)
@@ -209,7 +209,7 @@ function M.srscan (f)
         return
     end    
     printf("   ")
-    for i = 1, V.NSECTS do
+    for i = 0, V.NSECTS - 1 do
         printf("%-2d ", i)
     end
     printf("\n")
@@ -241,7 +241,7 @@ function M.lrscan ()
     printf("   ")
     for j = Ship.quady - 1, Ship.quady + 1 do
         -- six spaces per column
-        if j < 1 or j > V.NQUADS then
+        if j < 0 or j > V.NQUADS - 1 then
             printf("      ")
         else
             printf("  %2d  ", j)
@@ -250,18 +250,18 @@ function M.lrscan ()
     -- scan the quadrants
     for i = Ship.quadx - 1, Ship.quadx + 1 do
         printf("\n   -------------------\n")
-        if i < 1 or i > V.NQUADS then
+        if i < 0 or i > V.NQUADS - 1 then
             -- negative energy barrier
             printf("   !  *  !  *  !  *  !")
         else
             -- print the left hand margin
             printf("%2d !", i)
             for j = Ship.quady - 1, Ship.quady + 1 do
-                if j < 1 or j > V.NQUADS then
+                if j < 0 or j > V.NQUADS - 1 then
                     -- negative energy barrier again
                     printf("  *  !")
                 else 
-                    local q = Quad[i][j]
+                    local q = Quad[i + 1][j + 1]
                     if q.stars < 0 then
                         -- supernova
                         printf(" /// !")
@@ -309,28 +309,28 @@ function M.visual ()
     local ix = Ship.sectx + v.x
     local iy = Ship.secty + v.y
     local s
-    if ix < 1 or ix > V.NSECTS or iy < 1 or iy > V.NSECTS then
+    if ix < 0 or ix > V.NSECTS - 1 or iy < 0  or iy > V.NSECTS - 1 then
         s = "?"
     else
-        s = V.Sectdisp[Sect[ix][iy]]
+        s = V.Sectdisp[Sect[ix + 1][iy + 1]]
     end
     printf("%d,%d %s ", ix, iy, s)
     v = Visdelta[dir + 1]
     ix = Ship.sectx + v.x
     iy = Ship.secty + v.y
-    if ix < 1 or ix > V.NSECTS or iy < 1 or iy > V.NSECTS then
+    if ix < 0 or ix > V.NSECTS - 1 or iy < 0  or iy > V.NSECTS - 1 then
         s = "?"
     else
-        s = V.Sectdisp[Sect[ix][iy]]
+        s = V.Sectdisp[Sect[ix + 1][iy + 1]]
     end
     printf("%s ", s)
     v = Visdelta[dir + 2]
     ix = Ship.sectx + v.x
     iy = Ship.secty + v.y
-    if ix < 1 or ix > V.NSECTS or iy < 1 or iy > V.NSECTS then
+    if ix < 0 or ix > V.NSECTS - 1 or iy < 0  or iy > V.NSECTS - 1 then
         s = "?"
     else
-        s = V.Sectdisp[Sect[ix][iy]]
+        s = V.Sectdisp[Sect[ix + 1][iy + 1]]
     end
     printf("%s %d,%d\n", s, ix, iy)
     Move.time = 0.05
