@@ -2,7 +2,11 @@
 
 * Target version: Lua 5.2
 * See `LICENSE` for the license (BSD 3-clause)
-* Note well: this repository is still in a very early stage, no runable code yet
+* Note well: this repository is still in an early stage and buggy
+
+## Background
+
+This Star Trek game is a ported version of BSD (FreeBSD/DragonFly BSD) trek, written in C.
 
 ## Requirements
 
