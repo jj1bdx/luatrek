@@ -116,15 +116,9 @@ function M.srscan (f)
     if (f >= 0) and trek.damage.check_out("SRSCAN") then
         return
     end
-    local statinfo = false
-    if f ~= 0 then
-        statinfo = true
-    else
-        -- @todo statinfo = trek.getpar.getynpar("status report")
-        statinfo = true -- @todo always do statreport
-        Etc.statreport = statinfo
-    end
+    local statinfo = true
     if f > 0 then
+        -- @todo Role of Etc.statreport?
         Etc.statreport = true
     end
     local q = Quad[Ship.quadx + 1][Ship.quady + 1]
