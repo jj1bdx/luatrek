@@ -3,7 +3,11 @@
 --- load trek as a global variable here
 -- otherwise the program will not work!
 trek = require "trek"
-trek.play.main()
+local V = trek.gstate
+V.Trace = true
+trek.setup.setup()
+trek.play.play()
+-- trek.play.main()
 
 --[[
 trek = require "trek"
