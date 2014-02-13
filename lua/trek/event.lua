@@ -302,8 +302,8 @@ function M.events (t_warp)
                         break
                     end
                 end
+                -- if not found then ignore this call
                 if found then
-                -- can't seem to find one; ignore this call
                 -- got one!!  Schedule its enslavement
                     Ship.distressed = Ship.distressed + 1
                     e = xsched("E_ENSLV", 1, ix, iy, q.systemname, false, false)
@@ -314,15 +314,15 @@ function M.events (t_warp)
                             break
                         end
                     end
-                end
-                -- tell the captain about it if we can
-                if not damaged("SSRADIO") then
-                    printf("\nUhura: Captain, starsystem %s in quadrant %d,%d is under attack\n",
-                        V.Systemname[e.systemname], ix, iy)
-                    restcancel = true
-                else
-                    -- if we can't tell him, make it invisible
-                    e.hidden = true
+                    -- tell the captain about it if we can
+                    if not damaged("SSRADIO") then
+                        printf("\nUhura: Captain, starsystem %s in quadrant %d,%d is under attack\n",
+                            V.Systemname[e.systemname], ix, iy)
+                        restcancel = true
+                    else
+                        -- if we can't tell him, make it invisible
+                        e.hidden = true
+                    end
                 end
             end
         elseif e.evcode == "E_ENSLV" then
