@@ -334,9 +334,12 @@ function M.destruct ()
     local zap = 20.0 * Ship.energy
     Game.deaths = Game.deaths + Ship.crew
     for i = 1, Etc.nkling do
-        if Etc.klingon[i].power * Etc.klingon[i].dist <= zap then
-            trek.kill.killk(Etc.klingon[i].x, Etc.klingon[i].y)
-            i = i - 1 -- @todo is this OK?
+        local dead = 0
+        k = i - dead
+        if Etc.klingon[k].power * Etc.klingon[k].dist <= zap then
+            trek.kill.killk(Etc.klingon[k].x, Etc.klingon[k].y)
+            -- This will prevent k exceeding the valid range 
+            dead = dead + 1
         end
     end
     -- if we didn't kill the last Klingon (detected by killk),
