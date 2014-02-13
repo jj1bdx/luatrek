@@ -153,7 +153,7 @@ function M.events (t_warp)
             trek.score.lose("L_NOTIME")
         end
         if evnum >= 0 and V.Trace then
-            printf("xdate = %.2f, evcode %s params %d %d %d\n",
+            printf("xdate = %.2f, evcode %s params %d %d %s\n",
                 xdate, e.evcode, e.x, e.y, e.systemname)
         end
         -- if evnum < 0, no events occurred
