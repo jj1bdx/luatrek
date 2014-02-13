@@ -180,14 +180,13 @@ function M.klmove (fl)
         printf("klmove: fl = %s, Etc.nkling = %d\n", fl, Etc.nkling)
     end
     for n = 1, Etc.nkling do
-        local k = Etc.klingon[n]
         local stayquad = true
         -- if V.Trace then
         --    printf("klmove: processing klingon number %d\n", n)
         -- end
         local i = 100
         if fl == "AFTER" then
-            i = math.floor(100.0 * k.power / Param.klingpwr)
+            i = math.floor(100.0 * Etc.klingon[n].power / Param.klingpwr)
         end
         local ii
         if i <= 1 then
@@ -204,10 +203,11 @@ function M.klmove (fl)
         end
         -- compute distance to move
         local motion = math.random(-25, 49)
-        motion = math.floor(motion * k.avgdist * Param.movefac[Move.newquad][fl])
+        motion = math.floor(motion * Etc.klingon[n].avgdist * 
+                            Param.movefac[Move.newquad][fl])
         -- compute direction
-        local dx = Ship.sectx - k.x + math.random(-1, 1)
-        local dy = Ship.secty - k.y + math.random(-1, 1)
+        local dx = Ship.sectx - Etc.klingon[n].x + math.random(-1, 1)
+        local dy = Ship.secty - Etc.klingon[n].y + math.random(-1, 1)
         local bigger = dx
         if dy > bigger then
             bigger = dy
@@ -228,8 +228,8 @@ function M.klmove (fl)
         local fudgex = 1
         local fudgey = 1
         -- try to move the klingon
-        local nextx = k.x
-        local nexty = k.y
+        local nextx = Etc.klingon[n].x
+        local nexty = Etc.klingon[n].y
         stayquad = true
         -- if V.Trace then
         --    printf("klmove: nextx = %d, nexty = %d\n", nextx, nexty)
@@ -264,7 +264,8 @@ function M.klmove (fl)
                 end
                 if not trek.damage.damaged("SRSCAN") then
                     printf("Klingon at %d,%d escapes to quadrant %d,%d\n",
-                            k.x, k.y, qx, qy)
+                            Etc.klingon[n].x, Etc.klingon[n].y,
+                            qx, qy)
                     local code = Quad[qx + 1][qy + 1].scanned
                     if code >= 0 and code < 1000 then
                         Quad[qx + 1][qy + 1].scanned = 
@@ -276,7 +277,7 @@ function M.klmove (fl)
                             Quad[Ship.quadx + 1][Ship.quady + 1].scanned - 100
                     end
                 end
-                Sect[k.x + 1][k.y + 1] = "EMPTY"
+                Sect[Etc.klingon[n].x + 1][Etc.klingon[n].y + 1] = "EMPTY"
                 Quad[qx + 1][qy + 1].klings = Quad[qx + 1][qy + 1].klings + 1
                 -- Old index range: 1 to oldnking
                 -- Etc.klingon[n] is no longer valid
@@ -319,16 +320,18 @@ function M.klmove (fl)
             --    printf("klmove: nextx = %d, nexty = %d\n", nextx, nexty)
             -- end
         end
-        if stayquad and (k.x ~= nextx or k.y ~= nexty) then
+        if stayquad and 
+            (Etc.klingon[n].x ~= nextx or Etc.klingon[n].y ~= nexty) then
             if not trek.damage.damaged("SRSCAN") then
-                -- printf("Klingon at %d,%d moves to %d,%d\n", k.x, k.y, nextx, nexty)
                 -- detect non-number
-                printf("Klingon at %s,%s moves to %s,%s\n", k.x, k.y, nextx, nexty)
+                -- @todo should be %d
+                printf("Klingon at %s,%s moves to %s,%s\n", 
+                        Etc.klingon[n].x, Etc.klingon[n].y, nextx, nexty)
             end
-            Sect[k.x + 1][k.y + 1] = "EMPTY"
-            k.x = nextx
-            k.y = nexty
-            Sect[k.x + 1][k.y + 1] = "KLINGON"
+            Sect[Etc.klingon[n].x + 1][Etc.klingon[n].y + 1] = "EMPTY"
+            Etc.klingon[n].x = nextx
+            Etc.klingon[n].y = nexty
+            Sect[Etc.klingon[n].x + 1][Etc.klingon[n].y + 1] = "KLINGON"
         end
         ::endofloop::
     end
