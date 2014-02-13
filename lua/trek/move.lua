@@ -102,8 +102,6 @@ local printf = pl.utils.printf
 --- shorthand for trek.damage.damaged
 local damaged = function (ev) trek.damage.damaged(ev) end
 
--- @todo working on this code
-
 --- Move Under Warp or Impulse Power
 -- `Ramflag' is set if we are to be allowed to ram stars,
 -- Klingons, etc.  This is passed from warp(), which gets it from
