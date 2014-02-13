@@ -179,8 +179,10 @@ function M.klmove (fl)
     if V.Trace then
         printf("klmove: fl = %s, Etc.nkling = %d\n", fl, Etc.nkling)
     end
+    local stayquad = {}
+    -- Do not touch Etc.nkling within the for loop
     for n = 1, Etc.nkling do
-        local stayquad = true
+        stayquad[n] = true
         -- if V.Trace then
         --    printf("klmove: processing klingon number %d\n", n)
         -- end
@@ -203,7 +205,7 @@ function M.klmove (fl)
         end
         -- compute distance to move
         local motion = math.random(-25, 49)
-        motion = math.floor(motion * Etc.klingon[n].avgdist * 
+        motion = math.floor(motion * Etc.klingon[n].avgdist *
                             Param.movefac[Move.newquad][fl])
         -- compute direction
         local dx = Ship.sectx - Etc.klingon[n].x + math.random(-1, 1)
@@ -222,15 +224,14 @@ function M.klmove (fl)
             dx = -dx
             dy = -dy
         end
-        if V.Trace then
-            printf("klmove: dx = %.2f, dy = %.2f, motion = %d\n", dx, dy, motion)
-        end
+        -- if V.Trace then
+        --    printf("klmove: dx = %.2f, dy = %.2f, motion = %d\n", dx, dy, motion)
+        -- end
         local fudgex = 1
         local fudgey = 1
         -- try to move the klingon
         local nextx = Etc.klingon[n].x
         local nexty = Etc.klingon[n].y
-        stayquad = true
         -- if V.Trace then
         --    printf("klmove: nextx = %d, nexty = %d\n", nextx, nexty)
         -- end
@@ -262,13 +263,13 @@ function M.klmove (fl)
                    -- break from the for loop
                    break
                 end
-                if not trek.damage.damaged("SRSCAN") then
+                if not trek.damage.damaged("SRSCAN") or V.Trace then
                     printf("Klingon at %d,%d escapes to quadrant %d,%d\n",
                             Etc.klingon[n].x, Etc.klingon[n].y,
                             qx, qy)
                     local code = Quad[qx + 1][qy + 1].scanned
                     if code >= 0 and code < 1000 then
-                        Quad[qx + 1][qy + 1].scanned = 
+                        Quad[qx + 1][qy + 1].scanned =
                             Quad[qx + 1][qy + 1].scanned + 100
                     end
                     local codeq = Quad[Ship.quadx + 1][Ship.quady + 1].scanned
@@ -279,18 +280,9 @@ function M.klmove (fl)
                 end
                 Sect[Etc.klingon[n].x + 1][Etc.klingon[n].y + 1] = "EMPTY"
                 Quad[qx + 1][qy + 1].klings = Quad[qx + 1][qy + 1].klings + 1
-                -- Old index range: 1 to oldnkling
-                -- Etc.klingon[n] is no longer valid
-                -- copy Etc.klingon[Etc.nkling] contents to Etc.klingon[n]
-                -- and decrement Etc.nkling by one
-                -- New index range: 1 to (oldnkling - 1)
-                local oldnkling = Etc.nkling
-                -- do not erase but overwrite the table elements
-                Etc.klingon[n] = pl.tablex.deepcopy(Etc.klingon[oldnkling])
-                Etc.nkling = oldnkling - 1
                 Quad[Ship.quadx + 1][Ship.quady + 1].klings =
                     Quad[Ship.quadx + 1][Ship.quady + 1].klings - 1
-                stayquad = false
+                stayquad[n] = false
                 -- break from the for loop
                 break
             end
@@ -316,12 +308,10 @@ function M.klmove (fl)
             --    printf("klmove: nextx = %d, nexty = %d\n", nextx, nexty)
             -- end
         end
-        if stayquad and 
+        if stayquad[n] and
             (Etc.klingon[n].x ~= nextx or Etc.klingon[n].y ~= nexty) then
-            if not trek.damage.damaged("SRSCAN") then
-                -- detect non-number
-                -- @todo should be %d
-                printf("Klingon at %s,%s moves to %s,%s\n", 
+            if not trek.damage.damaged("SRSCAN") or V.Trace then
+                printf("Klingon at %d,%d moves to %d,%d\n",
                         Etc.klingon[n].x, Etc.klingon[n].y, nextx, nexty)
             end
             Sect[Etc.klingon[n].x + 1][Etc.klingon[n].y + 1] = "EMPTY"
@@ -331,6 +321,35 @@ function M.klmove (fl)
         end
         ::endofloop::
     end
+    -- Remove escaped klingons and make a new Etc.klingon[] table
+    -- by counting the klingons still staying in the quadrant
+    local count = 0
+    local new = 1
+    for n = 1, Etc.nkling do
+        if stayquad[n] then
+            count = count + 1
+            if count ~= n then
+                -- count <= n
+                Etc.klingon[count] = pl.tablex.deepcopy(Etc.klingon[n])
+                if V.Trace then
+                    printf("klmove: copied Etc.klingon element %d to %d\n", n, count)
+                end
+            end
+            if V.Trace then
+               printf("klmove: new Etc.klingon[%d] x, y = %d, %d\n",
+                       count, Etc.klingon[count].x, Etc.klingon[count].y)
+            end
+        else
+            if V.Trace then
+                printf("klmove: skip escaped klingon number %d\n", n)
+            end
+        end
+    end
+    Etc.nkling = count
+    if V.Trace then
+        printf("klmove: new klingons: %d\n", Etc.nkling)
+    end
+    -- calculate new distance
     M.compkldist(0)
 end
 
