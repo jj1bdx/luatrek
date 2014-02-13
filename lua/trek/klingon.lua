@@ -147,6 +147,13 @@ function M.compkldist (f)
     end
     -- leave them sorted
     sortkl()
+    -- trace code to dump klingons in the sector
+    if V.Trace then
+        for i = 1, Etc.nkling do
+            printf("compkldist: klingon %d: x = %d, y = %d\n",
+                i, Etc.klingon[i].x, Etc.klingon[i].y)
+        end
+    end
 end
 
 --- Move Klingons Around:
@@ -271,14 +278,19 @@ function M.klmove (fl)
                 end
                 Sect[k.x + 1][k.y + 1] = "EMPTY"
                 Quad[qx + 1][qy + 1].klings = Quad[qx + 1][qy + 1].klings + 1
-                -- Old index range: 1 to Etc.nkling
+                -- Old index range: 1 to oldnking
                 -- Etc.klingon[n] is no longer valid
-                -- So copy Etc.klingon[Etc.nkling] contents to Etc.klingon[n]
-                -- then decrement Etc.nkling by one
-                -- New index range: 1 to (old Etc.nkling - 1)
-                -- do not erase but overwrite the table elements
-                pl.tablex.update(Etc.klingon[n], Etc.klingon[Etc.nkling])
-                Etc.nkling = Etc.nkling - 1
+                -- if n == Etc.nkling.old then do nothing
+                -- if n ~= Etc.nkling.old then
+                --    copy Etc.klingon[Etc.nkling] contents to Etc.klingon[n]
+                -- and decrement Etc.nkling by one
+                -- New index range: 1 to (Etc.nkling.old - 1)
+                local oldnkling = Etc.nkling
+                if n ~= oldnkling then
+                    -- do not erase but overwrite the table elements
+                    pl.tablex.update(Etc.klingon[n], Etc.klingon[oldnkling])
+                end
+                Etc.nkling = oldnkling - 1
                 Quad[Ship.quadx + 1][Ship.quady + 1].klings =
                     Quad[Ship.quadx + 1][Ship.quady + 1].klings - 1
                 stayquad = false
