@@ -368,8 +368,6 @@ function M.setup ()
     trek.initquad.initquad(false)
     trek.scan.srscan(1)
     trek.klingon.attack(0)
-    
-    -- @todo more to go
 end
 
 -- End of module
