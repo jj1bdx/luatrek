@@ -161,14 +161,14 @@ end
 -- the event at slot 'e' is deleted.
 -- @param e Event itself to be deleted from the slot
 function M.unschedule (e)
+    if V.Trace then
+        printf("unschedule: type %s @ %.2f parm %d %d %s %s %s\n", 
+                e.evcode, e.date, e.x, e.y, e.systemname, e.hidden, e.ghost)
+    end
     local oldevcode = e.evcode
     Now.eventptr[oldevcode] = "NOEVENT"
     e.date = 1e50
     e.evcode = ""
-    if V.Trace then
-        printf("unschedule: type %s parm %d %d %s %s %s @ %.2f\n", 
-                oldevcode, e.x, e.y, e.systemname, e.hidden, e.ghost, date)
-    end
     return
 end
 
