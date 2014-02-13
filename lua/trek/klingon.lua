@@ -279,18 +279,14 @@ function M.klmove (fl)
                 end
                 Sect[Etc.klingon[n].x + 1][Etc.klingon[n].y + 1] = "EMPTY"
                 Quad[qx + 1][qy + 1].klings = Quad[qx + 1][qy + 1].klings + 1
-                -- Old index range: 1 to oldnking
+                -- Old index range: 1 to oldnkling
                 -- Etc.klingon[n] is no longer valid
-                -- if n == Etc.nkling.old then do nothing
-                -- if n ~= Etc.nkling.old then
-                --    copy Etc.klingon[Etc.nkling] contents to Etc.klingon[n]
+                -- copy Etc.klingon[Etc.nkling] contents to Etc.klingon[n]
                 -- and decrement Etc.nkling by one
-                -- New index range: 1 to (Etc.nkling.old - 1)
+                -- New index range: 1 to (oldnkling - 1)
                 local oldnkling = Etc.nkling
-                if n ~= oldnkling then
-                    -- do not erase but overwrite the table elements
-                    pl.tablex.update(Etc.klingon[n], Etc.klingon[oldnkling])
-                end
+                -- do not erase but overwrite the table elements
+                Etc.klingon[n] = pl.tablex.deepcopy(Etc.klingon[oldnkling])
                 Etc.nkling = oldnkling - 1
                 Quad[Ship.quadx + 1][Ship.quady + 1].klings =
                     Quad[Ship.quadx + 1][Ship.quady + 1].klings - 1
