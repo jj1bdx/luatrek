@@ -102,9 +102,9 @@ local printf = pl.utils.printf
 
 --- Short range sensor scanner:
 -- a short range scan is taken of the current quadrant.  If the
--- flag 'f' is one, it is an "auto srscan".  It does a status
+-- flag `f` is one, it is an "auto srscan".  It does a status
 -- report and a srscan.
--- If 'f' is -1, you get a status report only.  If it is zero,
+-- If `f` is -1, you get a status report only.  If it is zero,
 -- you get a srscan and an optional status report.  The status
 -- report is taken if you enter "srscan yes"; for all srscans
 -- thereafter you get a status report with your srscan until
@@ -275,6 +275,7 @@ end
 
 --- This table has the delta x, delta y for particular directions
 -- @table Visdelta
+-- @field tables_inside It contains all necessary direction info as the `{x, y}` table
 local Visdelta = {
     { x = -1, y = -1 },
     { x = -1, y =  0 },
