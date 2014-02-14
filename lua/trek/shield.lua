@@ -101,14 +101,10 @@ local Device = V.Device
 local printf = pl.utils.printf
 
 --- Shield and cloaking device control:
--- 'f' is one for auto shield up (in case of Condition RED),
+-- `f` is one for auto shield up (in case of Condition RED),
 -- zero for shield control, and negative one for cloaking
--- device control.
--- 
--- Called with an 'up' or 'down' on the same line, it puts
--- the shields/cloak into the specified mode.  Otherwise it
--- reports to the user the current mode, and asks if she wishes
--- to change.
+-- device control. This command reports to the user the 
+-- current mode, and asks if the user wishes to change.
 --
 -- This is not a free move.  Hits that occur as a result of
 -- this move appear as though the shields are half up/down,
