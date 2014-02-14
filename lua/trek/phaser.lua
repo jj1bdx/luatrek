@@ -101,13 +101,15 @@ local Etc = V.Etc
 local printf = pl.utils.printf
 --- shorthand for trek.damage.damaged
 local damaged = function (ev) trek.damage.damaged(ev) end
---- local table of factors for phaser hits; see description below
--- Note: OMEGA ~= 100 * (ALPHA + 1) * (BETA + 1) / (EPSILON + 1)
+--- local table of factors for phaser hits; see the description
+-- in the table.
+--
+-- Note: `OMEGA ~= 100 * (ALPHA + 1) * (BETA + 1) / (EPSILON + 1)`
 -- @table phaser_factors
 -- @field ALPHA spread
--- @field BETA math.random()
--- @field GAMMA cos(angle)
--- @field EPSILON (dist)^2
+-- @field BETA `math.random()`
+-- @field GAMMA `cos(angle)`
+-- @field EPSILON `(dist)^2`
 -- @field OMEGA overall scaling factor
 local ALPHA = 3.0
 local BETA = 3.0
