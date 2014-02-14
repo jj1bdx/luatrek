@@ -94,7 +94,7 @@ function M.getstring (prompt)
 end
 
 --- Get parameter splitted as space-separated words into a table 
--- (see http://lua-users.org/wiki/SplitJoin)
+-- (see <http://lua-users.org/wiki/SplitJoin>)
 -- @string prompt (if not string, converted to string)
 -- @treturn int number of words in integer
 -- @treturn tab table of words
