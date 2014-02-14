@@ -102,14 +102,10 @@ local printf = pl.utils.printf
 --- shorthand for trek.damage.damaged
 local damaged = function (ev) trek.damage.damaged(ev) end
 
---- Move Under Warp or Impulse Power
--- `Ramflag' is set if we are to be allowed to ram stars,
--- Klingons, etc.  This is passed from warp(), which gets it from
--- either play() or ram().  Course is the course (0 -> 360) at
--- which we want to move.  `Speed' is the speed we
--- want to go, and `p_time' is the expected time.  It
--- can get cut short if a long range tractor beam is to occur.  We
--- cut short the move so that the user doesn't get docked time and
+--- Move under warp or impulse power
+--
+-- The move can get cut short if a long range tractor beam is to occur.
+-- We cut short the move so that the user doesn't get docked time and
 -- energy for distance which he didn't travel.
 --
 -- We check the course through the current quadrant to see that he
@@ -127,10 +123,12 @@ local damaged = function (ev) trek.damage.damaged(ev) end
 -- potentially very bad shape.
 --
 -- Klingons get a chance to zap you as you leave the quadrant.
--- By the way, they also try to follow you (heh heh).
+-- By the way, they also try to follow you.
 --
 -- Return value is the actual amount of time used.
--- @int ramflag if we are to be allowed to ram stars and etc.
+-- @int ramflag This flag is set if we are to be allowed to ram stars,
+-- Klingons, etc.  This is passed from warp(), which gets it from
+-- either play() or ram().  
 -- @number course Course (0 to 360 degrees)
 -- @number p_time Expected time
 -- @number speed Speed we want to go
@@ -278,9 +276,9 @@ end
 
 --- Move under warp power
 -- This is both the "move" and the "ram" commands, differing
--- only in the flag 'fl'.  It is also used for automatic
--- emergency override mode, when 'fl' is < 0 and 'c' and 'd'
--- are the course and distance to be moved.  If 'fl' >= 0,
+-- only in the flag `fl`.  It is also used for automatic
+-- emergency override mode, when `fl < 0` then `c` and `d`
+-- are the course and distance to be moved.  If `fl >= 0`,
 -- the course and distance are asked of the captain.
 --
 -- The guts of this routine are in the routine move(), which
