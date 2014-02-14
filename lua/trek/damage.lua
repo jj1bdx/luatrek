@@ -155,7 +155,7 @@ function M.out (dev)
 end
 
 --- Schedule Ship.damages to a Device:
--- device `dev' is damaged in an amount `dam'.  The damage is measured
+-- device `dev` is damaged in an amount `dam`.  The damage is measured
 -- in stardates, and is an additional amount of damage.  It should
 -- be the amount to occur in non-docked mode.  The adjustment
 -- to docked mode occurs automatically if we are docked.
