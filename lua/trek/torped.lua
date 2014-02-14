@@ -136,9 +136,8 @@ local function randcourse (n)
     return d
 end
 
---- Photon Torpedo control
---
--- Either one or three photon torpedoes are fired.  If three
+--- Photon Torpedo control:
+-- either one or three photon torpedoes are fired.  If three
 -- are fired, it is called a "burst" and you also specify
 -- a spread angle.
 --
