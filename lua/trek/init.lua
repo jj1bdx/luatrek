@@ -1,5 +1,10 @@
 #!/usr/bin/env lua
---- Initialization at init.lua - loading all submodules
+--- Initialization performed at file `init.lua`:
+-- this module load all the submodules and exit.
+-- To play the game, the parent Lua code module must execute:
+--
+--         trek == require "trek"
+--
 -- @module trek
 -- @alias M
 
