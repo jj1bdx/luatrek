@@ -101,9 +101,8 @@ local Device = V.Device
 local printf = pl.utils.printf
 
 --- Schedule an event:
--- an event of type 'type' is scheduled for time NOW + 'offset'
--- into the first available slot.  'x', 'y', 'systemname',
--- 'hidden', 'ghost' are
+-- an event of type `type` is scheduled for time `NOW + offset`
+-- into the first available slot.  `x, y, systemname, hidden, ghost` are
 -- considered the attributes for this event.
 --
 -- The address of the slot is returned.
@@ -143,8 +142,7 @@ function M.schedule (type, offset, x, y, systemname, hidden, ghost)
 end
 
 --- Reschedule an event:
--- the event pointed to by 'e' is rescheduled to the current
--- time plus 'offset'.
+-- the event `e` is rescheduled to the current time plus 'offset'.
 -- @param e Event itself
 -- @number offset date offset plus the current time
 function M.reschedule (e, offset)
