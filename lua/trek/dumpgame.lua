@@ -87,7 +87,7 @@ local Dump_version = 2
 local Dump_filename = "./luatrek.dump.txt"
 
 --- Dump game:
--- this routine dumps the game onto the file "./luatrek.dump.txt".  
+-- this routine dumps the game onto the file `./luatrek.dump.txt`.  
 -- The file contains a large Lua table text dump, which includes
 -- the game version number and dump version number.
 function M.dumpgame ()
@@ -111,7 +111,7 @@ function M.dumpgame ()
 end
 
 --- Restore game:
--- the game is restored from the file "./luatrek.dump.txt".  In order for
+-- the game is restored from the file `./luatrek.dump.txt`.  In order for
 -- this to succeed, the file must exist and be readable, must
 -- have the correct Luatrek and Dump version numbers,
 -- and must have all the appropriate table entries.
