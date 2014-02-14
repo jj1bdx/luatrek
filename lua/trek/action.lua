@@ -165,11 +165,11 @@ local function prkalc (course, dist)
 end
 
 --- On-Board Computer:
---
 -- A computer request is fetched from the captain.  The requests
 -- are:
---
--- chart -- print a star chart of the known galaxy.  This includes
+-- 
+-- * chart -- print a star chart of the known galaxy.
+--     This includes
 --     every quadrant that has ever had a long range or
 --     a short range scan done of it, plus the location of
 --     all starbases.  This is of course updated by any sub-
@@ -177,34 +177,26 @@ end
 --     The format is the same as that of a long range scan
 --     except that ".1." indicates that a starbase exists
 --     but we know nothing else.
---
--- trajectory -- gives the course and distance to every know
+-- * trajectory -- gives the course and distance to every know
 --     Klingon in the quadrant.  Obviously this fails if the
 --     short range scanners are out.
---
--- course -- gives a course computation from whereever you are
---     to any specified location.  If the course begins
---     with a slash, the current quadrant is taken.
---     Otherwise the input is quadrant and sector coordi-
---     nates of the target sector.
---
--- move -- identical to course, except that the move is performed.
---
--- score -- prints out the current score.
---
--- pheff -- "PHaser EFFectiveness" at a given distance.  Tells
+-- * course -- gives a course computation from whereever you are
+--     to any specified location. 
+--     The input is quadrant and sector coordinates
+--     of the target sector.  Separate the numbers by spaces.
+-- * move -- identical to course, except that the move is performed.
+-- * score -- prints out the current score.
+-- * pheff -- "PHaser EFFectiveness" at a given distance.  Tells
 --     you how much stuff you need to make it work.
---
--- warpcost -- Gives you the cost in time and units to move for
+-- * warpcost -- Gives you the cost in time and units to move for
 --     a given distance under a given warp speed.
---
--- impcost -- Same for the impulse engines.
---
--- distresslist -- Gives a list of the currently known starsystems
+-- * impcost -- Same for the impulse engines.
+-- * distresslist -- Gives a list of the currently known starsystems
 --     or starbases which are distressed, together with their
 --     quadrant coordinates.
---
--- quit -- exiting the computer
+-- * quit -- exiting the computer
+-- * srscan -- Short range scan is available in the computer also.
+--     Note well that you will be attacked *after* exiting the computer.
 function M.computer()
     if trek.damage.check_out("COMPUTER") then
         return
