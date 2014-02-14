@@ -194,7 +194,7 @@ end
 -- this routine prints out the win message, arranges to print out
 -- your score, tells you if you have a promotion coming to you.
 -- This function generates an error() exception with
--- code "ENDOFGAME".
+-- code `"ENDOFGAME"`.
 --
 -- Pretty straightforward, although the promotion algorithm is
 -- pretty off the wall.
@@ -226,7 +226,7 @@ end
 -- printed, and the game is restarted.  Oh yeh, any special
 -- actions which need be taken are taken.
 -- This function generates an error() exception with
--- code "ENDOFGAME".
+-- code `"ENDOFGAME"`.
 -- @string why Lose reason code
 function M.lose (why)
     Game.killed = true
