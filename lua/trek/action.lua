@@ -206,41 +206,41 @@ function M.computer()
         if r == 1 then
             -- star chart
             printf("Computer record of galaxy for all long range sensor scans\n\n")
-            printf("   ")
+            printf("  ")
             -- print top header
             for i = 0, V.NQUADS - 1 do
-                printf("-%2d- ", i)
+                printf("-%d- ", i)
             end
             printf("\n")
             for i = 0, V.NQUADS - 1 do
-                printf("%2d ", i)
+                printf("%d ", i)
                 for j = 0, V.NQUADS - 1 do
                     if i == Ship.quadx and j == Ship.quady then
-                        printf("$$$  ")
+                        printf("$$$ ")
                     else
                         local q = Quad[i + 1][j + 1]
                         -- 1000 or 1001 is special case
                         if q.scanned >= 1000 then
                             if q.scanned > 1000 then
-                                printf(".1.  ")
+                                printf(".1. ")
                             else
-                                printf("///  ")
+                                printf("/// ")
                             end
                         else
                             if q.scanned < 0 then
-                                printf("...  ")
+                                printf("... ")
                             else
-                                printf("%3d  ", q.scanned)
+                                printf("%3d ", q.scanned)
                             end
                         end
                     end
                 end
-                printf("%2d\n", i)
+                printf("%d\n", i)
             end
-            printf("   ")
+            printf("  ")
             -- print bottom footer
             for i = 0, V.NQUADS - 1 do
-                printf("-%2d- ", i)
+                printf("-%d- ", i)
             end
             printf("\n");
         elseif r == 2 then
