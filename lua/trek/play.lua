@@ -177,26 +177,31 @@ function M.main()
     V.Trace = true
     local again = true
     while again do
-        -- exception caught inside the pcall
-        local status, err = pcall(function ()
+        -- exception caught inside the xpcall
+        local status, handler = xpcall(function ()
             -- play the game
             trek.setup.setup()
             M.play()
+            end,
+            -- error handler function
+            function (err)
+                if err.code == "ENDOFGAME" then
+                    return false
+                else
+                    -- dump stacktrace then crash
+                    return debug.traceback(err)
+                end
             end)
-        -- exception handling
-        if not status then
+        -- end-of-game handling
+        if not status and not handler then
             -- end of game exception
-            if err.code == "ENDOFGAME" then
-                printf("\nLuatrek: game over\n")
-                again = trek.getpar.getynpar("Another game")
-            else
-                -- general errors, crash it
-                error(err)
-                -- NOTREACHED
-            end
+            printf("\nLuatrek: game over\n")
+            again = trek.getpar.getynpar("Another game")
         else
-            -- @todo Really reach here?
-            again = false
+            -- status shouldn't be true because M.play() is an infinite loop
+            -- so this should be a general error, crash it
+            error(handler)
+            -- NOTREACHED
         end
     end
     return
