@@ -1,7 +1,6 @@
 # Luatrek: Star Trek in Lua
 
-* Requires Lua 5.2
-* See `LICENSE` for the license (BSD 3-clause)
+* Current version: pre-0.2
 * *Note well*: this repository is still in an early stage and buggy
 
 ## Background
