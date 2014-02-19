@@ -3,8 +3,8 @@
 -- @module trek.play
 -- @alias M
 
--- Luatrek license statement
---[[
+--- Luatrek license statement as a literal string
+local license_statement = [[
 Luatrek ("this software") is covered under the BSD 3-clause license.
 
 This product includes software developed by the University of California, Berkeley
@@ -172,7 +172,8 @@ local printf = pl.utils.printf
 --- The Main program: call this function to start the game
 function M.main()
     -- @todo No command option needed?
-    printf("\nLuatrek version %s\n\n", V.Luatrek_version)
+    printf("\nLuatrek version %s\n", V.Luatrek_version)
+    printf("Use 'license' command to show the license\n\n")
     -- Enable trace
     V.Trace = true
     local again = true
@@ -234,6 +235,7 @@ local Comtab =
     ["impulse"] = function () trek.move.impulse() end,
     ["l"] = function () trek.scan.lrscan() end,
     ["lrscan"] = function () trek.scan.lrscan() end,
+    ["license"] = function () trek.play.license() end,
     ["m"] = function () trek.move.dowarp(0) end,
     ["move"] = function () trek.move.dowarp(0) end,
     ["p"] = function () trek.phaser.phaser() end,
@@ -279,6 +281,11 @@ function M.play ()
         trek.klingon.attack(0)
         trek.score.checkcond()
     end
+end
+
+--- Print full license
+function M.license ()
+    io.write(license_statement)
 end
 
 -- End of module
