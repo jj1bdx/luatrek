@@ -27,7 +27,7 @@
 
 ## Module names
 
-* All modules are now under lua/trek/
+* All modules are now under `lua/trek/`
 * lua/trek/init.lua will load all the necessary modules
 * Hierarchical naming: trek.getpar.getynpar()
 * You can always assign shorthands in Lua, e.g., GP = trek.getpar; GP.getynpar()
@@ -50,6 +50,10 @@
 * Command cancellation patterns should be defined
 
 ## Exception catch on the game main program
+
+* Lua xpcall() with debug.traceback() is chosen for catching the general errors and game-ending exeptions
+
+### Thoughts on exeption handling
 
 * Do we need setjmp()/longjmp() just for restarting a game? I don't think so. The longjmp() calls are only used to notify end of the game and jump back to the main.c loop from lose() in lose.c, myreset() in play.c, and win() in win.c. Terminating the game altogether in the three cases will eliminate the need for the setjmp()/longjmp() pairs.
 * Removing the "Another Game" loop will be the simplest solution. 
