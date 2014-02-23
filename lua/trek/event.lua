@@ -435,7 +435,7 @@ function M.events (t_warp)
                     printf("Spock has tried to recalibrate your Space Internal Navigation System,\n")
                     printf("  but he has no standard base to calibrate to.  Suggest you get\n")
                     printf("  to a starbase immediately so that you can properly recalibrate.\n")
-                    Ship.sinsbad = 1
+                    Ship.sinsbad = true
                 end
             elseif dev == "SSRADIO" then
                 -- restcancel = dumpssradio()
