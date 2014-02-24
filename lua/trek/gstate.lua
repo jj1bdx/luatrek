@@ -225,7 +225,7 @@ M.Quad = pl.array2d.new(M.NQUADS, M.NQUADS,
             klings = 0,
             holes = 0,
             scanned = -1,
-            starts = 0,
+            stars = 0,
             systemname = 0,
             distressed = 0,
         }
