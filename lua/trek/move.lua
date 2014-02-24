@@ -249,7 +249,7 @@ function M.move (ramflag, course, p_time, speed)
             if Sect[ix + 1][iy + 1] == "HOLE" then
                 -- get dumped elsewhere in the galaxy
                 M.dumpme(true)
-                trek.initquad.initquad()
+                trek.initquad.initquad(false)
                 n = 0
                 break
             end
