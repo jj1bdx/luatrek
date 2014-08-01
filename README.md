@@ -28,6 +28,10 @@ This Star Trek game is a ported version of BSD (FreeBSD/DragonFly BSD) trek, wri
 
 Use GitHub issue to report the bugs
 
+## TODO
+
+* Revision after release of Lua 5.3: integer type handling
+
 ## Author
 
 * Kenji Rikitake
