@@ -31,7 +31,7 @@ Use GitHub issue to report the bugs
 ## TODO
 
 * Revision after release of Lua 5.3: integer type handling
-* Revision keeping up with LuaRocks 2.2.0
+* Revision keeping up with LuaRocks 2.2.0 (working OK on OS X)
 
 ## Author
 
