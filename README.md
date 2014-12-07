@@ -10,6 +10,7 @@ This Star Trek game is a ported version of BSD (FreeBSD/DragonFly BSD) trek, wri
 ## Requirements
 
 * Lua 5.2
+* Tested on FreeBSD 10.1-STABLE and OS X 10.10.1
 * See `doc/manual/devenv-memo.md` for how to install the development environment
 
 ## How to run
