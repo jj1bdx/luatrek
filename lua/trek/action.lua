@@ -10,7 +10,7 @@ Luatrek ("this software") is covered under the BSD 3-clause license.
 This product includes software developed by the University of California, Berkeley
 and its contributors.
 
-Copyright (c) 2013, 2014 Kenji Rikitake. All rights reserved.
+Copyright (c) 2013-2022 Kenji Rikitake. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
