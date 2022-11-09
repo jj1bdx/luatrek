@@ -397,7 +397,7 @@ function M.abandon ()
             Game.deaths = Game.deaths + Ship.crew
         else
             printf("Crew beams down to planet %s\n",
-                    V.Systemname(q.systemname))
+                    V.Systemname[q.systemname])
         end
     end
     -- see if you can be exchanged
