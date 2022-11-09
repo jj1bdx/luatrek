@@ -9,9 +9,11 @@ This Star Trek game is a ported version of BSD (FreeBSD/DragonFly BSD) trek, wri
 
 ## Requirements
 
-* Lua 5.2
-* Tested on FreeBSD 10.1-STABLE and OS X 10.10.1
+* Lua 5.4 (originally developed by 5.2)
+* Tested on macOS 12.6.1
 * See `doc/manual/devenv-memo.md` for how to install the development environment
+* [luarocks](https://github.com/luarocks/luarocks/)
+* [penlight](https://lunarmodules.github.io/Penlight/index.html): use `luarocks install penlight`
 
 ## How to run
 
@@ -32,7 +34,7 @@ Use GitHub issue to report the bugs
 ## TODO
 
 * Revision after release of Lua 5.3: integer type handling
-* Revision keeping up with LuaRocks 2.2.0 (working OK on OS X)
+* Revision keeping up with LuaRocks
 
 ## Author
 
