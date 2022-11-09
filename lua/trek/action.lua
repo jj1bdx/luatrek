@@ -273,7 +273,7 @@ function M.computer()
                 if tqx == nil or tqy == nil or
                    ix == nil or iy == nil then
                     printf("Invalid coordinate number entered\n")
-                elseif tqx < 0 or tqx > V.NQUADS - 1or
+                elseif tqx < 0 or tqx > V.NQUADS - 1 or
                    tqy < 0 or tqy > V.NQUADS - 1 or
                    ix < 0 or ix > V.NSECTS - 1 or
                    iy < 0 or iy > V.NSECTS - 1 then
